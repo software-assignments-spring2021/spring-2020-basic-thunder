@@ -103,8 +103,8 @@ dist
 # TernJS port file
 .tern-port
 
+# JetBrains setting files
 .idea
 
-node_modules
-
+# macOS system files
 .DS_Store
