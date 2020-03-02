@@ -7,6 +7,11 @@ The application aims to help Professors to clarify course related contents that 
 
 From the perspective of the end-user, there are two types of user roles. Namely, instructor and student. The instructor is able to create a course forum, invite students, view all the questions raised by students, reply to posts or mark the answers from students as official answers. The student can participate in a class by post questions to class forum, reply to an existing question, endorse useful answers as well as unendorsed not-so-useful answers.
 
+## Project Demo
+The demo is composed of a series of wireframe diagrams.
+
+Please visit the [demo](https://invis.io/28W5IVVJ67M) page for more detail.
+
 ## History of Project
 The Biazza project was originally proposed by Jiaqi Liu and Lingyi Ju. Inspired by the easy-to-use forums such as Stack Overflow, Piazza, and Campuswire, Jiaqi and Lingyu sought an opportunity to provide realize a full-stack web application that integrates the characteristics of the above user-friendly forums.
 
