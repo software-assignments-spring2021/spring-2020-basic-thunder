@@ -18,7 +18,7 @@ The Biazza project was originally proposed by Jiaqi Liu and Lingyi Ju. Inspired 
 Basic Thunder is the team that is responsible for realizing the Biazza proposal. This team is formed by a group of bright students in the Agile _Software Development and DevOps_ course at NYU.
 
 ## Ways to Contribute
-Please visit the [Contribution]() page for more detail.
+Please visit the [Contribution](https://github.com/nyu-software-engineering/spring-2020-basic-thunder/blob/master/CONTRIBUTING.md) page for more detail.
 
 ## How to Build and Test this Project?
 __We have not reach the building and testing stage. This section will be updated in future.__
