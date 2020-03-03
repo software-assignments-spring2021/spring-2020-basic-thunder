@@ -31,7 +31,7 @@ Please ensure you have the relevant environment before building and testing the 
 
 ## Relevant Websites
 Here is a list of websites that we have considered when designing and implementing the functionalities of this Biazza project:
-* [NYUClasses]((https://newclasses.nyu.edu)
+* [NYUClasses](https://newclasses.nyu.edu)
 * [Piazza](https://www.google.com)
 * [Campuswire](https://campuswire.com/)
 * [Stack Overflow](https://stackoverflow.com/)
