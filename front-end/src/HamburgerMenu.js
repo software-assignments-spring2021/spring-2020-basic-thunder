@@ -18,9 +18,13 @@ import "./HamburgerMenu.css"
 const Hamburger = () => {
 	return(
 		<Menu>
-	        <a id="home" className="menu-item" href="#">Home</a>
-	        <a id="about" className="menu-item" href="#">About</a>
-	        <a id="contact" className="menu-item" href="#">Contact</a>
+	        <a id="syllabus" className="menu-item" href="#">Syllabus</a>
+	        <a id="schedule" className="menu-item" href="#">Schedule</a>
+	        <a id="members" className="menu-item" href="#">Members</a>
+	        <a id="forum" className="menu-item" href="#">Forum</a>
+	        <a id="courses" className="menu-item" href="#">Courses</a>
+	        <a id="settings" className="menu-item" href="#">Settings</a>
+	        <a id="logout" className="menu-item" href="#">Log Out</a>
       	</Menu>
 	);
 }
