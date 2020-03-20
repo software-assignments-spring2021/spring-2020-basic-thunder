@@ -21,9 +21,9 @@ import deleteicon from "./img/deleteicon.png"
 const PostView = () =>{
     const {courseId,postId} = useParams();
     const [awaitingData,setAwaitingData] = useState(true);
-    const [myId,setMyId] = useState(201); // current user's id (mock data)
+    const [myId,setMyId] = useState(100); // current user's id (mock data)
     const [data,setData] = useState({'CourseName':null, 'ListOfPosts':[]});
-    const [instructorMode,setInstructorMode] = useState(true); // assuming we are the instructor
+    const [instructorMode,setInstructorMode] = useState(false); // assuming we are the instructor
 
     useEffect(()=>{
         const fetchData = async () => {
@@ -179,7 +179,8 @@ const EditBtn = ({myId,authorId,reply_id})=>{
     let { _, url } = useRouteMatch();
     if (myId === authorId)
         return(
-            <Link to={`${url}/${reply_id}/EditReply`} className={"ReplyFunctionContainer"}>
+            {/*<Link to={`${url}/${reply_id}/EditReply`} className={"ReplyFunctionContainer"}>*/}
+            <Link to={`${url}/ReplyPost`} className={"ReplyFunctionContainer"}>
                 <span>
                     <img src={editicon} className={"EditImg"} />
                 </span>
@@ -237,7 +238,7 @@ const AddReplyBtn = ()=>{
     let { _, url } = useRouteMatch();
 
     return(
-      <Link className={"AddReplyBtn"} to={`${url}/ReplyPost`} >Reply</Link>
+        <Link className={"AddReplyBtn"} to={`${url}/ReplyPost`} >Reply</Link>
   );
 };
 
