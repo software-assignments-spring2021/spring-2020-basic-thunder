@@ -179,7 +179,7 @@ const EditBtn = ({myId,authorId,reply_id})=>{
     let { _, url } = useRouteMatch();
     if (myId === authorId)
         return(
-            {/*<Link to={`${url}/${reply_id}/EditReply`} className={"ReplyFunctionContainer"}>*/}
+            /*{<Link to={`${url}/${reply_id}/EditReply`} className={"ReplyFunctionContainer"}>}*/
             <Link to={`${url}/ReplyPost`} className={"ReplyFunctionContainer"}>
                 <span>
                     <img src={editicon} className={"EditImg"} />
