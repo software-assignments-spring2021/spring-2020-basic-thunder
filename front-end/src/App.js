@@ -1,26 +1,30 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import './styles/loggedInHomeView.css'
+import './logged_in_home_view'
+import {HomeView} from "./logged_in_home_view";
+import {ListPostsView} from "./list_posts_view"
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <div className="App">
+                <Switch>
+                    <Route path="/LoggedInHome/" component={HomeView} />
+                    <Route path="/:courseId/Forum" component={ListPostsView} />
+                </Switch>
+            </div>
+        </Router>
+    );
 }
 
+// export default App;
 export default App;
