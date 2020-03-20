@@ -180,7 +180,7 @@ const CourseList = () =>{
                   <Course key={e.id} title={e.title} courseId={e.id}/>
               ))):<h4 id={"noCourse"}>You are not affiliated to any course</h4>}
           </div>
-          <InstructorControls isInstructor={!isInstructor}/>
+          <InstructorControls isInstructor={isInstructor}/>
       </div>
     );
 };
