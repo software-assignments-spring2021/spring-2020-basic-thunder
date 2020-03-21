@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './styles/RegisterView.css'
 import {Link} from "react-router-dom"
 
@@ -15,17 +15,27 @@ const RegisterView = function() {
     )
 }
 
-const SignUpForm = function() {
-    return (
-        <div class="container">
-        <form>
-            <button onClick={handleClick}>
-                Student
-            </button>
+function SignUpForm(props) {
 
-            <button onClick={handleClick}>
-                Professor
-            </button>
+    const [role, setRole] = useState('student')
+
+    const handleClick = function(event) {
+        event.preventDefault()
+        const buttons = document.querySelectorAll('#buttons input')
+        buttons.forEach((button) => {
+            button.id = 'off'
+        })
+        event.target.id = 'on'
+    }
+
+    return (
+        <div className="container">
+
+        <form>
+            <div id="buttons">
+            <input id="on" type="button" value="Student" onClick={handleClick}/>
+            <input id="off" type="button" value="Instructor" onClick={handleClick}/>
+            </div>
 
             <label>First Name:
             <input type="text" placeholder="First Name" name="first_name" />
@@ -51,15 +61,9 @@ const SignUpForm = function() {
                 </Link>
             </p>
         </form>
-
         </div>
     )
 }
 
-const handleClick = function(event) {
-    event.preventDefault()
-    const buttons = document.getElementsByTagName('button')
-
-}
 
 export {RegisterView}

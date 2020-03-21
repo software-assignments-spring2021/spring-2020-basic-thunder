@@ -2,14 +2,13 @@ div #register {
     border: 1px solid black;
 }
 
-button {
-    margin: 10px;
+#buttons input {
+    margin: 5px;
 }
 
 div.container {
     display: flex;
     justify-content: center;
-
 }
 
 form {
@@ -21,4 +20,14 @@ form {
 label {
     display: block;
     padding: 5px;
+}
+
+#on {
+    background-color: black;
+    color: white;
+}
+
+#off {
+    background-color: white;
+    color: black;
 }
