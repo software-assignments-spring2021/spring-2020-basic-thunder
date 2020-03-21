@@ -128,21 +128,11 @@ const Course = (props) =>{
     )
 };
 
-
-const Settings = ()=>{
-    return (
-        <div className={"Settings"}>
-            <button id={"SettingsBtn"}>Settings</button>
-        </div>
-    )
-};
-
 const InstructorControls = ({isInstructor}) =>{
     if(isInstructor)
         return (
         <div>
             <AddCourse/>
-            <Settings/>
         </div>
     );
     return null;
