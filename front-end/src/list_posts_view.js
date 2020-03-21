@@ -78,7 +78,6 @@ const CourseBarComponent = ({CourseName})=>{
     );
 };
 
-
 const PostPreview = (props)=>{
     let { path, url } = useRouteMatch();
 
