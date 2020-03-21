@@ -178,8 +178,8 @@ const DeleteBtn = ({reply_id,instructorMode}) =>{
 const EditBtn = ({myId,authorId,reply_id})=>{
     let { _, url } = useRouteMatch();
     if (myId === authorId)
+        /*{<Link to={`${url}/${reply_id}/EditReply`} className={"ReplyFunctionContainer"}>}*/
         return(
-            /*{<Link to={`${url}/${reply_id}/EditReply`} className={"ReplyFunctionContainer"}>}*/
             <Link to={`${url}/ReplyPost`} className={"ReplyFunctionContainer"}>
                 <span>
                     <img src={editicon} className={"EditImg"} />
