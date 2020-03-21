@@ -243,16 +243,25 @@ const AddReplyBtn = ()=>{
 };
 
 const BackToForumBtn = ()=>{
-    const {courseId} = useParams();
+    const {courseId,postId} = useParams();
     return (
         <div className={"BackBtnContainer"}>
-            <Link to={`${courseId}/Forum`}>
+            <Link to={`/${courseId}/Forum`}>
                 <div className={"BackToForumBtn"}>
                         Back
                 </div>
             </Link>
         </div>
-    )
+    );
+    // return (
+    //     <div className={"BackBtnContainer"}>
+    //         <Link to={`/${courseId}/Forum/${postId}`}>
+    //             <div className={"BackToForumBtn"}>
+    //                 Back
+    //             </div>
+    //         </Link>
+    //     </div>
+    // );
 };
 
-export {PostView,Question,BackToForumBtn}
+export {PostView,Question}
