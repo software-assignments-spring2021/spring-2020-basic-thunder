@@ -31,3 +31,7 @@ label {
     background-color: white;
     color: black;
 }
+
+#buttons input:focus {
+    outline: none !important;
+}

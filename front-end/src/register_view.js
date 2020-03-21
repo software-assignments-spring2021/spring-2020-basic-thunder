@@ -65,5 +65,4 @@ function SignUpForm(props) {
     )
 }
 
-
 export {RegisterView}
