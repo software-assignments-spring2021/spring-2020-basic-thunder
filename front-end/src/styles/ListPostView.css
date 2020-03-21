@@ -1,0 +1,96 @@
+#AddPostBtn{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background-color: darkslateblue;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+
+#AddPostBtn:hover {
+    background-color:mediumpurple;
+    cursor: pointer;
+}
+
+.PostPreviewContainer {
+    text-align: center;
+    /*border: 3px solid orange;*/
+}
+
+.PostPreviewDetail {
+    text-align: center;
+    border-radius: 8px;
+    max-width: 1024px;
+    margin: 0 auto;
+    border-bottom: 2px solid gray;
+}
+
+.false{
+    background-color: #ffe6e7;
+}
+
+.PostTopicHeader{
+    text-align: left;
+    /*border: 3px solid orange;*/
+}
+
+.PostTopic{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 21px;
+    text-align: left;
+    display: inline;
+    font-weight: bolder;
+}
+
+.false .PostTopic{
+    color: #9a0000;
+}
+
+.ture .PostTopic{
+    color: black;
+}
+
+.ReplyInfo{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    display: inline;
+}
+
+
+.PostPreview{
+    text-align: left;
+    /*border: 3px solid slateblue;*/
+    color: dimgrey;
+}
+
+.PostTopicContent{
+    /*border: 3px solid green;*/
+}
+
+.PostPreviewDetail .PostStatusIconContainer{
+    text-align: right;
+}
+
+.PostStatusIcon{
+    max-width: 22px;
+}
+
+a{
+    text-decoration: none;
+}
+a, a:visited, a:hover, a:active {
+    color: inherit;
+}
+
+.false:hover{
+    background: lightpink;
+}
+
+.true:hover{
+    background: lightyellow;
+}
