@@ -1,0 +1,11 @@
+ul {
+    display: table;
+    margin: 0 auto;
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+img {
+    width: 600px;
+}
