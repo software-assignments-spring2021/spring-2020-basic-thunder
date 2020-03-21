@@ -2,17 +2,17 @@ import React, {useEffect, useState} from 'react';
 import {useParams,Redirect} from "react-router";
 import axios from "axios";
 import {LoadingView} from "./loading_view";
-import {Question,BackToForumBtn} from "./view_post_view"
+import {Question} from "./view_post_view"
 import "./styles/ReplyPostView.css"
-// import {
+import {
 //     BrowserRouter as Router,
 //     Switch,
 //     Route,
-//     Link,
+    Link,
 //     useParams,
 //     useRouteMatch,
 //     Redirect
-// } from "react-router-dom";
+} from "react-router-dom";
 
 /* main */
 const ReplyPostView = () =>{
@@ -76,7 +76,7 @@ const ReplyPostView = () =>{
                         <PostReplyBtn type={"submit"}/>
                     </div>
                 </form>
-                <BackToForumBtn />
+                <BackToPostBtn />
             </div>
         );
     }
@@ -88,6 +88,19 @@ const PostReplyBtn = ()=>{
         Submit
       </button>
   )
+};
+
+const BackToPostBtn = ()=>{
+    const {courseId,postId} = useParams();
+    return (
+        <div className={"BackBtnContainer"}>
+            <Link to={`/${courseId}/Forum/${postId}/post`}>
+                <div className={"BackToForumBtn"}>
+                    Back
+                </div>
+            </Link>
+        </div>
+    );
 };
 
 export {ReplyPostView};
