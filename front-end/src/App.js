@@ -5,6 +5,7 @@ import './styles/loggedInHomeView.css'
 import './logged_in_home_view'
 import {HomeView} from "./logged_in_home_view";
 import {ListPostsView} from "./list_posts_view"
+import {PostView} from "./view_post_view"
 import {
     BrowserRouter as Router,
     Switch,
@@ -19,6 +20,7 @@ function App() {
             <div className="App">
                 <Switch>
                     <Route path="/LoggedInHome/" component={HomeView} />
+                    <Route path="/:courseId/Forum/:postId/post" component={PostView}/>
                     <Route path="/:courseId/Forum" component={ListPostsView} />
                 </Switch>
             </div>
