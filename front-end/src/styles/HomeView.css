@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    background-color: #95859c;
+}
+
+#header {
+    text-align: left;
+    background-color: #95859c;
+    height: 50px;
+}
+
+#header a {
+    color: #f3f3f3;
+    font-family: sans-serif;
+    font-size: 40px;
+    font-weight: bold;
+    position: relative;
+    margin: 5px;
+    text-decoration: none;
+}
+
+.container > div {
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    text-align: center;
+    background-color: #f1f1f1;
+}
+
+ul {
+    display: table;
+    margin: 0 auto;
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+img {
+    width: 600px;
+}
