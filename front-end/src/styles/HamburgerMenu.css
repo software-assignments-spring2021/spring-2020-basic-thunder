@@ -4,7 +4,7 @@
   width: 36px;
   height: 30px;
   left: 36px;
-  top: 36px;
+  top: 26px;
 }
  
 /* Color/shape of burger icon bar */
@@ -35,6 +35,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
 .bm-menu-wrap {
   position: fixed;
   height: 100%;
+  width: 100% !important;
 }
  
 /* General sidebar styles */
