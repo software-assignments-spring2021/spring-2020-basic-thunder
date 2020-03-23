@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 
 const HomeView = function() {
     return (
-        <div class="container">
+        <div className="HomeView">
             <div id="header">
                 <Header/>
             </div>

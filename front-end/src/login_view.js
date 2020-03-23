@@ -2,9 +2,12 @@ import React from 'react'
 import './styles/LoginView.css'
 import {Link} from "react-router-dom"
 
+
 const LoginView = function() {
     return (
-        <div>
+        <div className={'LoginView'}>
+
+
             <h1>Log In</h1>
             <div id="login">
                 <LoginForm/>
