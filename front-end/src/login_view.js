@@ -38,7 +38,7 @@ const LoginForm = function() {
 
                 <input type="submit" value="Log In" />
 
-                <p>Don't have an account?
+                <p>Don't have an account? <br/>
                     <Link to="sign-up">
                         <span>Sign Up</span>
                     </Link>
