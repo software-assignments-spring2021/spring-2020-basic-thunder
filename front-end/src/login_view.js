@@ -1,16 +1,22 @@
 import React from 'react'
 import './styles/LoginView.css'
 import {Link} from "react-router-dom"
+import {Header} from './home_view'
 
 
 const LoginView = function() {
     return (
         <div className={'LoginView'}>
 
+            <div id="header">
+                <Header/>
+            </div>
 
-            <h1>Log In</h1>
-            <div id="login">
-                <LoginForm/>
+            <div id="main">
+                <div id="login">
+                    <h1>Log In</h1>
+                    <LoginForm/>
+                </div>
             </div>
         </div>
     )
@@ -18,9 +24,8 @@ const LoginView = function() {
 
 const LoginForm = function() {
     return (
-        <div class="container">
+        <div>
             <form>
-
                 <label>Email:
                     <input type="text" placeholder="Email Address" name="email" />
                 </label>
@@ -38,10 +43,8 @@ const LoginForm = function() {
                 </p>
 
             </form>
-
         </div>
     )
 }
-
 
 export {LoginView}

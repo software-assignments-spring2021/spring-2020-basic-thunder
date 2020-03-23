@@ -1,11 +1,48 @@
 .LoginView {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    background-color: #95859c;
+    font-family: Helvetica, sans-serif;
+}
+
+.LoginView #header {
+    text-align: left;
+    background-color: #95859c;
+    height: 50px;
+}
+
+.LoginView #header a {
+    color: #f3f3f3;
+    font-size: 40px;
+    font-weight: bold;
+    position: relative;
+    margin: 5px;
+    text-decoration: none;
+}
+
+.LoginView  > div {
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    text-align: center;
+    background-color: #f3f3f3;
+}
+
+.LoginView #login {
+    width: 300px;
+    border: 10px solid #95859c;
+    margin: 50px;
+    display: inline-block;
+    text-align: center;
+}
+
+.LoginView form {
+    display: inline-block;
 
 }
 
 /*
-div #login {
-    border: 1px solid black;
-}
+
 
 button {
     margin: 10px;
