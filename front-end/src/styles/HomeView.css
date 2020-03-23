@@ -7,6 +7,7 @@
 }
 
 .HomeView #header {
+    width: 100%;
     text-align: left;
     background-color: #95859c;
     height: 50px;
@@ -50,6 +51,7 @@
 .HomeView #main button:hover {
     background-color: #95859c;
     color: #f3f3f3;
+    cursor: pointer;
 }
 
 .HomeView ul {

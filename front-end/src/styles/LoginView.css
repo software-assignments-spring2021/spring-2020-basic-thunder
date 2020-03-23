@@ -7,6 +7,7 @@
 }
 
 .LoginView #header {
+    width: 100vh;
     text-align: left;
     background-color: #95859c;
     height: 50px;

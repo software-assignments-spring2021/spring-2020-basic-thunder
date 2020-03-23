@@ -36,9 +36,7 @@ const HomeView = function() {
 const Header = function() {
     return (
         <Link to='/home'>
-            <a>
-                Biazza
-            </a>
+            Biazza
         </Link>
     )
 }
