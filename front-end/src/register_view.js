@@ -1,14 +1,20 @@
 import React, {useState} from 'react'
 import './styles/RegisterView.css'
 import {Link} from "react-router-dom"
+import {Header} from './home_view'
 
 const RegisterView = function() {
     return (
-        <div>
-            <h1>Sign Up</h1>
+        <div className={'RegisterView'}>
+            <div id="header">
+                <Header/>
+            </div>
 
-            <div id="register">
-                <SignUpForm/>
+            <div id="main">
+                <div id="register">
+                    <h2>Sign Up</h2>
+                    <SignUpForm/>
+                </div>
             </div>
 
         </div>
@@ -29,38 +35,43 @@ function SignUpForm(props) {
     }
 
     return (
-        <div className="container">
+        <div>
 
-        <form>
-            <div id="buttons">
-            <input id="on" type="button" value="Student" onClick={handleClick}/>
-            <input id="off" type="button" value="Instructor" onClick={handleClick}/>
-            </div>
+            <form>
+                <div id="buttons">
+                <input id="on" type="button" value="Student" onClick={handleClick}/>
+                <input id="off" type="button" value="Instructor" onClick={handleClick}/>
+                </div>
 
-            <label>First Name:
-            <input type="text" placeholder="First Name" name="first_name" />
-            </label>
+                <label>
+                    <span>First Name:</span>
+                    <input type="text" name="first_name" />
+                </label>
 
-            <label>Last Name:
-            <input type="text" placeholder="Last Name" name="last_name" />
-            </label>
+                <label>
+                    <span>Last Name:</span>
+                    <input type="text" name="last_name" />
+                </label>
 
-            <label>Email:
-            <input type="text" placeholder="Email Address" name="email" />
-            </label>
+                <label>
+                    <span>Email:</span>
+                    <input type="text" name="email" />
+                </label>
 
-            <label>Password:
-            <input type="text" placeholder="Password" name="password" />
-            </label>
+                <label>
+                    <span>Password:</span>
+                    <input type="text" name="password" />
+                </label>
 
-            <input type="submit" value="Sign Up" />
+                <input type="submit" value="Sign Up" />
 
-            <p>Already have an account?
-                <Link to="log-in">
-                    <span> Log In</span>
-                </Link>
-            </p>
-        </form>
+                <p>Already have an account?<br/>
+                    <Link to="log-in">
+                        <span> Log In</span>
+                    </Link>
+                </p>
+            </form>
+
         </div>
     )
 }
