@@ -44,7 +44,7 @@ const Header = function() {
 const LoginBtn = function() {
     return (
         <Link to='/log-in'>
-            <button>
+            <button id="button1">
                 Log In
             </button>
         </Link>
@@ -54,7 +54,7 @@ const LoginBtn = function() {
 const RegisterBtn = function() {
     return (
         <Link to='/sign-up'>
-            <button>
+            <button id="button2">
                 Sign Up
             </button>
         </Link>
