@@ -14,7 +14,7 @@ const LoginView = function() {
 
             <div id="main">
                 <div id="login">
-                    <h1>Log In</h1>
+                    <h2>LOGIN</h2>
                     <LoginForm/>
                 </div>
             </div>
@@ -26,12 +26,14 @@ const LoginForm = function() {
     return (
         <div>
             <form>
-                <label>Email:
-                    <input type="text" placeholder="Email Address" name="email" />
+                <label>
+                    <span>Email:</span>
+                    <input type="text" name="email" />
                 </label>
 
-                <label>Password:
-                    <input type="text" placeholder="Password" name="password" />
+                <label>
+                    <span>Password:</span>
+                    <input type="text" name="password" />
                 </label>
 
                 <input type="submit" value="Log In" />

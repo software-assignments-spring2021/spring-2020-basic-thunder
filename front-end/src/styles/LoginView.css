@@ -29,20 +29,72 @@
 }
 
 .LoginView #login {
-    width: 300px;
+    width: 280px;
     border: 10px solid #95859c;
     margin: 50px;
     display: inline-block;
     text-align: center;
+    background-color: #f3f3f3;
+    border-radius: 4px;
+}
+
+.LoginView #login h2 {
+    font-size: 25px;
+    font-weight: lighter;
+    padding-top: 20px;
 }
 
 .LoginView form {
     display: inline-block;
+    width: 70%;
+}
+
+.LoginView label {
+
+}
+
+.LoginView label span{
+    display: block;
+    text-align: left;
+    padding-left: 3px;
+}
+
+.LoginView input {
+    text-align: center;
+    width: 70%;
+}
+
+.LoginView input[type=text] {
+    width: 100%;
+    padding: 7px 0 7px 0;
+    margin: 5px 0 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.LoginView input[type=submit] {
+    width: 70%;
+    font-size: 14px;
+    background-color: #745582;
+    color: white;
+    padding: 10px 15px 10px 15px;
+    margin: 30px 0 15px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.LoginView input[type=submit]:hover {
+    background-color: #573069;
+}
+
+.LoginView form p {
 
 }
 
 /*
-
 
 button {
     margin: 10px;
