@@ -3,7 +3,7 @@
     flex-wrap: wrap;
     flex-basis: 100%;
     background-color: #95859c;
-    font-family: Helvetica;
+    font-family: Helvetica, sans-serif;
 }
 
 .HomeView #header {
@@ -15,7 +15,7 @@
 .HomeView #header a {
     color: #f3f3f3;
     font-size: 40px;
-    font-weight: bold;
+    font-weight: lighter;
     position: relative;
     margin: 5px;
     text-decoration: none;
@@ -26,6 +26,10 @@
     flex-basis: 100%;
     text-align: center;
     background-color: #f3f3f3;
+}
+
+.HomeView #main {
+    height: 100vh;
 }
 
 .HomeView #main h1 {

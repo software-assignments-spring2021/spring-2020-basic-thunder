@@ -15,7 +15,7 @@
 .LoginView #header a {
     color: #f3f3f3;
     font-size: 40px;
-    font-weight: bold;
+    font-weight: lighter;
     position: relative;
     margin: 5px;
     text-decoration: none;
@@ -26,6 +26,10 @@
     flex-basis: 100%;
     text-align: center;
     background-color: #f3f3f3;
+}
+
+.LoginView #main {
+    height: 100vh;
 }
 
 .LoginView #login {
