@@ -5,7 +5,7 @@ The two objects should be logged in view and the course specific view.
 */
 import React from "react"
 import { slide as Menu } from "react-burger-menu"
-import "./HamburgerMenu.css"
+import "./styles/HamburgerMenu.css"
 
 // class Example extends React.Component {
 //   showSettings (event) {
