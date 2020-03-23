@@ -109,6 +109,7 @@
     font-size: 14px;
     padding: 5px 10px 5px 10px;
     margin: 5px 5px 20px;
+    transition-duration: 0.4s;
 }
 
 .RegisterView #on {

@@ -23,7 +23,9 @@ const RegisterView = function() {
 
 function SignUpForm(props) {
 
-    const [role, setRole] = useState('student')
+    const state = {
+        role: 'Student'
+    }
 
     const handleClick = function(event) {
         event.preventDefault()
@@ -32,12 +34,25 @@ function SignUpForm(props) {
             button.id = 'off'
         })
         event.target.id = 'on'
+        state.role = event.target.value
+    }
+
+    const handleSubmit = function(event) {
+        // validation
+        /*
+        event.preventDefault()
+        const form = event.target
+        const firstName = form.querySelector('[name=first_name]')
+        if (!firstName.value) {
+            const message = document.createElement('p')
+            message.textContent = 'Name required.'
+            firstName.parentNode.append(message)
+        }*/
     }
 
     return (
         <div>
-
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div id="buttons">
                 <input id="on" type="button" value="Student" onClick={handleClick}/>
                 <input id="off" type="button" value="Instructor" onClick={handleClick}/>
@@ -45,7 +60,7 @@ function SignUpForm(props) {
 
                 <label>
                     <span>First Name:</span>
-                    <input type="text" name="first_name" />
+                    <input type="text" name="first_name"/>
                 </label>
 
                 <label>
@@ -63,7 +78,7 @@ function SignUpForm(props) {
                     <input type="text" name="password" />
                 </label>
 
-                <input type="submit" value="Sign Up" />
+                <input type="submit" value="Sign Up"/>
 
                 <p>Already have an account?<br/>
                     <Link to="log-in">
