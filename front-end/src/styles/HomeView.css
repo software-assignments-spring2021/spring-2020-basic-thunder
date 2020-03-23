@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     flex-basis: 100%;
     background-color: #95859c;
+    font-family: Helvetica;
 }
 
 #header {
@@ -13,7 +14,6 @@
 
 #header a {
     color: #f3f3f3;
-    font-family: sans-serif;
     font-size: 40px;
     font-weight: bold;
     position: relative;
@@ -25,7 +25,27 @@
     flex-wrap: wrap;
     flex-basis: 100%;
     text-align: center;
-    background-color: #f1f1f1;
+    background-color: #f3f3f3;
+}
+
+#main h1 {
+    color: #745582;
+}
+
+#main button {
+    font-size: 15px;
+    color: #745582;
+    border: 2px solid #95859c;
+    border-radius: 4px;
+    background-color: #f3f3f3;
+    transition-duration: 0.4s;
+    padding: 5px 20px 5px 20px;
+    margin: 10px 15px 10px 15px;
+}
+
+#main button:hover {
+    background-color: #95859c;
+    color: #f3f3f3;
 }
 
 ul {
@@ -38,4 +58,5 @@ ul {
 
 img {
     width: 600px;
+    margin-bottom: 20px;
 }

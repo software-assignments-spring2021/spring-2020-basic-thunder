@@ -5,13 +5,11 @@ import {Link} from "react-router-dom"
 const HomeView = function() {
     return (
         <div class="container">
-
             <div id="header">
                 <Header/>
             </div>
 
-
-            <div class="main">
+            <div id="main">
                 <h1>Welcome to Biazza!</h1>
                 <p>Forums, schedules, and syllabuses for college courses</p>
                 <LoginBtn/>
@@ -65,4 +63,5 @@ const RegisterBtn = function() {
     )
 }
 
+export {Header}
 export {HomeView}

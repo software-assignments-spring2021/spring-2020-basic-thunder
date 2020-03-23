@@ -6,7 +6,6 @@ import {HomeView} from './home_view'
 import {LoginView} from './login_view'
 import {RegisterView} from './register_view'
 
-
 import {
     BrowserRouter as Router,
     Switch,
@@ -25,7 +24,7 @@ function App() {
         </Switch>
         </div>
         </Router>
-);
+    );
 }
 
 export default App;
