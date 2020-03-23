@@ -12,7 +12,7 @@ const RegisterView = function() {
 
             <div id="main">
                 <div id="register">
-                    <h2>Sign Up</h2>
+                    <h2>SIGN UP</h2>
                     <SignUpForm/>
                 </div>
             </div>
