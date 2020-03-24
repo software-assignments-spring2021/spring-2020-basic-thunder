@@ -24,10 +24,10 @@ function App() {
             <div className="App">
                 <Switch>
                     <Route path="/LoggedInHome/" component={HomeView} />
+                    <Route path="/:courseId/Forum/CreatePost" component={CreatePost} />
                     <Route path="/:courseId/Forum/:postId/post/ReplyPost" component={ReplyPostView}/>
                     <Route path="/:courseId/Forum/:postId/post" component={PostView}/>
                     <Route path="/:courseId/Forum" component={ListPostsView} />
-                    <Route path="/CreatePost" component={CreatePost} />
                 </Switch>
             </div>
         </Router>
