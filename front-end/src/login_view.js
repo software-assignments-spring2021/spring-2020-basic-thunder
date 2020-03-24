@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 import {Header} from './home_view'
 
 
-const LoginView = function() {
+const LoginView = () => {
     return (
         <div className={'LoginView'}>
 
@@ -22,7 +22,7 @@ const LoginView = function() {
     )
 }
 
-const LoginForm = function() {
+const LoginForm = () => {
     return (
         <div>
             <form>
