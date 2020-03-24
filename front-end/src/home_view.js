@@ -2,7 +2,7 @@ import React from 'react'
 import './styles/HomeView.css'
 import {Link} from "react-router-dom"
 
-const HomeView = function() {
+const HomeView = () => {
     return (
         <div className="HomeView">
             <div id="header">
@@ -33,7 +33,7 @@ const HomeView = function() {
     )
 }
 
-const Header = function() {
+const Header = () => {
     return (
         <Link to='/home'>
             Biazza
@@ -41,7 +41,7 @@ const Header = function() {
     )
 }
 
-const LoginBtn = function() {
+const LoginBtn = () => {
     return (
         <Link to='/log-in'>
             <button id="button1">
@@ -51,7 +51,7 @@ const LoginBtn = function() {
     )
 }
 
-const RegisterBtn = function() {
+const RegisterBtn = () => {
     return (
         <Link to='/sign-up'>
             <button id="button2">
