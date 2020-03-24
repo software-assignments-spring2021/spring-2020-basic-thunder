@@ -140,5 +140,31 @@ def getListOfPosts(courseId):
         ],
     }
 
+@app.route("/<int:courseId>/Syllabus",methods=["GET","POST"])
+def getSyllabus(courseId):
+    if request.method == 'GET':
+        return {
+            'courseId': courseId,
+            'courseName': 'CS480 Computer Vision',
+            'syllabus': 'Here is the class\'s syllabus',
+            'success': True
+        }
+    elif request.method == 'POST':
+        return{
+            'courseId': courseId,
+            'courseName': 'CS480 Computer Vision',
+            'syllabus': 'Here is the class\'s updated syllabus',
+            'success': True
+        }
+    else:
+        print(request)
+        print("Invalid request for route")
+        return{
+            'courseId': courseId,
+            'courseName': 'CS480 Computer Vision',
+            'syllabus': null,
+            'success': False
+        }
+
 if __name__ == "__main__":
     app.run()
