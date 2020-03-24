@@ -2,7 +2,7 @@ import React from 'react'
 import './styles/HomeView.css'
 import {Link} from "react-router-dom"
 
-const HomeView = () => {
+const NotLoggedInHomeView = () => {
     return (
         <div className="HomeView">
             <div id="header">
@@ -62,4 +62,4 @@ const RegisterBtn = () => {
 }
 
 export {Header}
-export {HomeView}
+export {NotLoggedInHomeView}
