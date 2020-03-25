@@ -2,10 +2,6 @@ import React from 'react'
 import './styles/HomeView.css'
 import {Link} from "react-router-dom"
 
-/*
- * Home view for users not logged in
- */
-
 const NotLoggedInHomeView = () => {
     return (
         <div className="HomeView">
