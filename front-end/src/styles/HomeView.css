@@ -1,0 +1,89 @@
+.HomeView {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    background-color: #95859c;
+    font-family: Helvetica, sans-serif;
+}
+
+.HomeView #header {
+    width: 100%;
+    text-align: left;
+    background-color: #95859c;
+    height: 50px;
+}
+
+.HomeView #header a {
+    color: #f3f3f3;
+    font-size: 40px;
+    font-weight: lighter;
+    position: relative;
+    margin: 5px;
+    text-decoration: none;
+}
+
+.HomeView  > div {
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    text-align: center;
+    background-color: #f3f3f3;
+}
+
+.HomeView #main {
+    height: 100vh;
+}
+
+.HomeView #main h1 {
+    color: #745582;
+    padding-top: 10px;
+}
+
+.HomeView #main button {
+    font-size: 15px;
+    color: #745582;
+    border: 2px solid #95859c;
+    border-radius: 4px;
+    background-color: #f3f3f3;
+    transition-duration: 0.4s;
+    padding: 5px 20px 5px 20px;
+    margin: 10px 15px 10px 15px;
+}
+
+.HomeView #main #button2 {
+    border: 2px solid #95949a;
+    background-color: #745582;
+    color: #f3f3f3;
+}
+
+.HomeView #main #button2:hover {
+    background-color: #95859c;
+    border: 2px solid #95859c;
+    cursor: pointer;
+}
+
+.HomeView #main button:hover {
+    background-color: #95859c;
+    color: #f3f3f3;
+    cursor: pointer;
+}
+
+.HomeView ul {
+    display: table;
+    margin: 0 auto;
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 25px;
+}
+
+.HomeView li {
+    padding-top: 3px;
+    font-size: 15px;
+    font-weight: lighter;
+}
+
+.HomeView img {
+    position: relative;
+    width: 600px;
+    margin-bottom: 20px;
+    max-width: 90%;
+}

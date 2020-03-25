@@ -24,7 +24,7 @@ const NotLoggedInHomeView = () => {
                 </ul>
 
                 <div>
-                    <img src="../images/placeholder.jpg" alt="placeholder"/>
+                    <img src="https://www.sylvansport.com/wp/wp-content/uploads/2018/11/image-placeholder-1200x800.jpg" alt="placeholder"/>
                 </div>
 
             </div>
