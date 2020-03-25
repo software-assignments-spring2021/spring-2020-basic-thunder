@@ -86,6 +86,10 @@ def getPost(courseId,postId):
         ],
     }
 
+@app.route("/<courseId>/Forum/CreatePost",methods=["POST"])
+def createPost(courseId):
+    return {'postid':5}
+
 @app.route("/<courseId>/Forum",methods=["GET"])
 def getListOfPosts(courseId):
     return {
