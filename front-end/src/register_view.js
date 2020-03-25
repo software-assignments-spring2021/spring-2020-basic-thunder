@@ -3,7 +3,7 @@ import './styles/RegisterView.css'
 import {Link} from "react-router-dom"
 import {Header} from './home_view'
 
-const RegisterView = function() {
+const RegisterView = () => {
     return (
         <div className={'RegisterView'}>
             <div id="header">
@@ -21,7 +21,7 @@ const RegisterView = function() {
     )
 }
 
-function SignUpForm(props) {
+const SignUpForm = (props) => {
 
     const state = {
         role: 'Student'
