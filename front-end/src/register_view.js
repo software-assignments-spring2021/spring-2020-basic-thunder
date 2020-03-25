@@ -54,8 +54,8 @@ const SignUpForm = (props) => {
         <div>
             <form onSubmit={handleSubmit}>
                 <div id="buttons">
-                <input id="on" type="button" value="Student" onClick={handleClick}/>
-                <input id="off" type="button" value="Instructor" onClick={handleClick}/>
+                    <input id="on" type="button" value="Student" onClick={handleClick}/>
+                    <input id="off" type="button" value="Instructor" onClick={handleClick}/>
                 </div>
 
                 <label>

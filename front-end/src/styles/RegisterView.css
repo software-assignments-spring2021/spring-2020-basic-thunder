@@ -134,63 +134,51 @@
 }
 
 /*
-
 button {
     margin: 10px;
 }
-
 div.container {
     display: flex;
     justify-content: center;
 }
-
 form {
     width: 30%;
     padding-top: 10px;
     padding-bottom: 10px;
 }
-
 label {
     display: block;
     padding: 5px;
 }
-
  */
 /*
 div #register {
     border: 1px solid black;
 }
-
 #buttons input {
     margin: 5px;
 }
-
 div.container {
     display: flex;
     justify-content: center;
 }
-
 form {
     width: 30%;
     padding-top: 10px;
     padding-bottom: 10px;
 }
-
 label {
     display: block;
     padding: 5px;
 }
-
 #on {
     background-color: black;
     color: white;
 }
-
 #off {
     background-color: white;
     color: black;
 }
-
 #buttons input:focus {
     outline: none !important;
 }

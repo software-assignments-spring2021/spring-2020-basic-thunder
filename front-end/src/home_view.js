@@ -2,7 +2,7 @@ import React from 'react'
 import './styles/HomeView.css'
 import {Link} from "react-router-dom"
 
-const HomeView = function() {
+const NotLoggedInHomeView = () => {
     return (
         <div className="HomeView">
             <div id="header">
@@ -24,7 +24,7 @@ const HomeView = function() {
                 </ul>
 
                 <div>
-                    <img src="../images/placeholder.jpg" alt="placeholder"/>
+                    <img src="https://www.sylvansport.com/wp/wp-content/uploads/2018/11/image-placeholder-1200x800.jpg" alt="placeholder"/>
                 </div>
 
             </div>
@@ -33,7 +33,7 @@ const HomeView = function() {
     )
 }
 
-const Header = function() {
+const Header = () => {
     return (
         <Link to='/home'>
             Biazza
@@ -41,20 +41,20 @@ const Header = function() {
     )
 }
 
-const LoginBtn = function() {
+const LoginBtn = () => {
     return (
         <Link to='/log-in'>
-            <button>
+            <button id="button1">
                 Log In
             </button>
         </Link>
     )
 }
 
-const RegisterBtn = function() {
+const RegisterBtn = () => {
     return (
         <Link to='/sign-up'>
-            <button>
+            <button id="button2">
                 Sign Up
             </button>
         </Link>
@@ -62,4 +62,4 @@ const RegisterBtn = function() {
 }
 
 export {Header}
-export {HomeView}
+export {NotLoggedInHomeView}

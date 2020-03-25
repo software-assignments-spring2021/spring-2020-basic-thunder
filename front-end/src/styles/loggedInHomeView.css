@@ -1,0 +1,147 @@
+
+
+.NavBarComponentPlaceHolder{
+    text-align: center;
+    border: 3px solid black;
+    /*margin: 20px;*/
+}
+
+.CourseList{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+}
+
+.CourseDetail{
+    display: block;
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration:none;
+}
+
+.CourseDetail:hover{
+    background-color: thistle;
+    color: red;
+}
+
+#addNewClassBtn{
+    background-color: darkslateblue;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    font-size: 16px;
+    margin: 0 auto;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+
+#SettingsBtn{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background-color: darkslateblue;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+
+#addNewClassBtn:hover {
+    background-color:mediumpurple;
+}
+
+#SettingsBtn:hover {
+    background-color:mediumpurple;
+}
+
+
+.Banner{
+    text-align: center;
+    max-width: 100%;
+    max-height: 100vh;
+    height: auto;
+}
+
+#BannerImg{
+    height: 22vh;
+    max-width: 1024px;
+    z-index: -1;
+    position: relative;
+    display: inline-block;
+}
+
+#BannerText{
+    font-size: 50px;
+    position:absolute;
+    text-align: center;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    top: 17%;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+#submitNewCourse{
+    background-color: mediumseagreen;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+
+#submitNewCourse:hover {
+    background-color:seagreen;
+}
+
+.AddNewCourseArea{
+    text-align: left;
+}
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    font-size:20px;
+}
+
+.submissionBtnContainer{
+    text-align: center;
+}
+
+.GuideUserLine{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#cancelNewClassBtn{
+    background-color: darkorange;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    font-size: 16px;
+    margin: 0 auto;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+
+#cancelNewClassBtn:hover {
+    background-color:darkgoldenrod;
+}
+
+.SemesterOptionsContainer {
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif
+}
