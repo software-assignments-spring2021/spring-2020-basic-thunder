@@ -65,9 +65,9 @@ const ListPostsView = ()=>{
             <div  className={"PostPreviewContainer"}>
                 {data['ListOfPosts'].map(props=>(<PostPreview key={props.postid} preview={props['preview']} replies={props.replies} resolved={props['resolved']} topic={props.topic} postid={props.postid}/>))}
             </div>
-            <div className={"AddPostContainer"}>
+            <Link to={`/${courseId}/Forum/CreatePost`} className={"AddPostContainer"}>
                 <button id={"AddPostBtn"}>Add Post</button>
-            </div>
+            </Link>
         </div>
     );
 };

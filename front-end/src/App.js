@@ -14,6 +14,9 @@ import {
     Link
 } from "react-router-dom";
 
+import CreatePost from './CreatePost'
+// <Route path="/:courseId/Forum/CreatePost" component={CreatePost} />
+// <Route path="/CreatePost" component={CreatePost} />
 
 function App() {
     return (
@@ -21,6 +24,7 @@ function App() {
             <div className="App">
                 <Switch>
                     <Route path="/LoggedInHome/" component={HomeView} />
+                    <Route path="/:courseId/Forum/CreatePost" component={CreatePost} />
                     <Route path="/:courseId/Forum/:postId/post/ReplyPost" component={ReplyPostView}/>
                     <Route path="/:courseId/Forum/:postId/post" component={PostView}/>
                     <Route path="/:courseId/Forum" component={ListPostsView} />
