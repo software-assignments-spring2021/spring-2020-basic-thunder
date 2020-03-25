@@ -1,0 +1,54 @@
+.student{
+	display: none;
+}
+
+#syllabus-text-area{
+	width: 80%;
+	height: 60vh;
+	min-height: 300px;
+}
+
+#edit-btn{
+	background-color: darkblue;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+
+#edit-btn:hover{
+	background-color: blue;
+	cursor:pointer;
+}
+
+#submit-btn{
+	background-color: darkgreen;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+
+#submit-btn:hover{
+	background-color: green;
+	cursor:pointer;
+}
+
+#cancel-btn{
+	background-color: darkred;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+
+#cancel-btn:hover{
+	background-color: red;
+	cursor:pointer;
+}

@@ -146,7 +146,7 @@ def getSyllabus(courseId):
         return {
             'courseId': courseId,
             'courseName': 'CS480 Computer Vision',
-            'syllabus': 'Here is the class\'s syllabus',
+            'syllabus': 'Here is the class\'s syllabus returned from the back-end',
             'success': True
         }
     elif request.method == 'POST':
