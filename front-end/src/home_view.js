@@ -2,6 +2,10 @@ import React from 'react'
 import './styles/HomeView.css'
 import {Link} from "react-router-dom"
 
+/*
+ * Home view for users not logged in
+ */
+
 const NotLoggedInHomeView = () => {
     return (
         <div className="HomeView">
@@ -24,7 +28,7 @@ const NotLoggedInHomeView = () => {
                 </ul>
 
                 <div>
-                    <img src="https://www.sylvansport.com/wp/wp-content/uploads/2018/11/image-placeholder-1200x800.jpg" alt="placeholder"/>
+                    <img src="../images/placeholder.jpg" alt="placeholder"/>
                 </div>
 
             </div>

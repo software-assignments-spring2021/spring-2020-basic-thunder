@@ -10,7 +10,7 @@ import {LoadingView} from "./loading_view"
 
 const NavBarComponentPlaceHolder = () => {
     return (
-        <div className="biazza-header">
+        <div className="biazza-header-title">
             <h2>Biazza</h2>
         </div>
     );
@@ -126,7 +126,7 @@ const Syllabus = () => {
 	else{
 		return(
 			<div id="syllabus-container">
-				<header id="syllabus-header">
+				<header class="biazza-header">
 					<Hamburger />
 					<NavBarComponentPlaceHolder />
 				</header>

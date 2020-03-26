@@ -2,11 +2,11 @@
 	display: none;
 }
 
-#syllabus-header{
+.biazza-header{
     background: #373a47;
 }
 
-.biazza-header{
+.biazza-header-title{
     color: white;
     border-top: 3px solid black;
     border-bottom: 3px solid black;
