@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
+import axios from 'axios'
 import './styles/LoginView.css'
-import {Link} from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 import {Header} from './home_view'
 
 
@@ -22,10 +24,29 @@ const LoginView = () => {
     )
 }
 
-const LoginForm = () => {
+const LoginForm = (props) => {
+    let authenticated = true;
+    let api = 'http://127.0.0.1:5000/'
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        postData()
+
+        if (authenticated) {
+            e.preventDefault()
+            window.location.href = '/LoggedInHome'
+        }
+    }
+
+    const postData = async() => {
+        await axios.post(api, 'data').then(res => {
+            console.log(res)
+        })
+    }
+
     return (
         <div>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <label>
                     <span>Email:</span>
                     <input type="text" name="email" />
@@ -36,7 +57,7 @@ const LoginForm = () => {
                     <input type="text" name="password" />
                 </label>
 
-                <input type="submit" value="Log In" />
+                <input type="submit" value="Log In"/>
 
                 <p>Don't have an account? <br/>
                     <Link to="sign-up">

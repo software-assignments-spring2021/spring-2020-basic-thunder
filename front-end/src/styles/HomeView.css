@@ -9,7 +9,7 @@
 .HomeView #header {
     width: 100%;
     text-align: center;
-    background-color: #95859c;
+    background-color: #373a47;
     height: 50px;
 }
 
@@ -26,7 +26,8 @@
     flex-wrap: wrap;
     flex-basis: 100%;
     text-align: center;
-    background-color: #f3f3f3;
+    /*background-color: #d3ccd6;*/
+    background-color: #aea8d3;
 }
 
 .HomeView #main {
@@ -34,17 +35,21 @@
 }
 
 .HomeView #main h1 {
-    color: #745582;
+    /* color: #745582;*/
+    color: black;
     padding-top: 10px;
 }
 
 .HomeView #main button {
-    font-size: 15px;
-    color: #745582;
+    font-size: 18px;
+    width: 110px;
+    height: 40px;
+    /*color: #745582;*/
+    color: black;
     border: 2px solid #95859c;
     border-radius: 4px;
     background-color: #f3f3f3;
-    transition-duration: 0.4s;
+    transition-duration: 0.6s;
     padding: 5px 20px 5px 20px;
     margin: 10px 15px 10px 15px;
 }
@@ -56,13 +61,13 @@
 }
 
 .HomeView #main #button2:hover {
-    background-color: #95859c;
+    background-color: black;
     border: 2px solid #95859c;
     cursor: pointer;
 }
 
 .HomeView #main button:hover {
-    background-color: #95859c;
+    background-color: black;
     color: #f3f3f3;
     cursor: pointer;
 }
