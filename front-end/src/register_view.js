@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import './styles/RegisterView.css'
 import {Link} from "react-router-dom"
 import {Header} from './home_view'
+import axios from "axios";
 
 const RegisterView = () => {
     return (
@@ -27,6 +28,9 @@ const SignUpForm = (props) => {
         role: 'Student'
     }
 
+    let authenticated = true;
+    let api = 'http://127.0.0.1:5000'
+
     const handleClick = function(event) {
         event.preventDefault()
         const buttons = document.querySelectorAll('#buttons input')
@@ -37,7 +41,14 @@ const SignUpForm = (props) => {
         state.role = event.target.value
     }
 
-    const handleSubmit = function(event) {
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        postData()
+
+        if (authenticated) {
+            e.preventDefault()
+            window.location.href = '/LoggedInHome'
+        }
         // validation
         /*
         event.preventDefault()
@@ -48,6 +59,12 @@ const SignUpForm = (props) => {
             message.textContent = 'Name required.'
             firstName.parentNode.append(message)
         }*/
+    }
+
+    const postData = async() => {
+        await axios.post(api, 'data').then(res => {
+            console.log(res)
+        })
     }
 
     return (
