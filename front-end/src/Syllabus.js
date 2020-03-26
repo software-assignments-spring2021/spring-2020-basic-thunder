@@ -1,36 +1,7 @@
-/*
-Has the same header burger + Biazza
-Has the same compnent underneath with the name of the class
-
-There is just a giant textbox
-Instructor's view has an edit button and a preview button.
-	Preview essentiallly opens up student's view of the syllabus
-	Edit when clicked
-
-Ok this page is shite.  Instructor's view will be the same as student's view except
-there is an edit button
-	Once instructor clicks edit two new buttons appear.
-		Save and Cancel
-	Save saves the current text and cancel reverts back to the old version
-	After clicking one of these buttons, they disappear and edit is back.
-	(Might be able to reuse the submit and back buttons for creating post)
-
-Implement prose mirror. Professor should be able to switch between markdown and
-wysiwyg. Savebtn makes POST call, Cancel makes everything go back
-into non markdown viewing(essentially student's view). Have to simulate whether I
-am a prof or not.
-
-*/
-
 import React, {useState, useEffect} from "react"
 import axios from "axios"
 import {
-    // BrowserRouter as Router,
-    // Switch,
-    // Route,
-    // Link,
     useParams,
-    // useRouteMatch
 } from "react-router-dom";
 
 import "./styles/Syllabus.css"
@@ -39,7 +10,7 @@ import {LoadingView} from "./loading_view"
 
 const NavBarComponentPlaceHolder = () => {
     return (
-        <div className="NavBarComponentPlaceHolder">
+        <div className="biazza-header">
             <h2>Biazza</h2>
         </div>
     );
@@ -84,9 +55,6 @@ const EditBtn = (instructorMode) => {
 		)
 	}
 }
-
-// reset to edit button when submit or cancel gets called.
-// after submit is clicked changed text area to reflect this
 
 const SaveBtn = (courseId) => {
 	let postSyllabus = async () => {
@@ -158,7 +126,7 @@ const Syllabus = () => {
 	else{
 		return(
 			<div id="syllabus-container">
-				<header>
+				<header id="syllabus-header">
 					<Hamburger />
 					<NavBarComponentPlaceHolder />
 				</header>
