@@ -59,7 +59,7 @@ const ListPostsView = ()=>{
             <LoadingView />
         );
     return (
-        <div>
+        <div class="ForumView">
             <header className="biazza-header">
                 <Hamburger />
                 <NavBarComponentPlaceHolder />

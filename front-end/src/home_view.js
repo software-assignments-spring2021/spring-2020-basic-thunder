@@ -28,7 +28,7 @@ const NotLoggedInHomeView = () => {
                 </ul>
 
                 <div>
-                    <img src="../images/placeholder.jpg" alt="placeholder"/>
+                    {/*<img src="../images/placeholder.jpg" alt="placeholder"/>*/}
                 </div>
 
             </div>

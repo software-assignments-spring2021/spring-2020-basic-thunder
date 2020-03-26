@@ -13,7 +13,7 @@
 }
 
 #syllabus-container{
-    background-color: rgba(174, 168, 211, 1);
+    /*background-color: rgba(174, 168, 211, 1);*/
     height: 100vh;
 }
 
@@ -21,7 +21,8 @@
 	width: 80%;
 	height: 60vh;
 	min-height: 300px;
-    background: rgba(174, 168, 211, 1);
+    font-size: 22px;
+    /*background: rgba(174, 168, 211, 1);*/
 }
 
 #edit-btn{
