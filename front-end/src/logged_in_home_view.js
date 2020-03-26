@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import banner from "./img/ys.jpg"
 import {LoadingView} from "./loading_view"
+import './styles/loggedInHomeView.css'
 
 /*
 Comment for future implement
@@ -28,7 +29,9 @@ const HomeView = ()=>{
     return (
         <div>
             <div id={"InsHomeView"} >
-                <NavBarComponentPlaceHolder />
+                <header className="biazza-header">
+                    <NavBarComponentPlaceHolder />
+                </header>
                 <Banner />
                 <CourseList />
             </div>
@@ -49,8 +52,8 @@ const Banner = ()=>{
 
 const NavBarComponentPlaceHolder = () =>{
     return (
-        <div className={"NavBarComponentPlaceHolder"}>
-            <h2>Nav Bar Component Place Holder</h2>
+        <div className="biazza-header-title">
+            <h2>Biazza</h2>
         </div>
     );
 };

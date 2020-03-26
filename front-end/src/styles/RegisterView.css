@@ -8,7 +8,7 @@
 
 .RegisterView #header {
     width: 100vh;
-    text-align: left;
+    text-align: center;
     /*background-color: #95859c;*/
     background-color: #373a47;
     height: 50px;

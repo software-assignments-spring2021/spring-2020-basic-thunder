@@ -30,7 +30,7 @@ import axios from "axios";
 
 const NavBarComponentPlaceHolder = () => {
     return (
-        <div className="NavBarComponentPlaceHolder">
+        <div className="biazza-header-title">
             <h2>Biazza</h2>
         </div>
     );
@@ -75,7 +75,7 @@ const CreatePost = () => {
 
 	return(
 		<div id="create-post-container">
-			<header>
+			<header className="biazza-header">
 				<Hamburger />
 				<NavBarComponentPlaceHolder />
 			</header>

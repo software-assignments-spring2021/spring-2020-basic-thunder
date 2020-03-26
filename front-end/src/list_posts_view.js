@@ -12,6 +12,7 @@ import resolvedImg from "./img/resolved.png"
 import unresolvedImg from "./img/unresolved.png"
 import {LoadingView} from "./loading_view"
 import './styles/ListPostView.css'
+import Hamburger from './HamburgerMenu'
 
 /*
 schema
@@ -59,9 +60,11 @@ const ListPostsView = ()=>{
         );
     return (
         <div>
-            <NavBarComponentPlaceHolder />
+            <header className="biazza-header">
+                <Hamburger />
+                <NavBarComponentPlaceHolder />
+            </header>
             <CourseBarComponent CourseName={data['CourseName']} />
-            {/*<h2 className={"Forum"}>Forum: {data['CourseName']}</h2>*/}
             <div  className={"PostPreviewContainer"}>
                 {data['ListOfPosts'].map(props=>(<PostPreview key={props.postid} preview={props['preview']} replies={props.replies} resolved={props['resolved']} topic={props.topic} postid={props.postid}/>))}
             </div>
@@ -114,10 +117,15 @@ const PostPreview = (props)=>{
 
 const NavBarComponentPlaceHolder = () =>{
     return (
-        <div className={"NavBarComponentPlaceHolder"}>
-            <h2>Nav Bar Place Holder</h2>
+        <div className="biazza-header-title">
+            <h2>Biazza</h2>
         </div>
     );
+    // return (
+    //     <div className={"NavBarComponentPlaceHolder"}>
+    //         <h2>Nav Bar Place Holder</h2>
+    //     </div>
+    // );
 };
 
 export {ListPostsView,CourseBarComponent};

@@ -2,10 +2,26 @@
 	display: none;
 }
 
+.biazza-header{
+    background: #373a47;
+}
+
+.biazza-header-title{
+    color: white;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+}
+
+#syllabus-container{
+    background-color: rgba(174, 168, 211, 1);
+    height: 100vh;
+}
+
 #syllabus-text-area{
 	width: 80%;
 	height: 60vh;
 	min-height: 300px;
+    background: rgba(174, 168, 211, 1);
 }
 
 #edit-btn{
@@ -16,6 +32,8 @@
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
+    border-left: 0px;
+    border-top: 0px;
 }
 
 #edit-btn:hover{
@@ -31,6 +49,8 @@
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
+    border-left: 0px;
+    border-top: 0px;
 }
 
 #submit-btn:hover{
@@ -46,6 +66,8 @@
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
+    border-left: 0px;
+    border-top: 0px;
 }
 
 #cancel-btn:hover{
