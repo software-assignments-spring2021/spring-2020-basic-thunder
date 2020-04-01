@@ -1,0 +1,222 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// middleware layer begin
+const allowedOrigins = ['http://localhost:3000','http://127.0.0.1:3000'];
+
+app.use(
+    cors({
+        origin: function(origin, cb){
+            // allow requests with no origin
+            // (like mobile apps or curl requests)
+            if(!origin) return cb(null, true);
+            if(allowedOrigins.indexOf(origin) === -1){
+                var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+                return cb(new Error(msg), false);
+            }
+            return cb(null, true);
+        }
+    })
+);
+
+
+// middleware end
+
+// delete reply request
+app.delete('/:courseId/Forum/:postId/post/:replyId/DeleteReply',(req,res)=>{
+    const courseId = req.params.courseId;
+    const postId = req.params.postId;
+    const replyId = req.params.replyId;
+    res.json(
+        {
+            'deleteSuccess':true,
+        }
+    )
+});
+
+// get Reply Post view
+app.get('/:courseId/Forum/:postId/post/ReplyPost',(req,res)=>{
+    const courseId = req.params.courseId;
+    const postId = req.params.postId;
+
+    res.json(
+        {
+            'postid': 1,
+            'topic': "No graphs in output file?",
+            'content': "I just got done with my job, and it does not look like the output file contains any graphs? \nOnly thing on there are my print statements.",
+            "resolved": true,
+            'replies': 2,
+            "time": 1574313620213,
+            "author": "Allan",
+            "authorId": 2422,
+        }
+    );
+});
+
+
+// handle reply posts from Reply Post View
+app.post('/:courseId/Forum/:postId/post/ReplyPost',(req,res)=>{
+    const courseId = req.params.courseId;
+    const postId = req.params.postId;
+
+    res.json(
+        {
+            'postSuccess':true,
+        }
+    );
+});
+
+
+// post detail page
+app.get('/:courseId/Forum/:postId/post',(req,res)=>{
+    const courseId = req.params.courseId;
+    const postId = req.params.postId;
+
+    res.json(
+        {
+            'postid': 1,
+            'topic': "No graphs in output file?",
+            'content': "I just got done with my job, and it does not look like the output file contains any graphs? \nOnly thing on there are my print statements.",
+            "resolved": true,
+            'replies': 2,
+            "time": 1574313620213,
+            "author": "Allan",
+            "authorId": 2422,
+            'reply_details':[
+                {
+                    "has_voted": false,
+                    "reply_id": 101,
+                    "author":"Zeping Zhan",
+                    "authorId":310,
+                    "is_official_ans": true,
+                    "time":1584329621216,
+                    "up_vote":8,
+                    "content":"It's essentially just a text file so you need to save the plot as a file."
+                },
+                {
+                    "has_voted": true,
+                    "reply_id": 132,
+                    "author": "James",
+                    "authorId": 201,
+                    "is_official_ans": false,
+                    "time": 1580300621000,
+                    "up_vote": 23,
+                    "content": "Try savefig() function",
+                },
+                {
+                    "has_voted": false,
+                    "reply_id": 210,
+                    "author":"Anonymous",
+                    "authorId": 472,
+                    "is_official_ans":false,
+                    "time": 1575300621000,
+                    "up_vote": 1,
+                    "content":"you should ask NYU hpc"
+                },
+            ],
+        }
+    );
+});
+
+// handle user post
+app.post('/:courseId/Forum/CreatePost',(req,res)=>{
+    const courseId = req.params.courseId;
+
+    res.json(
+        {
+            'postid':5,
+        }
+    );
+});
+
+// forum view
+app.get("/:courseId/Forum",(req,res)=>{
+    const courseId = req.params.courseId;
+
+
+    res.json(
+        {
+            'CourseName': 'CS480 Computer Vision',
+            'ListOfPosts': [
+                {
+                    'topic': 'No graphs in output file?',
+                    'preview': 'I just got done with my job, and it does not look like the output file contains any graphs? Only thing on there are my pr',
+                    'resolved': false,
+                    'postid': 1,
+                    'replies': 2
+                },
+                {
+                    'topic': 'Understanding Learning Rate',
+                    'preview': "I'm plotting accuracy and loss curves for each learning rate, and my graphs look a little unexpected (I might be nai",
+                    'resolved': false,
+                    'postid': 2,
+                    'replies': 0
+                },
+                {
+                    'topic': 'Prince Cluster Modules to Load',
+                    'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
+                    'resolved': true,
+                    'postid': 3,
+                    'replies': 2
+
+                },
+                {
+                    'topic': 'How to calculate loss for an epoch',
+                    'preview': "One thing I am a little confused about is how to calculate the loss for each epoch. I calculate the loss on each sample",
+                    'resolved': true,
+                    'postid': 4,
+                    'replies': 1
+
+                },
+                {
+                    'topic': "Clarification on part two's three different sets of hyperparameters",
+                    'preview': "What does it mean by three sets of hyperparameters? If I choose three learning rate e.g. 0.5, 0.05 and 0.005, would this",
+                    'resolved': true,
+                    'postid': 5,
+                    'replies': 3
+
+                },
+                {
+                    'topic': 'How to plot all learning rates on one plot',
+                    'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
+                    'resolved': true,
+                    'postid': 6,
+                    'replies': 4
+                },
+
+            ],
+        }
+    );
+});
+
+app.get("/:courseId/Syllabus",(req,res)=>{
+    const courseId = req.params.courseId;
+
+    res.json(
+        {
+            'courseId': courseId,
+            'courseName': 'CS480 Computer Vision',
+            'syllabus': 'Here is the class\'s syllabus returned from the back-end',
+            'success': true
+        }
+    )
+});
+
+app.post("/:courseId/Syllabus",(req,res)=>{
+    const courseId = req.params.courseId;
+    res.json(
+        {
+            'courseId': courseId,
+            'courseName': 'CS480 Computer Vision',
+            'syllabus': 'Here is the class\'s updated syllabus',
+            'success': true
+        }
+    )
+});
+
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
