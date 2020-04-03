@@ -22,45 +22,56 @@ const LoginView = () => {
             </div>
         </div>
     )
-}
+};
 
 const LoginForm = (props) => {
-    let authenticated = true;
-    let api = 'http://127.0.0.1:5000/'
+    const [doneLogin,setDoneLogin] = useState(false);
+    const [loginErrMsg,setLoginErrMsg] = useState(false);
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        postData()
+        e.preventDefault();
+        const email = e.target['email'].value;
+        const pw = e.target['pass'].value;
+        axios.post('http://127.0.0.1:5000/login',{
+            email: email,
+            password: pw,
+        }).then(res=>{
+            // register success: store access token
+            console.log("access-token:",res.data['access-token']);
+            localStorage.setItem('access-token',res.data['access-token']);
+            setLoginErrMsg(false);
+            setDoneLogin(true);
+        }).catch(err=>{
+            // login failed
+            localStorage.removeItem('access-token');
+            setLoginErrMsg(true);
+            document.getElementById("pass").value = null;
+        });
+    };
 
-        if (authenticated) {
-            e.preventDefault()
-            window.location.href = '/LoggedInHome'
-        }
-    }
 
-    const postData = async() => {
-        await axios.post(api, 'data').then(res => {
-            console.log(res)
-        })
+    if (doneLogin){
+        return <Redirect push to={`/LoggedInHome`} />;
     }
 
     return (
         <div>
+            <ErrorMsg activate={loginErrMsg} />
             <form onSubmit={handleSubmit}>
                 <label>
                     <span>Email:</span>
-                    <input type="text" name="email" />
+                    <input type="email" name="email" id={"email"} required={true} className={"LoginRegisInputs"}/>
                 </label>
 
                 <label>
                     <span>Password:</span>
-                    <input type="text" name="password" />
+                    <input type="password" name="password" id={"pass"} required={true} minLength={3} className={"LoginRegisInputs"}/>
                 </label>
 
                 <input type="submit" value="Log In"/>
 
                 <p>Don't have an account? <br/>
-                    <Link to="sign-up">
+                    <Link to="sign-up" className={"SignUpLink"}>
                         <span>Sign Up</span>
                     </Link>
                 </p>
@@ -68,6 +79,18 @@ const LoginForm = (props) => {
             </form>
         </div>
     )
-}
+};
+
+const ErrorMsg = ({activate}) =>{
+    if(activate){
+        return (
+            <div className={"LoginErrMsgBlock"}>
+                <h3>Login Failed</h3>
+                Incorrect email or password!
+            </div>
+        );
+    }
+    return null;
+};
 
 export {LoginView}

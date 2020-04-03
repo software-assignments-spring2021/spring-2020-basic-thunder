@@ -1,12 +1,45 @@
-const express = require('express');
+// database related
+require("./db"); // schema
 const mongoose = require('mongoose');
+const User = mongoose.model('User');
+
+// configuration secrets
+require('dotenv').config();
+
+// authentication related
+// Note: we are going to use JWT (json web token) to perform authentication
+const passport = require('passport');
+const passportJWT = require('passport-jwt');
+const JwtStrategy = passportJWT.Strategy;
+const ExtractJwt = passportJWT.ExtractJwt;
+const jwt = require('jsonwebtoken');
+const jwtOptions = {
+    jwtFromRequest:ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.SECRET_OR_KEY,
+};
+const strategy = new JwtStrategy(jwtOptions,(jwt_payload,next)=>{
+    //extract user from DB
+    User.findOne({_id:jwt_payload.id},(err,user)=>{
+        if(err) {
+            next(null,false);
+        }
+        else {
+            next(null,user);
+        }
+    });
+});
+passport.use(strategy);
+const bcrypt = require('bcryptjs'); // password encryption and decryption
+
+
+// express related
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 5000;
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-// middleware layer begin
+// middleware begin
 const allowedOrigins = ['http://localhost:3000','http://127.0.0.1:3000'];
 
 app.use(
@@ -16,7 +49,7 @@ app.use(
             // (like mobile apps or curl requests)
             if(!origin) return cb(null, true);
             if(allowedOrigins.indexOf(origin) === -1){
-                var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+                const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
                 return cb(new Error(msg), false);
             }
             return cb(null, true);
@@ -24,8 +57,97 @@ app.use(
     })
 );
 
+app.use(passport.initialize());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 // middleware end
+
+// login
+app.post("/login", (req, res)=>{
+    if(req.body && req.body.email && req.body.password){
+        const email = req.body.email;
+        const password = req.body.password;
+        const user = User.findOne({"email":email},(err,user,count)=>{
+            // user not found
+            if(!user){
+                res.status(401).json({err_message:"no such user found"});
+            }
+            // no error, user found
+            else if(!err && user){
+                bcrypt.compare(password, user.password, (err, passwordMatch) => {
+                    // correct password, issue access token
+                    if(passwordMatch===true){
+                        const payload = {
+                            "id": user.id,
+                        };
+                        const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: 60}); //{expiresIn: '30m'}
+                        res.json({"access-token": token});
+                    }
+                    // password do not match with the database record
+                    else{
+                        res.status(401).json({err_message:"incorrect email or password"});
+                    }
+                });
+            }
+        });
+    }
+    else{
+        res.status(401).json({err_message:"request does not contain email or password."});
+    }
+});
+
+// register
+app.post("/register", (req, res)=> {
+    if(req.body&&req.body.email&&req.body.password&&req.body.firstname&&req.body.lastname&&req.body.role){
+        const email = req.body.email;
+        const password = req.body.password;
+        const firstname = req.body.firstname;
+        const lastname = req.body.lastname;
+        const role = req.body.role;
+        if (!(email.length>=3) || !(password.length>=3)){
+            res.status(401).json({err_message:"email or password is too short."});
+        }
+        else{
+            const user_obj = {email:email};
+            User.findOne(user_obj,(err,result)=>{
+                if(result){
+                    res.status(401).json({err_message:"email already exist"});
+                }
+                else{
+                    const saltRounds = 10;
+                    bcrypt.hash(password,saltRounds,(err,hash)=>{
+                        new User({
+                            email: email,
+                            firstname: firstname,
+                            lastname: lastname,
+                            role: role,
+                            password: hash,
+                            courses: [],
+                        }).save((err,user,count)=>{
+                            if(err){
+                                // database error
+                                res.status(401).json({err_message:"document save error"});
+                            }
+                            else{
+                                // registration complete: issue payload to user
+                                const payload = {
+                                    "id": user.id,
+                                };
+                                const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: 60}); //{expiresIn: '30m'}
+                                res.json({"access-token": token});
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    }
+    else{
+        res.status(401).json({err_message:"incomplete request (missing fields)"});
+    }
+});
+
 
 // delete reply request
 app.delete('/:courseId/Forum/:postId/post/:replyId/DeleteReply',(req,res)=>{
