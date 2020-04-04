@@ -19,6 +19,7 @@ const CourseSchema = new mongoose.Schema({
     "course_name":{type:String,required:true},
     "term": {type:String,required:true},
     "syllabus":{type:String},
+    "creator_uid":{type:Number,required:true},
     "list_of_posts":[
         {
             "topic":String,

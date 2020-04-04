@@ -2,6 +2,7 @@
 require("./db"); // schema
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const Course = mongoose.model("Course");
 
 // configuration secrets
 require('dotenv').config();
@@ -19,9 +20,6 @@ const jwtOptions = {
 };
 const strategy = new JwtStrategy(jwtOptions,(jwt_payload,next)=>{
     //extract user from DB
-
-    console.log("testing");
-    console.log(jwt_payload.uid);
 
     User.findOne({uid:jwt_payload.uid},(err,user)=>{
         if(err) {
@@ -72,6 +70,50 @@ app.get("/verify-access-token",passport.authenticate('jwt',{session:false}),(req
     res.send({uid:uid});
 });
 
+app.get("/my-courses",passport.authenticate('jwt',{session:false}),(req,res)=> {
+    const user = req.user;
+    res.send(
+        {
+            'courses': user['courses'],
+            'role': user['role'],
+        });
+});
+
+app.post("/create-courses",passport.authenticate('jwt',{session:false}),(req,res)=> {
+    const user = req.user;
+    if(user.role==='Instructor'&&req.body && req.body.course_name && req.body.term){
+        new Course({
+            creator_uid: user.uid,
+            course_name:req.body.course_name,
+            term:req.body.term,
+            syllabus:null,
+            list_of_posts:[],
+        }).save((err,course,count)=>{
+            if(err){
+                // database error
+                res.status(401).json({err_message:"document save error"});
+            }
+            else{
+                // add course to current instructor's field
+                user['courses'].push({
+                        "course_id":course['course_id'],
+                        "course_name":course['course_name'],
+                    });
+                user.save((err)=>{
+                    if(err){
+                        res.status(401).json({err_message:"document save error"});
+                    }
+                    else{
+                        res.json({"message":"success"});
+                    }
+                });
+            }
+        });
+    }
+    else{
+        res.status(401).json({err_message:"you are not an instructor or incomplete request (missing fields)"})
+    }
+});
 
 // login
 app.post("/login", (req, res)=>{
@@ -116,7 +158,7 @@ app.post("/register", (req, res)=> {
         const lastname = req.body.lastname;
         const role = req.body.role;
         if (!(email.length>=3) || !(password.length>=3)){
-            res.status(401).json({err_message:"email or password is too short."});
+            res.status(401).json({err_message:"email or password is too short"});
         }
         else{
             const user_obj = {email:email};
@@ -326,31 +368,63 @@ app.get("/:courseId/Forum",(req,res)=>{
     );
 });
 
-app.get("/:courseId/Syllabus",(req,res)=>{
-    const courseId = req.params.courseId;
 
-    res.json(
-        {
-            'courseId': courseId,
-            'courseName': 'CS480 Computer Vision',
-            'syllabus': 'Here is the class\'s syllabus returned from the back-end',
-            'success': true
-        }
-    )
+
+app.get("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const courseId = parseInt(req.params.courseId);
+    const user = req.user;
+    // check if the user is in the class
+    // invalid course id or user not in the class
+    if(user.courses.find(elem=>elem.course_id === courseId)===undefined){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+    else{
+        Course.findOne({"course_id":courseId},(err,course)=> {
+            res.json(
+                {
+                    'courseId':course.course_id,
+                    'courseName':course.course_name,
+                    'syllabus':course.syllabus,
+                }
+            )
+        });
+    }
 });
 
-app.post("/:courseId/Syllabus",(req,res)=>{
-    const courseId = req.params.courseId;
-    res.json(
-        {
-            'courseId': courseId,
-            'courseName': 'CS480 Computer Vision',
-            'syllabus': 'Here is the class\'s updated syllabus',
-            'success': true
-        }
-    )
-});
 
+
+app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const courseId = parseInt(req.params.courseId);
+    const user = req.user;
+    // check fields
+    if(!req.body || !req.body.syllabus){
+        res.status(401).json({err_message:"incomplete request (missing fields)"});
+    }
+    // check if the user is in the class
+    // invalid course id or user not in the class
+    else if(user.courses.find(elem=>elem.course_id === courseId)===undefined){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+    else{
+        Course.findOne({"course_id":courseId},(err,course)=> {
+            if(course['creator_uid'] !== user.uid){
+                res.status(401).json({err_message:"only the creator of this course can modify syllabus"});
+            }
+            else{
+                course.syllabus = req.body.syllabus;
+                course.save((err)=>{
+                    if(err){
+                        // database error
+                        res.status(401).json({err_message:"document save error"});
+                    }
+                    else{
+                        res.json({'message':'success'});
+                    }
+                })
+            }
+        });
+    }
+});
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
