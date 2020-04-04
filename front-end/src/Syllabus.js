@@ -110,7 +110,7 @@ const Syllabus = () => {
 	const courseId = useParams()
 	const [data, setData] = useState({"courseId":-1,"courseName":null,"syllabus":null})
 	let dataArray = [data.courseId, data.courseName, data.syllabus]
-	const [instructorMode, setInstructorMode] = useState(true)
+	const [instructorMode, setInstructorMode] = useState(false);
 	// console.log(data)
 	// console.log(courseId)
 	// console.log(parseInt(courseId.courseId))
@@ -121,7 +121,8 @@ const Syllabus = () => {
 				let api = `http://127.0.0.1:5000/${parseInt(courseId.courseId)}/Syllabus`
 				axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
 					.then(result => {
-						setData(result.data)
+						setData(result.data);
+						setInstructorMode(result.data['isInstructor']);
 					})
 					.catch(err=>{
 						// you are not allowed to view this page

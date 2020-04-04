@@ -385,6 +385,7 @@ app.get("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req,
                     'courseId':course.course_id,
                     'courseName':course.course_name,
                     'syllabus':course.syllabus,
+                    'isInstructor':course.creator_uid === user.uid,
                 }
             )
         });
