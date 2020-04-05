@@ -56,7 +56,7 @@ const ListPostsView = ()=>{
                 })
                 .catch(err=>{
                     console.log(err);
-                    window.location.reload(false);
+                    window.location.href = '/LoggedInHome';
                 });
         };
         fetchData();

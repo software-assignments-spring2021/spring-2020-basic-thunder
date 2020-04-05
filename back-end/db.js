@@ -34,7 +34,7 @@ CourseSchema.plugin(AutoIncrement, {inc_field: 'course_id'});
 mongoose.model('Course', CourseSchema);
 
 const PostSchema = new mongoose.Schema({
-    "post_id":{type:Number,unique:true,required:true},
+    "post_id":{type:Number},
     'topic':{type:String,required:true},
     'content':{type:String,required:true},
     "resolved":{type:Boolean,required:true},

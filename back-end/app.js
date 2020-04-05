@@ -3,6 +3,8 @@ require("./db"); // schema
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Course = mongoose.model("Course");
+const Post = mongoose.model("Post");
+const Reply = mongoose.model("Reply");
 
 // configuration secrets
 require('dotenv').config();
@@ -297,15 +299,63 @@ app.get('/:courseId/Forum/:postId/post',(req,res)=>{
     );
 });
 
-// handle user post
-app.post('/:courseId/Forum/CreatePost',(req,res)=>{
-    const courseId = req.params.courseId;
+// get create post data: course name and user name
+app.get('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const courseId = parseInt(req.params.courseId);
+    const user = req.user;
+    if(!isEnrolled(user,courseId)){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+    else{
+        Course.findOne({"course_id":courseId},(err,course)=> {
+            res.json({
+                'course_name': course.course_name + " [" + course.term + "]",
+                'username':user.firstname + ' ' + user.lastname,
+            });
+        });
+    }
+});
 
-    res.json(
-        {
-            'postid':5,
+// handle user post
+app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const courseId = parseInt(req.params.courseId);
+    const user = req.user;
+    if(!isEnrolled(user,courseId)){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+
+    else if(!req.body || !req.body['title'] || !req.body['content'] ||!req.body['post_as']){
+        console.log("test2");
+
+        res.status(401).json({err_message:"missing fields"})
+    }
+    else{
+        let post_as = null;
+        if (req.body.post_as !== 'Anonymous to Classmates' && req.body.post_as !== 'Anonymous to Everyone'){
+            post_as = user.firstname + ' ' + user.lastname;
         }
-    );
+        else{
+            post_as = req.body.post_as;
+        }
+        new Post({
+            'topic':req.body.title,
+            'content':req.body.content,
+            "resolved":false,
+            "replies":0,
+            "time":Date.now(),
+            "author": post_as,
+            "uid": user.uid, // author id
+            'reply_details':[],
+        }).save((err,post)=>{
+            if(err){
+                // database error
+                res.status(401).json({err_message:"document save error"});
+            }
+            else{
+                res.json({'postid':post['post_id']});
+            }
+        });
+    }
 });
 
 // forum view
