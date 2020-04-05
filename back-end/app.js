@@ -309,63 +309,74 @@ app.post('/:courseId/Forum/CreatePost',(req,res)=>{
 });
 
 // forum view
-app.get("/:courseId/Forum",(req,res)=>{
-    const courseId = req.params.courseId;
+app.get("/:courseId/Forum",passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const courseId = parseInt(req.params.courseId);
+    const user = req.user;
+    if(!isEnrolled(user,courseId)){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+    else{
+        Course.findOne({"course_id":courseId},(err,course)=> {
+            res.json({
+                'CourseName': course.course_name + " [" + course.term + "]",
+                'ListOfPosts':course.list_of_posts,
+            });
+        });
+        // res.json(
+        //     {
+        //         'CourseName': 'CS480 Computer Vision',
+        //         'ListOfPosts': [
+        //             {
+        //                 'topic': 'No graphs in output file?',
+        //                 'preview': 'I just got done with my job, and it does not look like the output file contains any graphs? Only thing on there are my pr',
+        //                 'resolved': false,
+        //                 'postid': 1,
+        //                 'replies': 2
+        //             },
+        //             {
+        //                 'topic': 'Understanding Learning Rate',
+        //                 'preview': "I'm plotting accuracy and loss curves for each learning rate, and my graphs look a little unexpected (I might be nai",
+        //                 'resolved': false,
+        //                 'postid': 2,
+        //                 'replies': 0
+        //             },
+        //             {
+        //                 'topic': 'Prince Cluster Modules to Load',
+        //                 'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
+        //                 'resolved': true,
+        //                 'postid': 3,
+        //                 'replies': 2
+        //
+        //             },
+        //             {
+        //                 'topic': 'How to calculate loss for an epoch',
+        //                 'preview': "One thing I am a little confused about is how to calculate the loss for each epoch. I calculate the loss on each sample",
+        //                 'resolved': true,
+        //                 'postid': 4,
+        //                 'replies': 1
+        //
+        //             },
+        //             {
+        //                 'topic': "Clarification on part two's three different sets of hyperparameters",
+        //                 'preview': "What does it mean by three sets of hyperparameters? If I choose three learning rate e.g. 0.5, 0.05 and 0.005, would this",
+        //                 'resolved': true,
+        //                 'postid': 5,
+        //                 'replies': 3
+        //
+        //             },
+        //             {
+        //                 'topic': 'How to plot all learning rates on one plot',
+        //                 'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
+        //                 'resolved': true,
+        //                 'postid': 6,
+        //                 'replies': 4
+        //             },
+        //
+        //         ],
+        //     }
+        // );
+    }
 
-
-    res.json(
-        {
-            'CourseName': 'CS480 Computer Vision',
-            'ListOfPosts': [
-                {
-                    'topic': 'No graphs in output file?',
-                    'preview': 'I just got done with my job, and it does not look like the output file contains any graphs? Only thing on there are my pr',
-                    'resolved': false,
-                    'postid': 1,
-                    'replies': 2
-                },
-                {
-                    'topic': 'Understanding Learning Rate',
-                    'preview': "I'm plotting accuracy and loss curves for each learning rate, and my graphs look a little unexpected (I might be nai",
-                    'resolved': false,
-                    'postid': 2,
-                    'replies': 0
-                },
-                {
-                    'topic': 'Prince Cluster Modules to Load',
-                    'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
-                    'resolved': true,
-                    'postid': 3,
-                    'replies': 2
-
-                },
-                {
-                    'topic': 'How to calculate loss for an epoch',
-                    'preview': "One thing I am a little confused about is how to calculate the loss for each epoch. I calculate the loss on each sample",
-                    'resolved': true,
-                    'postid': 4,
-                    'replies': 1
-
-                },
-                {
-                    'topic': "Clarification on part two's three different sets of hyperparameters",
-                    'preview': "What does it mean by three sets of hyperparameters? If I choose three learning rate e.g. 0.5, 0.05 and 0.005, would this",
-                    'resolved': true,
-                    'postid': 5,
-                    'replies': 3
-
-                },
-                {
-                    'topic': 'How to plot all learning rates on one plot',
-                    'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
-                    'resolved': true,
-                    'postid': 6,
-                    'replies': 4
-                },
-
-            ],
-        }
-    );
 });
 
 
@@ -375,7 +386,7 @@ app.get("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req,
     const user = req.user;
     // check if the user is in the class
     // invalid course id or user not in the class
-    if(user.courses.find(elem=>elem.course_id === courseId)===undefined){
+    if(!isEnrolled(user,courseId)){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
@@ -383,7 +394,7 @@ app.get("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req,
             res.json(
                 {
                     'courseId':course.course_id,
-                    'courseName':course.course_name,
+                    'courseName':course.course_name + " [" + course.term + "]",
                     'syllabus':course.syllabus,
                     'isInstructor':course.creator_uid === user.uid,
                 }
@@ -403,7 +414,7 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
     }
     // check if the user is in the class
     // invalid course id or user not in the class
-    else if(user.courses.find(elem=>elem.course_id === courseId)===undefined){
+    else if(!isEnrolled(user,courseId)){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
@@ -426,6 +437,11 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
         });
     }
 });
+
+
+const isEnrolled = (user,course_id)=>{
+    return user.courses.find(elem=>elem.course_id === course_id)!==undefined;
+};
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
