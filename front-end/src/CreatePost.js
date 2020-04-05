@@ -30,7 +30,6 @@ import axios from "axios";
 import {LoadingView} from "./loading_view";
 import {CourseBarComponent} from "./list_posts_view"
 
-const accessToken = localStorage.getItem("access-token");
 
 const NavBarComponentPlaceHolder = () => {
     return (
@@ -50,6 +49,7 @@ const CreatePost = () => {
 
     useEffect(()=>{
         const fetchData = async () => {
+            const accessToken = localStorage.getItem("access-token");
             const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res=>{
                     setData(res.data);
@@ -69,6 +69,8 @@ const CreatePost = () => {
         const title = e.target['inpt-question-title'].value;
         const content = e.target['inpt-question-content'].value;
 		const postAs = e.target['show-my-name-selector'].value;
+        const accessToken = localStorage.getItem("access-token");
+
         axios.post(api,
 			{
 				'title':title,

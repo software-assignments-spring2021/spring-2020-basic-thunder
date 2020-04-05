@@ -41,7 +41,6 @@ schema
 
  */
 
-const accessToken = localStorage.getItem("access-token");
 
 /* main */
 const ListPostsView = ()=>{
@@ -50,6 +49,7 @@ const ListPostsView = ()=>{
     useEffect(()=>{
         const fetchData = async () => {
             const api = `http://127.0.0.1:5000/${courseId}/Forum`; // testing api
+            const accessToken = localStorage.getItem("access-token");
             const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res=>{
                     setData(res.data);
@@ -66,7 +66,7 @@ const ListPostsView = ()=>{
             <LoadingView />
         );
     return (
-        <div class="ForumView">
+        <div className="ForumView">
             <header className="biazza-header">
                 <Hamburger />
                 <NavBarComponentPlaceHolder />
@@ -75,7 +75,7 @@ const ListPostsView = ()=>{
             <div  className={"PostPreviewContainer"}>
                 {
                     data['ListOfPosts'].length > 0 ?
-                        data['ListOfPosts'].map(props=>(<PostPreview key={props.postid} preview={props['preview']} replies={props.replies} resolved={props['resolved']} topic={props.topic} postid={props.postid}/>))
+                        data['ListOfPosts'].map(props=>(<PostPreview key={props.postid} preview={props['preview']} replies={props.replies} resolved={props['resolved']} topic={props.topic} postid={props.post_id}/>))
                         :"This forum has no post yet."
                 }
             </div>

@@ -188,7 +188,7 @@ app.post("/register", (req, res)=> {
                                 const payload = {
                                     "uid": user.uid,
                                 };
-                                const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: 60}); //{expiresIn: '30m'}
+                                const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: '30m'}); //{expiresIn: '30m'}
                                 res.json({"access-token": token});
                             }
                         });
@@ -320,16 +320,16 @@ app.get('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:false
 app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:false}),(req,res)=>{
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
+    console.log("test1");
     if(!isEnrolled(user,courseId)){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
 
     else if(!req.body || !req.body['title'] || !req.body['content'] ||!req.body['post_as']){
-        console.log("test2");
-
         res.status(401).json({err_message:"missing fields"})
     }
     else{
+        console.log("test2");
         let post_as = null;
         if (req.body.post_as !== 'Anonymous to Classmates' && req.body.post_as !== 'Anonymous to Everyone'){
             post_as = user.firstname + ' ' + user.lastname;
@@ -337,7 +337,7 @@ app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:fals
         else{
             post_as = req.body.post_as;
         }
-        new Post({
+        const new_post = new Post({
             'topic':req.body.title,
             'content':req.body.content,
             "resolved":false,
@@ -346,23 +346,107 @@ app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:fals
             "author": post_as,
             "uid": user.uid, // author id
             'reply_details':[],
-        }).save((err,post)=>{
+        });
+        console.log(new_post);
+
+        new_post.save((err,post)=>{
+            console.log("test3");
+
             if(err){
+                console.log("test4");
                 // database error
                 res.status(401).json({err_message:"document save error"});
             }
             else{
-                res.json({'postid':post['post_id']});
+                console.log("test5");
+
+                Course.findOne({"course_id":courseId},(err,course)=> {
+                    let preview = post.content;
+                    if(preview.length > 122){
+                        preview = preview.slice(0,122);
+                    }
+                    course.list_of_posts.push(
+                        {
+                            "topic":post.topic,
+                            "preview":preview,
+                            "resolved":post.resolved,
+                            "post_id":post.post_id,
+                            "replies":post.replies,
+                        }
+                    );
+                    course.save((err)=>{
+                        res.json({'postid':post['post_id']});
+                    });
+
+                });
             }
         });
     }
 });
+
+
+// app.get("/:courseId/Forum",(req,res)=> {
+//     res.json(
+//         {
+//             'CourseName': 'CS480 Computer Vision',
+//             'ListOfPosts': [
+//                 {
+//                     'topic': 'No graphs in output file?',
+//                     'preview': 'I just got done with my job, and it does not look like the output file contains any graphs? Only thing on there are my pr',
+//                     'resolved': false,
+//                     'postid': 1,
+//                     'replies': 2
+//                 },
+//                 {
+//                     'topic': 'Understanding Learning Rate',
+//                     'preview': "I'm plotting accuracy and loss curves for each learning rate, and my graphs look a little unexpected (I might be nai",
+//                     'resolved': false,
+//                     'postid': 2,
+//                     'replies': 0
+//                 },
+//                 {
+//                     'topic': 'Prince Cluster Modules to Load',
+//                     'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
+//                     'resolved': true,
+//                     'postid': 3,
+//                     'replies': 2
+//
+//                 },
+//                 {
+//                     'topic': 'How to calculate loss for an epoch',
+//                     'preview': "One thing I am a little confused about is how to calculate the loss for each epoch. I calculate the loss on each sample",
+//                     'resolved': true,
+//                     'postid': 4,
+//                     'replies': 1
+//
+//                 },
+//                 {
+//                     'topic': "Clarification on part two's three different sets of hyperparameters",
+//                     'preview': "What does it mean by three sets of hyperparameters? If I choose three learning rate e.g. 0.5, 0.05 and 0.005, would this",
+//                     'resolved': true,
+//                     'postid': 5,
+//                     'replies': 3
+//
+//                 },
+//                 {
+//                     'topic': 'How to plot all learning rates on one plot',
+//                     'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
+//                     'resolved': true,
+//                     'postid': 6,
+//                     'replies': 4
+//                 },
+//
+//             ],
+//         }
+//     );
+// });
 
 // forum view
 app.get("/:courseId/Forum",passport.authenticate('jwt',{session:false}),(req,res)=>{
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
     if(!isEnrolled(user,courseId)){
+        console.log("this path");
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
@@ -372,61 +456,7 @@ app.get("/:courseId/Forum",passport.authenticate('jwt',{session:false}),(req,res
                 'ListOfPosts':course.list_of_posts,
             });
         });
-        // res.json(
-        //     {
-        //         'CourseName': 'CS480 Computer Vision',
-        //         'ListOfPosts': [
-        //             {
-        //                 'topic': 'No graphs in output file?',
-        //                 'preview': 'I just got done with my job, and it does not look like the output file contains any graphs? Only thing on there are my pr',
-        //                 'resolved': false,
-        //                 'postid': 1,
-        //                 'replies': 2
-        //             },
-        //             {
-        //                 'topic': 'Understanding Learning Rate',
-        //                 'preview': "I'm plotting accuracy and loss curves for each learning rate, and my graphs look a little unexpected (I might be nai",
-        //                 'resolved': false,
-        //                 'postid': 2,
-        //                 'replies': 0
-        //             },
-        //             {
-        //                 'topic': 'Prince Cluster Modules to Load',
-        //                 'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
-        //                 'resolved': true,
-        //                 'postid': 3,
-        //                 'replies': 2
-        //
-        //             },
-        //             {
-        //                 'topic': 'How to calculate loss for an epoch',
-        //                 'preview': "One thing I am a little confused about is how to calculate the loss for each epoch. I calculate the loss on each sample",
-        //                 'resolved': true,
-        //                 'postid': 4,
-        //                 'replies': 1
-        //
-        //             },
-        //             {
-        //                 'topic': "Clarification on part two's three different sets of hyperparameters",
-        //                 'preview': "What does it mean by three sets of hyperparameters? If I choose three learning rate e.g. 0.5, 0.05 and 0.005, would this",
-        //                 'resolved': true,
-        //                 'postid': 5,
-        //                 'replies': 3
-        //
-        //             },
-        //             {
-        //                 'topic': 'How to plot all learning rates on one plot',
-        //                 'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
-        //                 'resolved': true,
-        //                 'postid': 6,
-        //                 'replies': 4
-        //             },
-        //
-        //         ],
-        //     }
-        // );
     }
-
 });
 
 

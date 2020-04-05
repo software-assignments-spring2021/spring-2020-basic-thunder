@@ -35,13 +35,13 @@ mongoose.model('Course', CourseSchema);
 
 const PostSchema = new mongoose.Schema({
     "post_id":{type:Number},
-    'topic':{type:String,required:true},
-    'content':{type:String,required:true},
-    "resolved":{type:Boolean,required:true},
-    "replies":{type:Number,required:true},
-    "time":{type:Number,required:true},
-    "author": {type:String,required:true},
-    "uid": {type:Number,required:true}, // author id
+    'topic':{type:String},
+    'content':{type:String},
+    "resolved":{type:Boolean},
+    "replies":{type:Number},
+    "time":{type:Number},
+    "author": {type:String},
+    "uid": {type:Number}, // author id
     'reply_details':[{
         "reply_id":Number,
         "has_voted":Boolean,

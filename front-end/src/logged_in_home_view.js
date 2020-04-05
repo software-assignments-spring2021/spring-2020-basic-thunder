@@ -91,7 +91,8 @@ const AddCourse = ()=>{
                 setAddCourse(false);
             })
             .catch(e=>{
-            window.location.href = '/log-in';
+                // window.location.reload(false);
+                console.log("error:",e);
         });
     };
 
