@@ -20,13 +20,10 @@ const CourseSchema = new mongoose.Schema({
     "term": {type:String,required:true},
     "syllabus":{type:String},
     "creator_uid":{type:Number,required:true},
+    "instructor_uids":[Number],
     "list_of_posts":[
         {
-            "topic":String,
-            "preview":String,
-            "resolved":Boolean,
             "post_id":Number,
-            "replies":Number,
         }]
 },{collection:'Course'});
 
@@ -38,18 +35,15 @@ const PostSchema = new mongoose.Schema({
     'topic':{type:String},
     'content':{type:String},
     "resolved":{type:Boolean},
-    "replies":{type:Number},
     "time":{type:Number},
     "author": {type:String},
     "uid": {type:Number}, // author id
+    "course_id":{type:Number}, // course id
+    "firstname":{type:String},
+    "lastname":{type:String},
     'reply_details':[{
         "reply_id":Number,
-        "has_voted":Boolean,
-        "uid":Number,
         "is_official_ans":Boolean,
-        "time":Number,
-        "up_vote":Number,
-        "content":String
     }],
 },{collection:'Post'});
 
@@ -57,12 +51,16 @@ PostSchema.plugin(AutoIncrement, {inc_field: 'post_id'});
 mongoose.model('Post', PostSchema);
 
 const ReplySchema = new mongoose.Schema({
-    "reply_id":{type:Number,unique:true,required:true},
+    "reply_id":{type:Number},
+    "firstname":{type:String}, // replier's first name
+    "lastname":{type:String}, // replier's last name
+    "author": {type:String}, // the author name that the replier wants to show other people.
     "uid":{type:Number,required:true},
     "is_official_ans":{type:Boolean,required:true},
     "time":{type:Number,required:true},
     "up_vote":{type:Number,required:true},
     "content":{type:String},
+    "voter_uid":[Number],
 },{collection:'Post'});
 
 ReplySchema.plugin(AutoIncrement, {inc_field: 'reply_id'});

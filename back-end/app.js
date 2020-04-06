@@ -86,10 +86,13 @@ app.post("/create-courses",passport.authenticate('jwt',{session:false}),(req,res
     if(user.role==='Instructor'&&req.body && req.body.course_name && req.body.term){
         new Course({
             creator_uid: user.uid,
+            firstname:user.firstname,
+            lastnname:user.lastname,
             course_name:req.body.course_name,
             term:req.body.term,
             syllabus:null,
             list_of_posts:[],
+            instructor_uids:[user.uid]
         }).save((err,course,count)=>{
             if(err){
                 // database error
@@ -215,95 +218,317 @@ app.delete('/:courseId/Forum/:postId/post/:replyId/DeleteReply',(req,res)=>{
     )
 });
 
-// get Reply Post view
-app.get('/:courseId/Forum/:postId/post/ReplyPost',(req,res)=>{
-    const courseId = req.params.courseId;
-    const postId = req.params.postId;
 
-    res.json(
-        {
-            'postid': 1,
-            'topic': "No graphs in output file?",
-            'content': "I just got done with my job, and it does not look like the output file contains any graphs? \nOnly thing on there are my print statements.",
-            "resolved": true,
-            'replies': 2,
-            "time": 1574313620213,
-            "author": "Allan",
-            "authorId": 2422,
-        }
-    );
+app.get('/:courseId/course/:replyId/reply-detail',passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const user = req.user;
+    const replyId = parseInt(req.params.replyId);
+    const courseId = parseInt(req.params.courseId);
+    const enrolledData = isEnrolled(user,courseId);
+
+    if(!enrolledData['isEnrolled']){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+    else{
+        Course.findOne({"course_id":courseId},(err,course)=>{
+
+            Reply.findOne({"reply_id":replyId},(err,reply)=> {
+                if(!reply){
+                    res.status(401).json({err_messagee:"reply do not exist"});
+                }
+                else{
+                    const ins_mode = course.instructor_uids.indexOf(user.uid)!==-1;
+                    let author_name = reply.author;
+                    if(ins_mode && reply.author === 'Anonymous to Classmates'){
+                        author_name += " (" + reply.firstname + " " + reply.lastname + ")";
+                    }
+                    else if(reply.uid===user.uid){
+                        author_name += " (me)"
+                    }
+                    res.json({
+                        has_voted: reply.voter_uid.indexOf(user.uid) !== -1,
+                        instructor_mode: ins_mode,
+                        upvote_count: reply.voter_uid.length,
+                        is_my_reply: reply.uid === user.uid,
+                        time: reply.time,
+                        content: reply.content,
+                        author:author_name,
+                    })
+                }
+            });
+        });
+    }
 });
+
+// handle upvote
+app.get('/:replyId/add-upvote',passport.authenticate('jwt',{session:false}),(req,res)=> {
+    const user = req.user;
+    const replyId = parseInt(req.params.replyId);
+    Reply.findOne({reply_id:replyId},(err,reply)=>{
+        if(!reply || err){
+            res.status(401).json({err_meessage:"reply not found!"})
+        }
+        else{
+            if (reply.voter_uid.indexOf(user.uid) !== -1){
+                res.json({
+                    upvote: reply.voter_uid.length,
+                    hasVoted: true,
+                })
+            }
+            else{
+                reply.voter_uid.push(user.uid);
+                reply.save((err)=>{
+                    if(err){
+                        res.status(401).json({err_message:"document save error"});
+                    }
+                    else{
+                        res.json({
+                            upvote: reply.voter_uid.length,
+                            hasVoted: true,
+                        })
+                    }
+                });
+            }
+        }
+    })
+});
+
+// handle cancel upvote
+app.get('/:replyId/cancel-upvote',passport.authenticate('jwt',{session:false}),(req,res)=> {
+    const user = req.user;
+    const replyId = parseInt(req.params.replyId);
+    Reply.findOne({reply_id:replyId},(err,reply)=>{
+        if(!reply || err){
+            res.status(401).json({err_meessage:"reply not found!"})
+        }
+        else{
+            const index = reply.voter_uid.indexOf(user.uid);
+            if (index === -1){
+                res.json({
+                    upvote: reply.voter_uid.length,
+                    hasVoted: false,
+                })
+            }
+            else{
+                reply.voter_uid.splice(index,1);
+                reply.save((err)=>{
+                    if(err){
+                        res.status(401).json({err_message:"document save error"});
+                    }
+                    else{
+                        res.json({
+                            upvote: reply.voter_uid.length,
+                            hasVoted: false,
+                        })
+                    }
+                });
+            }
+        }
+    })
+});
+
+// get Reply Post view
+app.get('/:courseId/Forum/:postId/post/ReplyPost',passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const postId = parseInt(req.params.postId);
+    const courseId = parseInt(req.params.courseId);
+    const user = req.user;
+    const enrolledData = isEnrolled(user,courseId);
+
+    if(!enrolledData['isEnrolled']){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+    else{
+        Post.findOne({post_id:postId},(err,post)=> {
+            if(!post || err){
+                console.log("unable to find the post");
+                res.status(401).json({err_message:"unable to find the post"});
+            }
+            else{
+                Course.findOne({course_id:courseId},(err,course)=> {
+                    res.json(
+                        {
+                            'is_instructor': course.instructor_uids.indexOf(user.uid)!==-1,
+                            'CourseName': enrolledData['courseName'],
+                            'author_name': user.firstname + " " + user.lastname,
+                            'postid': post.post_id,
+                            'topic': post.topic,
+                            'content': post.content,
+                            "resolved": post.resolved,
+                            'replies': post.reply_details.length,
+                            "time": post.time,
+                            "author": post.author,
+                            "authorId": user.uid,
+                        }
+                    )
+                });
+            }
+        });
+    }
+});
+
 
 
 // handle reply posts from Reply Post View
-app.post('/:courseId/Forum/:postId/post/ReplyPost',(req,res)=>{
-    const courseId = req.params.courseId;
-    const postId = req.params.postId;
-
-    res.json(
-        {
-            'postSuccess':true,
-        }
-    );
+app.post('/:courseId/Forum/:postId/post/ReplyPost',passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const postId = parseInt(req.params.postId);
+    const courseId = parseInt(req.params.courseId);
+    const user = req.user;
+    const enrolledData = isEnrolled(user,courseId);
+    if(!req.body||!req.body.reply||!req.body.post_as){
+        res.status(401).json({err_message:"incomplete request (missing fields)"});
+    }
+    else if(!enrolledData['isEnrolled']){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+    else {
+        Post.findOne({post_id: postId}, (err, post) => {
+            if (!post || err) {
+                console.log("unable to find the post");
+                res.status(401).json({err_message: "unable to find the post"});
+            }
+            else{
+                Course.findOne({course_id:courseId},(err,course)=>{
+                    const is_official_ans = course.instructor_uids.indexOf(user.uid)!==-1;
+                    let author_name = req.body.post_as;
+                    if(is_official_ans){
+                        author_name = user.firstname + " " + user.lastname;
+                    }
+                    new Reply({
+                        "author": author_name,
+                        "uid":user.uid,
+                        "is_official_ans":is_official_ans,
+                        "time":Date.now(),
+                        "content":req.body.reply,
+                        "firstname":user.firstname,
+                        "lastname":user.lastname,
+                        'voter_uid':[],
+                    }).save((err,reply)=>{
+                        if(err){
+                            // database error
+                            res.status(401).json({err_message:"document save error"});
+                        }
+                        else{
+                            post['reply_details'].push({
+                                "reply_id":reply["reply_id"],
+                                "is_official_ans":reply['is_official_ans'],
+                            });
+                            if(reply['is_official_ans']){
+                                post['resolved'] = true;
+                            }
+                            post.save();
+                            res.json({"message":"success"});
+                        }
+                    });
+                });
+            }
+        });
+    }
 });
 
+// create a post preview for forum view
+app.get("/:courseId/Forum/:postId/PostPreview",passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const postId = parseInt(req.params.postId);
+    const courseId = parseInt(req.params.courseId);
+    const user = req.user;
+    const enrolledData = isEnrolled(user,courseId);
+    if(!enrolledData['isEnrolled']){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+    else{
+        Post.findOne({post_id:postId},(err,post)=> {
+            if(!post || err || post.course_id!==courseId){
+                console.log("unable to find the post");
+                res.status(401).json({err_message:"unable to find the post"});
+            }
+            else{
+                let preview = post.content.replace(/(\r\n|\n|\r|\t)/gm, "");
+                if(preview.length > 122){
+                    preview = preview.slice(0,122);
+                }
+                res.json(
+                    {
+                        'preview':preview,
+                        'topic': post.topic,
+                        "resolved": post.resolved,
+                        'replies': post.reply_details.length,
+                    }
+                )
+            }
+        });
+    }
+});
 
 // post detail page
-app.get('/:courseId/Forum/:postId/post',(req,res)=>{
-    const courseId = req.params.courseId;
-    const postId = req.params.postId;
-
-    res.json(
-        {
-            'postid': 1,
-            'topic': "No graphs in output file?",
-            'content': "I just got done with my job, and it does not look like the output file contains any graphs? \nOnly thing on there are my print statements.",
-            "resolved": true,
-            'replies': 2,
-            "time": 1574313620213,
-            "author": "Allan",
-            "authorId": 2422,
-            'reply_details':[
-                {
-                    "has_voted": false,
-                    "reply_id": 101,
-                    "author":"Zeping Zhan",
-                    "authorId":310,
-                    "is_official_ans": true,
-                    "time":1584329621216,
-                    "up_vote":8,
-                    "content":"It's essentially just a text file so you need to save the plot as a file."
-                },
-                {
-                    "has_voted": true,
-                    "reply_id": 132,
-                    "author": "James",
-                    "authorId": 201,
-                    "is_official_ans": false,
-                    "time": 1580300621000,
-                    "up_vote": 23,
-                    "content": "Try savefig() function",
-                },
-                {
-                    "has_voted": false,
-                    "reply_id": 210,
-                    "author":"Anonymous",
-                    "authorId": 472,
-                    "is_official_ans":false,
-                    "time": 1575300621000,
-                    "up_vote": 1,
-                    "content":"you should ask NYU hpc"
-                },
-            ],
-        }
-    );
+app.get('/:courseId/Forum/:postId/post',passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const postId = parseInt(req.params.postId);
+    const courseId = parseInt(req.params.courseId);
+    const user = req.user;
+    const enrolledData = isEnrolled(user,courseId);
+    if(!enrolledData['isEnrolled']){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+    else{
+        Post.findOne({post_id:postId},(err,post)=> {
+            if(!post || err){
+                console.log("unable to find the post");
+                res.status(401).json({err_message:"unable to find the post"});
+            }
+            else{
+                let author_name = post.author;
+                if(post.author !== 'Anonymous to Classmates'){
+                    if(post.uid === user.uid){
+                        author_name += " (me)";
+                    }
+                    res.json(
+                        {
+                            'CourseName':enrolledData['courseName'],
+                            'postid': post.post_id,
+                            'topic': post.topic,
+                            'content': post.content,
+                            "resolved": post.resolved,
+                            'replies': post.reply_details.length,
+                            "time": post.time,
+                            "author": author_name,
+                            "authorId": post.uid,
+                            'reply_details':post['reply_details'],
+                            'myId':user.uid,
+                        }
+                    )
+                }
+                else{
+                    Course.findOne({course_id:courseId},(err,course)=>{
+                        if (course.instructor_uids.indexOf(user.uid)!==-1){
+                            author_name += " (" + post.firstname + " " + post.lastname + ")";
+                        }
+                        else if(post.uid === user.uid){
+                            author_name += " (me)";
+                        }
+                        res.json(
+                            {
+                                'CourseName':enrolledData['courseName'],
+                                'postid': post.post_id,
+                                'topic': post.topic,
+                                'content': post.content,
+                                "resolved": post.resolved,
+                                'replies': post.reply_details.length,
+                                "time": post.time,
+                                "author": author_name,
+                                "authorId": post.uid,
+                                'reply_details':post['reply_details'],
+                                'myId':user.uid,
+                            }
+                        )
+                    });
+                }
+            }
+        });
+    }
 });
 
 // get create post data: course name and user name
 app.get('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:false}),(req,res)=>{
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    if(!isEnrolled(user,courseId)){
+    if(!isEnrolled(user,courseId)['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
@@ -320,8 +545,7 @@ app.get('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:false
 app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:false}),(req,res)=>{
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    console.log("test1");
-    if(!isEnrolled(user,courseId)){
+    if(!isEnrolled(user,courseId)['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
 
@@ -329,7 +553,6 @@ app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:fals
         res.status(401).json({err_message:"missing fields"})
     }
     else{
-        console.log("test2");
         let post_as = null;
         if (req.body.post_as !== 'Anonymous to Classmates' && req.body.post_as !== 'Anonymous to Everyone'){
             post_as = user.firstname + ' ' + user.lastname;
@@ -345,21 +568,18 @@ app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:fals
             "time":Date.now(),
             "author": post_as,
             "uid": user.uid, // author id
+            'course_id':courseId,
             'reply_details':[],
+            "firstname":user.firstname,
+            "lastname":user.lastname,
         });
-        console.log(new_post);
 
         new_post.save((err,post)=>{
-            console.log("test3");
-
             if(err){
-                console.log("test4");
                 // database error
                 res.status(401).json({err_message:"document save error"});
             }
             else{
-                console.log("test5");
-
                 Course.findOne({"course_id":courseId},(err,course)=> {
                     let preview = post.content;
                     if(preview.length > 122){
@@ -371,7 +591,7 @@ app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:fals
                             "preview":preview,
                             "resolved":post.resolved,
                             "post_id":post.post_id,
-                            "replies":post.replies,
+                            "replies":post.reply_details.length,
                         }
                     );
                     course.save((err)=>{
@@ -384,68 +604,11 @@ app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:fals
     }
 });
 
-
-// app.get("/:courseId/Forum",(req,res)=> {
-//     res.json(
-//         {
-//             'CourseName': 'CS480 Computer Vision',
-//             'ListOfPosts': [
-//                 {
-//                     'topic': 'No graphs in output file?',
-//                     'preview': 'I just got done with my job, and it does not look like the output file contains any graphs? Only thing on there are my pr',
-//                     'resolved': false,
-//                     'postid': 1,
-//                     'replies': 2
-//                 },
-//                 {
-//                     'topic': 'Understanding Learning Rate',
-//                     'preview': "I'm plotting accuracy and loss curves for each learning rate, and my graphs look a little unexpected (I might be nai",
-//                     'resolved': false,
-//                     'postid': 2,
-//                     'replies': 0
-//                 },
-//                 {
-//                     'topic': 'Prince Cluster Modules to Load',
-//                     'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
-//                     'resolved': true,
-//                     'postid': 3,
-//                     'replies': 2
-//
-//                 },
-//                 {
-//                     'topic': 'How to calculate loss for an epoch',
-//                     'preview': "One thing I am a little confused about is how to calculate the loss for each epoch. I calculate the loss on each sample",
-//                     'resolved': true,
-//                     'postid': 4,
-//                     'replies': 1
-//
-//                 },
-//                 {
-//                     'topic': "Clarification on part two's three different sets of hyperparameters",
-//                     'preview': "What does it mean by three sets of hyperparameters? If I choose three learning rate e.g. 0.5, 0.05 and 0.005, would this",
-//                     'resolved': true,
-//                     'postid': 5,
-//                     'replies': 3
-//
-//                 },
-//                 {
-//                     'topic': 'How to plot all learning rates on one plot',
-//                     'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
-//                     'resolved': true,
-//                     'postid': 6,
-//                     'replies': 4
-//                 },
-//
-//             ],
-//         }
-//     );
-// });
-
 // forum view
 app.get("/:courseId/Forum",passport.authenticate('jwt',{session:false}),(req,res)=>{
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    if(!isEnrolled(user,courseId)){
+    if(!isEnrolled(user,courseId)['isEnrolled']){
         console.log("this path");
         res.status(401).json({err_message:"unable to find the given course id"});
     }
@@ -466,7 +629,7 @@ app.get("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req,
     const user = req.user;
     // check if the user is in the class
     // invalid course id or user not in the class
-    if(!isEnrolled(user,courseId)){
+    if(!isEnrolled(user,courseId)['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
@@ -494,7 +657,7 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
     }
     // check if the user is in the class
     // invalid course id or user not in the class
-    else if(!isEnrolled(user,courseId)){
+    else if(!isEnrolled(user,courseId)['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
@@ -520,7 +683,11 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
 
 
 const isEnrolled = (user,course_id)=>{
-    return user.courses.find(elem=>elem.course_id === course_id)!==undefined;
+    const searchRes = user.courses.find(elem=>elem.course_id === course_id);
+    if(searchRes === undefined){
+        return {'isEnrolled':false,'courseName':null};
+    }
+    return {'isEnrolled':true,'courseName':searchRes['course_name']};
 };
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));

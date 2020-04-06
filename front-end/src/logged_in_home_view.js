@@ -91,9 +91,9 @@ const AddCourse = ()=>{
                 setAddCourse(false);
             })
             .catch(e=>{
-                // window.location.reload(false);
-                console.log("error:",e);
-        });
+                console.log(e);
+                window.location.href = '/LoggedInHome';
+            });
     };
 
     if (addCourse)

@@ -15,23 +15,29 @@ import unresolvedImg from "./img/unresolved.png"
 import upward from "./img/Upward.png"
 import editicon from "./img/editicon.png"
 import deleteicon from "./img/deleteicon.png"
-
+import Hamburger from "./HamburgerMenu";
+import {CourseBarComponent, NavBarComponentPlaceHolder} from "./list_posts_view"
 
 /* main */
 const PostView = () =>{
     const {courseId,postId} = useParams();
     const [awaitingData,setAwaitingData] = useState(true);
-    const [myId,setMyId] = useState(100); // current user's id (mock data)
-    const [data,setData] = useState({'CourseName':null, 'ListOfPosts':[]});
+    const [data,setData] = useState({'CourseName':null, 'ListOfPosts':[],'myId':null});
     const [instructorMode,setInstructorMode] = useState(false); // assuming we are the instructor
 
     useEffect(()=>{
         const fetchData = async () => {
+            const accessToken = localStorage.getItem("access-token");
             const api = `http://127.0.0.1:5000/${courseId}/Forum/${postId}/post`; // testing api
-            const res = await axios.get(api).then(res=>{
-                setData(res.data);
-                setAwaitingData(false);
-            });
+            const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+                .then(res=>{
+                    setData(res.data);
+                    console.log(res.data);
+                    setAwaitingData(false);
+                }).catch(err=>{
+                    console.log(err);
+                    window.location.href = '/LoggedInHome';
+                });
         };
         fetchData();
     },[]);
@@ -43,75 +49,148 @@ const PostView = () =>{
         );
     else if (data['resolved']) {
         return (
-            <div className={"PostDetailContainer"}>
-                <Question postid={data['postid']} topic={data['topic']} content={data['content']} time={data['time']}
-                          author={data['author']} resolved={data['resolved']}/>
-                {data['reply_details']
-                    .filter(e => e['is_official_ans'])
-                    .map(e => <OfficialAnswer author={e["author"]} time={e['time']} content={e['content']} />
-                )}
-                {data['reply_details'].length > 1? <div className={"AnswerHeader"} id={"StudentAnswerHeader"}>the students' answers (sorted by votes)</div>:<span></span>}
-                {data['reply_details']
-                    .filter(e => !e['is_official_ans'])
-                    .map(e => <StudentAnswer authorId={e['authorId']} myId={myId} instructorMode={instructorMode} has_voted={e['has_voted']} reply_id={e['reply_id']} author={e["author"]} time={e['time']} content={e['content']} up_vote={e['up_vote']} down_vote={e['down_vote']} />
-                    )}
-                <AddReplyBtn />
-                <BackToForumBtn />
+            <div>
+                <header className="biazza-header">
+                    <Hamburger />
+                    <NavBarComponentPlaceHolder />
+                </header>
+                <CourseBarComponent CourseName={data['CourseName']} />
+                <div className={"PostDetailContainer"}>
+                    <Question postid={data['postid']} topic={data['topic']} content={data['content']} time={data['time']}
+                              author={data['author']} resolved={data['resolved']}/>
+                    <div className={"OfficialAnswerContainer"}>
+                        <div id={'OfficialAnswerHeader'} className={"AnswerHeader"}>the instructors' answer</div>
+                        {data['reply_details']
+                            .filter(e => e['is_official_ans'])
+                            .map(e => <OfficialAnswer key={e['reply_id']} reply_id={e['reply_id']} />
+                        )}
+                    </div>
+                    {data['reply_details'].filter(e => !e['is_official_ans']).length > 0? <div className={"AnswerHeader"} id={"StudentAnswerHeader"}>the students' answers (sorted by votes)</div>:<span></span>}
+                    {data['reply_details']
+                        .filter(e => !e['is_official_ans'])
+                        .map(e => <StudentAnswer key={e['reply_id']} reply_id={e['reply_id']} />
+                        )}
+                    <AddReplyBtn />
+                    <BackToForumBtn />
+                </div>
             </div>
         );
     }
 
     else if (data['reply_details'].length>0){
         return (
-            <div className={"PostDetailContainer"}>
-                <Question postid={data['postid']} topic={data['topic']} content={data['content']} time={data['time']} author={data['author']} resolved={data['resolved']}/>
-                <div className={"AnswerHeader"} id={"StudentAnswerHeader"}>the students' answers (sorted by votes)</div>
-                {data['reply_details']
-                    .filter(e => !e['is_official_ans'])
-                    .map(e => <StudentAnswer authorId={e['authorId']} myId={myId} instructorMode={instructorMode} has_voted={e['has_voted']} reply_id={e['reply_id']} author={e["author"]} time={e['time']} content={e['content']} up_vote={e['up_vote']} />
-                    )}
-                <AddReplyBtn />
-                <BackToForumBtn />
+            <div>
+                <header className="biazza-header">
+                    <Hamburger />
+                    <NavBarComponentPlaceHolder />
+                </header>
+                <CourseBarComponent CourseName={data['CourseName']} />
+                <div className={"PostDetailContainer"}>
+                    <Question postid={data['postid']} topic={data['topic']} content={data['content']} time={data['time']} author={data['author']} resolved={data['resolved']}/>
+                    <div className={"AnswerHeader"} id={"StudentAnswerHeader"}>the students' answers (sorted by votes)</div>
+                    {data['reply_details']
+                        .filter(e => !e['is_official_ans'])
+                        .map(e => <StudentAnswer key={e['reply_id']} reply_id={e['reply_id']} />
+                        )}
+                    <AddReplyBtn />
+                    <BackToForumBtn />
+                </div>
             </div>
         );
     }
 
     else{
         return (
-            <div className={"PostDetailContainer"}>
-                <Question postid={data['postid']} topic={data['topic']} content={data['content']} time={data['time']} author={data['author']} resolved={data['resolved']}/>
-                This question has not been answered.
-                <AddReplyBtn />
-                <BackToForumBtn />
+            <div>
+                <header className="biazza-header">
+                    <Hamburger />
+                    <NavBarComponentPlaceHolder />
+                </header>
+                <CourseBarComponent CourseName={data['CourseName']} />
+                <div className={"PostDetailContainer"}>
+                    <Question postid={data['postid']} topic={data['topic']} content={data['content']} time={data['time']} author={data['author']} resolved={data['resolved']}/>
+                    This question has not been answered.
+                    <AddReplyBtn />
+                    <BackToForumBtn />
+                </div>
             </div>
         );
     }
 };
 
 
-const StudentAnswer = ({myId,authorId,instructorMode,reply_id,author,time,content,up_vote,has_voted})=>{
-    const [upvote,setUpvote] = useState(up_vote);
-    const [hasVoted,setHasVoted] = useState(has_voted);
+const StudentAnswer = ({reply_id})=>{
+    const [upvote,setUpvote] = useState(0);
+    const [hasVoted,setHasVoted] = useState(false);
+    // const [isMyReply,setIsMyReply] = useState(false);
+    // const [instructorMode,setInstructorMode] = useState(false);
+    const [data,setData] = useState({});
+    const [awaitingData,setAwaitingData] = useState(true);
+    const {courseId,postId} = useParams();
+
+    /*
+    data has
+    1. has_voted (bool) -
+    2. upvote_count (Number)
+    3. is_my_reply (bool)
+    4. instructor_mode (bool) ?
+    5. time (Number)
+    6. content (String) -
+    7. author
+     */
+
+    useEffect(()=>{
+        const fetchData = async () => {
+            const accessToken = localStorage.getItem("access-token");
+            const api = `http://127.0.0.1:5000/${courseId}/course/${reply_id}/reply-detail`;
+            await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+                .then(res=>{
+                    setData(res.data);
+                    setUpvote(res.data['upvote_count']);
+                    setHasVoted(res.data['has_voted']);
+                    setAwaitingData(false);
+                }).catch(err=>{
+                    console.log(err);
+                });
+        };
+
+        fetchData();
+    },[upvote]);
 
     const upVoteHandler = (e)=>{
         e.preventDefault();
-        setUpvote(upvote+1);
-        setHasVoted(!hasVoted);
-        // send add vote request to backend
+        const accessToken = localStorage.getItem("access-token");
+        const api = `http://127.0.0.1:5000/${reply_id}/add-upvote`;
+        axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+            .then(res=>{
+                setUpvote(res.data.upvote);
+                setHasVoted(res.data.hasVoted);
+            })
+            .catch(err=>{
+                console.log(err);
+            });
     };
 
     const cancelUpVoteHandler = (e)=>{
         e.preventDefault();
-        setUpvote(upvote-1);
-        setHasVoted(!hasVoted);
-        // send decrease vote request to backend
+        const accessToken = localStorage.getItem("access-token");
+        const api = `http://127.0.0.1:5000/${reply_id}/cancel-upvote`;
+        axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+            .then(res=>{
+                setUpvote(res.data.upvote);
+                setHasVoted(res.data.hasVoted);
+            })
+            .catch(err=>{
+                console.log(err);
+            });
     };
 
+    if(awaitingData) return null;
 
-    if (hasVoted){
+    else if (data['has_voted']){
         return (
             <div className={"StudentAnswerContainer"}>
-                <div className={"content"}>{content}</div>
+                <div className={"content"}>{data['content']}</div>
                 <div className={"FunctionContainer"}>
                     <div className={`UpVoteContainer NoVote`} onClick={cancelUpVoteHandler}>
                         <span className={`UpVoteImgContainer`}>
@@ -122,17 +201,17 @@ const StudentAnswer = ({myId,authorId,instructorMode,reply_id,author,time,conten
                                 {upvote}
                         </span>
                     </div>
-                    <EditBtn reply_id={reply_id} myId={myId} authorId={authorId} />
-                    <DeleteBtn reply_id={reply_id} instructorMode={instructorMode} />
+                    <EditBtn is_my_reply={data['is_my_reply']} reply_id={reply_id} />
+                    {/*<DeleteBtn reply_id={reply_id} instructorMode={instructorMode} />*/}
 
                 </div>
-                <BottomInfo time={time} author={author} />
+                <BottomInfo time={data.time} author={data.author} />
             </div>
         )
     }
     return (
         <div className={"StudentAnswerContainer"}>
-            <div className={"content"}>{content}</div>
+            <div className={"content"}>{data['content']}</div>
 
             <div className={"FunctionContainer"}>
                 <div className={`UpVoteContainer`} onClick={upVoteHandler}>
@@ -144,11 +223,11 @@ const StudentAnswer = ({myId,authorId,instructorMode,reply_id,author,time,conten
                         {upvote}
                     </span>
                 </div>
-                <EditBtn reply_id={reply_id} myId={myId} authorId={authorId} />
-                <DeleteBtn reply_id={reply_id} instructorMode={instructorMode} />
+                <EditBtn is_my_reply={data['is_my_reply']} reply_id={reply_id} />
+                {/*<DeleteBtn reply_id={reply_id} instructorMode={instructorMode} />*/}
 
             </div>
-            <BottomInfo time={time} author={author} />
+            <BottomInfo time={data.time} author={data.author} />
         </div>
     );
 };
@@ -175,9 +254,9 @@ const DeleteBtn = ({reply_id,instructorMode}) =>{
     return null;
 };
 
-const EditBtn = ({myId,authorId,reply_id})=>{
+const EditBtn = ({is_my_reply,reply_id})=>{
     let { _, url } = useRouteMatch();
-    if (myId === authorId)
+    if (is_my_reply)
         /*{<Link to={`${url}/${reply_id}/EditReply`} className={"ReplyFunctionContainer"}>}*/
         return(
             <Link to={`${url}/ReplyPost`} className={"ReplyFunctionContainer"}>
@@ -190,12 +269,40 @@ const EditBtn = ({myId,authorId,reply_id})=>{
     return null;
 };
 
-const OfficialAnswer = ({author,time,content})=>{
+const OfficialAnswer = ({reply_id})=>{
+    const {courseId,postId} = useParams();
+    const [data,setData] = useState({});
+    const [awaitingData,setAwaitingData] = useState(true);
+    /*
+    data has
+    1. has_voted (bool) -
+    2. upvote_count (Number)
+    3. is_my_reply (bool)
+    4. instructor_mode (bool) ?
+    5. time (Number)
+    6. content (String) -
+    7. author
+     */
+    useEffect(()=>{
+        const fetchData = async () => {
+            const accessToken = localStorage.getItem("access-token");
+            const api = `http://127.0.0.1:5000/${courseId}/course/${reply_id}/reply-detail`;
+            await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+                .then(res=>{
+                    setData(res.data);
+                    setAwaitingData(false);
+                }).catch(err=>{
+                    console.log(err);
+                });
+        };
+
+        fetchData();
+    },[]);
+    if(awaitingData) return null;
     return (
-        <div className={"OfficialAnswerContainer"}>
-            <div id={'OfficialAnswerHeader'} className={"AnswerHeader"}>the instructors' answer</div>
-            <div className={"content"}>{content}</div>
-            <BottomInfo time={time} author={author} />
+        <div>
+            <div className={"content"}>{data.content}</div>
+            <BottomInfo time={data.time} author={data.author} />
         </div>
     );
 };
@@ -253,15 +360,6 @@ const BackToForumBtn = ()=>{
             </Link>
         </div>
     );
-    // return (
-    //     <div className={"BackBtnContainer"}>
-    //         <Link to={`/${courseId}/Forum/${postId}`}>
-    //             <div className={"BackToForumBtn"}>
-    //                 Back
-    //             </div>
-    //         </Link>
-    //     </div>
-    // );
 };
 
 export {PostView,Question}
