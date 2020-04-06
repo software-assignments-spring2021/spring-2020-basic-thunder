@@ -44,6 +44,7 @@ const PostSchema = new mongoose.Schema({
     'reply_details':[{
         "reply_id":Number,
         "is_official_ans":Boolean,
+        "upvote": Number,
     }],
 },{collection:'Post'});
 
@@ -52,13 +53,13 @@ mongoose.model('Post', PostSchema);
 
 const ReplySchema = new mongoose.Schema({
     "reply_id":{type:Number},
+    "post_id":{type:Number},
     "firstname":{type:String}, // replier's first name
     "lastname":{type:String}, // replier's last name
     "author": {type:String}, // the author name that the replier wants to show other people.
     "uid":{type:Number,required:true},
     "is_official_ans":{type:Boolean,required:true},
     "time":{type:Number,required:true},
-    "up_vote":{type:Number,required:true},
     "content":{type:String},
     "voter_uid":[Number],
 },{collection:'Post'});

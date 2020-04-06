@@ -31,8 +31,8 @@ const PostView = () =>{
             const api = `http://127.0.0.1:5000/${courseId}/Forum/${postId}/post`; // testing api
             const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res=>{
+                    res.data['reply_details'].sort((a,b)=>b.upvote-a.upvote);
                     setData(res.data);
-                    console.log(res.data);
                     setAwaitingData(false);
                 }).catch(err=>{
                     console.log(err);
@@ -201,8 +201,8 @@ const StudentAnswer = ({reply_id})=>{
                                 {upvote}
                         </span>
                     </div>
-                    <EditBtn is_my_reply={data['is_my_reply']} reply_id={reply_id} />
-                    {/*<DeleteBtn reply_id={reply_id} instructorMode={instructorMode} />*/}
+                    {/*<EditBtn is_my_reply={data['is_my_reply']} reply_id={reply_id} />*/}
+                    <DeleteBtn reply_id={reply_id} instructorMode={data.instructor_mode} />
 
                 </div>
                 <BottomInfo time={data.time} author={data.author} />
@@ -223,8 +223,8 @@ const StudentAnswer = ({reply_id})=>{
                         {upvote}
                     </span>
                 </div>
-                <EditBtn is_my_reply={data['is_my_reply']} reply_id={reply_id} />
-                {/*<DeleteBtn reply_id={reply_id} instructorMode={instructorMode} />*/}
+                {/*<EditBtn is_my_reply={data['is_my_reply']} reply_id={reply_id} />*/}
+                <DeleteBtn reply_id={reply_id} instructorMode={data.instructor_mode} />
 
             </div>
             <BottomInfo time={data.time} author={data.author} />
@@ -237,7 +237,10 @@ const DeleteBtn = ({reply_id,instructorMode}) =>{
     const [deleted,setRerender] = useState(false);
     const sendDeleteReplyRequest = (_)=>{
         const api = `http://127.0.0.1:5000/${courseId}/Forum/${postId}/post/${reply_id}/DeleteReply`; // testing api
-        const res = axios.delete(api).then(res=>{
+        const accessToken = localStorage.getItem("access-token");
+
+        //debug
+        const res = axios.delete(api,{headers: {"Authorization" : `Bearer ${accessToken}`}}).then(res=>{
             window.location.reload(false);
         });
     };

@@ -138,7 +138,7 @@ app.post("/login", (req, res)=>{
                         const payload = {
                             "uid": user.uid,
                         };
-                        const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: '30m'}); //{expiresIn: 60}
+                        const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: '7d'}); //{expiresIn: 60} 30m
                         res.json({"access-token": token});
                     }
                     // password do not match with the database record
@@ -191,7 +191,7 @@ app.post("/register", (req, res)=> {
                                 const payload = {
                                     "uid": user.uid,
                                 };
-                                const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: '30m'}); //{expiresIn: '30m'}
+                                const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: '7d'}); //{expiresIn: '30m'}
                                 res.json({"access-token": token});
                             }
                         });
@@ -207,15 +207,38 @@ app.post("/register", (req, res)=> {
 
 
 // delete reply request
-app.delete('/:courseId/Forum/:postId/post/:replyId/DeleteReply',(req,res)=>{
-    const courseId = req.params.courseId;
-    const postId = req.params.postId;
-    const replyId = req.params.replyId;
-    res.json(
-        {
-            'deleteSuccess':true,
-        }
-    )
+app.delete('/:courseId/Forum/:postId/post/:replyId/DeleteReply',passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const courseId = parseInt(req.params.courseId);
+    const postId = parseInt(req.params.postId);
+    const replyId = parseInt(req.params.replyId);
+    const user = req.user;
+    const enrolledData = isEnrolled(user,courseId);
+    if(!enrolledData['isEnrolled']){
+        res.status(401).json({err_message:"unable to find the given course id"});
+    }
+    else{
+        Post.findOne({post_id:postId},(err,post)=>{
+           if(err || !post || !(post.reply_details.find(elem=>elem.reply_id === replyId))){
+               res.status(401).json({err_message:"unable to find the given post id"});
+           }
+           else{
+               Reply.findOneAndDelete({reply_id:replyId},(err)=>{
+                   if(err){
+                       console.log(err);
+                       res.status(401).json({err_message:"database error (reply collection)"});
+                   }
+                   else{
+                       post.reply_details = post.reply_details.filter(elem=>elem.reply_id!==replyId);
+                       post.save((err)=>{
+                           res.json({
+                               'deleteSuccess':true
+                           })
+                       });
+                   }
+               })
+           }
+        });
+    }
 });
 
 
@@ -281,10 +304,20 @@ app.get('/:replyId/add-upvote',passport.authenticate('jwt',{session:false}),(req
                         res.status(401).json({err_message:"document save error"});
                     }
                     else{
-                        res.json({
-                            upvote: reply.voter_uid.length,
-                            hasVoted: true,
-                        })
+                        Post.findOne({post_id:reply.post_id},(err,post)=>{
+                            ++(post['reply_details'].find(elem=>elem.reply_id === reply.reply_id)['upvote']);
+                            post.save((err)=>{
+                                if(err){
+                                    res.status(401).json({err_message:"document save error"});
+                                }
+                                else{
+                                    res.json({
+                                        upvote: reply.voter_uid.length,
+                                        hasVoted: true,
+                                    })
+                                }
+                            });
+                        });
                     }
                 });
             }
@@ -309,17 +342,27 @@ app.get('/:replyId/cancel-upvote',passport.authenticate('jwt',{session:false}),(
                 })
             }
             else{
-                reply.voter_uid.splice(index,1);
-                reply.save((err)=>{
-                    if(err){
-                        res.status(401).json({err_message:"document save error"});
-                    }
-                    else{
-                        res.json({
-                            upvote: reply.voter_uid.length,
-                            hasVoted: false,
-                        })
-                    }
+                Post.findOne({post_id:reply.post_id},(err,post)=>{
+                    --(post['reply_details'].find(elem=>elem.reply_id === reply.reply_id)['upvote']);
+                    post.save((err)=>{
+                        if(err){
+                            res.status(401).json({err_message:"document save error"});
+                        }
+                        else{
+                            reply.voter_uid.splice(index,1);
+                            reply.save((err)=>{
+                                if(err){
+                                    res.status(401).json({err_message:"document save error"});
+                                }
+                                else{
+                                    res.json({
+                                        upvote: reply.voter_uid.length,
+                                        hasVoted: false,
+                                    })
+                                }
+                            });
+                        }
+                    });
                 });
             }
         }
@@ -339,7 +382,6 @@ app.get('/:courseId/Forum/:postId/post/ReplyPost',passport.authenticate('jwt',{s
     else{
         Post.findOne({post_id:postId},(err,post)=> {
             if(!post || err){
-                console.log("unable to find the post");
                 res.status(401).json({err_message:"unable to find the post"});
             }
             else{
@@ -382,7 +424,6 @@ app.post('/:courseId/Forum/:postId/post/ReplyPost',passport.authenticate('jwt',{
     else {
         Post.findOne({post_id: postId}, (err, post) => {
             if (!post || err) {
-                console.log("unable to find the post");
                 res.status(401).json({err_message: "unable to find the post"});
             }
             else{
@@ -394,6 +435,7 @@ app.post('/:courseId/Forum/:postId/post/ReplyPost',passport.authenticate('jwt',{
                     }
                     new Reply({
                         "author": author_name,
+                        "post_id":post.post_id,
                         "uid":user.uid,
                         "is_official_ans":is_official_ans,
                         "time":Date.now(),
@@ -410,6 +452,7 @@ app.post('/:courseId/Forum/:postId/post/ReplyPost',passport.authenticate('jwt',{
                             post['reply_details'].push({
                                 "reply_id":reply["reply_id"],
                                 "is_official_ans":reply['is_official_ans'],
+                                "upvote":reply['voter_uid'].length
                             });
                             if(reply['is_official_ans']){
                                 post['resolved'] = true;
@@ -436,7 +479,6 @@ app.get("/:courseId/Forum/:postId/PostPreview",passport.authenticate('jwt',{sess
     else{
         Post.findOne({post_id:postId},(err,post)=> {
             if(!post || err || post.course_id!==courseId){
-                console.log("unable to find the post");
                 res.status(401).json({err_message:"unable to find the post"});
             }
             else{
@@ -469,7 +511,6 @@ app.get('/:courseId/Forum/:postId/post',passport.authenticate('jwt',{session:fal
     else{
         Post.findOne({post_id:postId},(err,post)=> {
             if(!post || err){
-                console.log("unable to find the post");
                 res.status(401).json({err_message:"unable to find the post"});
             }
             else{
@@ -609,7 +650,6 @@ app.get("/:courseId/Forum",passport.authenticate('jwt',{session:false}),(req,res
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
     if(!isEnrolled(user,courseId)['isEnrolled']){
-        console.log("this path");
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
