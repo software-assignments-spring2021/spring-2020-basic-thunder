@@ -20,6 +20,7 @@ import {
 
 import Syllabus from "./Syllabus"
 import CreatePost from './CreatePost'
+import Schedule from "./Schedule"
 
 function App() {
     const [loggedIn,setLoggedIn] = useState(false);
@@ -37,6 +38,7 @@ function App() {
                     <Route path="/:courseId/Forum/:postId/post" component={PostView}/>
                     <Route path="/:courseId/Forum" component={ListPostsView} />
                     <Route path="/:courseId/Syllabus" component={Syllabus} />
+                    <Route path="/:courseId/Schedule" component={Schedule} />
                     <Route exact path="/">
                         {loggedIn ? <Redirect to="/LoggedInHome" /> : <Redirect to={"/home"}/>}
                     </Route>
