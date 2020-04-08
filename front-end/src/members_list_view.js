@@ -82,7 +82,7 @@ const MembersListView = () => {
 
 const Member = (props) => {
 
-    // add database code later
+    // add backend & database code later
     const handleYes = (e) => {
         e.preventDefault()
         e.currentTarget.parentElement.style.display = 'none'
@@ -158,7 +158,7 @@ const AddModal = (props) => {
     }
 
     const handleChange = (e) => {
-        console.log(e.currentTarget.value)
+        setSelected(e.currentTarget.value)
     }
 
     return (
@@ -175,11 +175,11 @@ const AddModal = (props) => {
                 <label>
                     <span>Type:</span><br/>
 
-                    <input type="radio" value="student" onChange={handleChange}/>
-                    <label htmlFor="student">Student</label><br/>
+                    <input type="radio" id="radio-1" value="student" checked={selected === 'student'} onChange={handleChange}/>
+                    <label id="label-1" htmlFor="student">Student</label><br/>
 
-                    <input type="radio" value="instructor" onChange={handleChange}/>
-                    <label htmlFor="instructor">Instructor</label><br/>
+                    <input type="radio" id="radio-2" value="instructor" checked={selected === 'instructor'} onChange={handleChange}/>
+                    <label id="label-2" htmlFor="instructor">Instructor</label><br/>
 
                 </label>
 
@@ -216,3 +216,4 @@ const CourseBarComponent = ({CourseName})=>{
 }
 
 export {MembersListView}
+

@@ -92,7 +92,27 @@
 }
 
 .MembersListView #add input[type=radio] {
-    transform: scale(1.3)
+    position: relative;
+    transform: scale(1.5);
+    margin-right: 10px;
+}
+
+.MembersListView #add #radio-1 {
+    left: -10px;
+}
+
+.MembersListView #add #radio-2 {
+    left: -4px;
+}
+
+.MembersListView #add #label-1 {
+    position: relative;
+    left: -10px;
+}
+
+.MembersListView #add #label-2 {
+    position: relative;
+    left: -4px;
 }
 
 .MembersListView #delete {
