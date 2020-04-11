@@ -9,6 +9,8 @@ import {ReplyPostView} from "./reply_post_view"
 import {NotLoggedInHomeView} from './home_view'
 import {LoginView} from './login_view'
 import {RegisterView} from './register_view'
+
+import {SettingsView} from './settings_view'
 import {useState} from 'react';
 import {
     BrowserRouter as Router,
@@ -40,6 +42,9 @@ function App() {
                     <Route exact path="/">
                         {loggedIn ? <Redirect to="/LoggedInHome" /> : <Redirect to={"/home"}/>}
                     </Route>
+
+                    <Route path={"/settings"} component={SettingsView} />
+
                 </Switch>
             </div>
         </Router>

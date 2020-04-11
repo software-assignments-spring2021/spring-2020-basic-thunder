@@ -1,0 +1,16 @@
+.SettingsView {
+
+}
+
+.SettingsView .section {
+    border: 1px solid black;
+    padding: 10px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 20px;
+}
+
+.SettingsView .section input[type=text] {
+    width: 200px;
+    height: 30px;
+}
