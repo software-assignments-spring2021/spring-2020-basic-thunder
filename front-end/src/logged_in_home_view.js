@@ -21,9 +21,7 @@ Expected data:
  */
 
 
-const useForceUpdate = () => useState()[1];
-let rerender_courselist = null;
-
+let rerenderTriggeer = null;
 /* main */
 const HomeView = ()=>{
     return (
@@ -79,21 +77,23 @@ const AddCourse = ()=>{
 
     const handleAddNewCourse = (e)=> {
         e.preventDefault();
-        const dataUrl = "https://jsonplaceholder.typicode.com/users"; // fake api
-        const dataToBeSend = {
-            name: courseName,
+        const accessToken = localStorage.getItem("access-token");
+        const api = "http://127.0.0.1:5000/create-courses"; // backend api
+        const course_name = e.target['courseNameInput'].value;
+        const term = e.target['SemesterOptionsContainer'].value;
+        const new_course_data = {
+            course_name: course_name,
+            term:term,
         };
-        setAddCourse(false);
-
-        axios.post(dataUrl, {
-            name: courseName,
-            // NewCourseName: courseName,
-            // UserId: 1,  // fake id
-        }).then(res => {
-            console.log("response received");
-            console.log(res);
-            rerender_courselist(null);
-        })
+        axios.post(api, new_course_data,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+            .then(res => {
+                rerenderTriggeer(null);
+                setAddCourse(false);
+            })
+            .catch(e=>{
+                console.log(e);
+                window.location.href = '/LoggedInHome';
+            });
     };
 
     if (addCourse)
@@ -101,7 +101,7 @@ const AddCourse = ()=>{
             <div>
                 <form className={"AddNewCourseArea"} onSubmit={handleAddNewCourse}>
                     <label htmlFor="courseName" className={"GuideUserLine"}>Please enter your new course: </label>
-                    <input type="text" placeholder="Course Name" id="courseNameInput" name="courseName" onChange={e=>setCourseName(e.target.value)}/>
+                    <input type="text" placeholder="Course Name" id="courseNameInput" name="courseName" onChange={e=>setCourseName(e.target.value)} required={true}/>
                     <label htmlFor="courseName" className={"GuideUserLine"}>Semester: </label>
                     <select id="SemesterOptionsContainer" defaultValue={selected_semester}>
                         {year_options.map(e=>(<option className={"SemesterOption"} value={e}>{e}</option>))}
@@ -141,23 +141,30 @@ const InstructorControls = ({isInstructor}) =>{
     return null;
 };
 
+// main
 const CourseList = () =>{
     const [awaitingData,setAwaitingData] = useState(true);
-    const [data,setData] = useState([]);
+    const [coursesArr,setCoursesArr] = useState([]);
     const [isInstructor,setInstructor] = useState(false);
-    const [_,updatefunc] = useState(null);
-    rerender_courselist = updatefunc;
-
+    const [rerender,setRerender] = useState(false);
+    rerenderTriggeer = setRerender;
     useEffect(()=>{
         const fetchData = async () => {
-            const dataUrl = "https://jsonplaceholder.typicode.com/todos"; // fake api
-            const res = await axios.get(dataUrl).then(res=>{
-                setData(res.data.slice(0,10));
-                setAwaitingData(false);
-            });
+            const api = "http://127.0.0.1:5000/my-courses"; // backend api
+            const accessToken = localStorage.getItem("access-token");
+            await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+                .then(res=>{
+                    console.log(res.data.courses);
+                    setCoursesArr(res.data.courses);
+                    setInstructor(res.data.role === 'Instructor');
+                    setAwaitingData(false);
+                })
+                .catch(e=>{
+                    console.log(e);
+                });
         };
         fetchData();
-    },[]);
+    },[rerender]);
     if (awaitingData)
         return (
             <div className={"CourseList"}>
@@ -169,8 +176,8 @@ const CourseList = () =>{
     return (
       <div className={"CourseList"}>
           <div id={"MyCourses"}>
-              {data.length>0?(data.map(e=>(
-                  <Course key={e.id} title={e.title} courseId={e.id}/>
+              {coursesArr.length>0?(coursesArr.map(e=>(
+                  <Course key={e.course_id} title={e.course_name} courseId={e.course_id}/>
               ))):<h4 id={"noCourse"}>You are not affiliated to any course</h4>}
           </div>
           <InstructorControls isInstructor={isInstructor}/>

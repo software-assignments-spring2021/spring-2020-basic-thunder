@@ -1047,7 +1047,8 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
     if(!req.body || !req.body.syllabus){
         res.status(401).json({err_message:"incomplete request (missing fields)"});
     }
-    // temp begin
+    // temp begins
+    const course = Course.find(e=>e.course_id === courseId);
     course.syllabus = req.body.syllabus;
     res.json({'message':'success'});
     // temp end
