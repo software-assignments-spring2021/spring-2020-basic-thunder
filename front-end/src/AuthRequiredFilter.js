@@ -33,7 +33,7 @@ const AuthRequiredFilter = ({ children }) => {
     }
 
     return (
-        <context.Provider value={user}>
+        <context.Provider>
             <Switch>
                 {children}
             </Switch>

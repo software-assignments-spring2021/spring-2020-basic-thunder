@@ -41,6 +41,8 @@ schema
 
  */
 
+const accessToken = localStorage.getItem("access-token");
+
 /* main */
 const ListPostsView = ()=>{
     const {courseId} = useParams();
@@ -48,9 +50,14 @@ const ListPostsView = ()=>{
     useEffect(()=>{
         const fetchData = async () => {
             const api = `http://127.0.0.1:5000/${courseId}/Forum`; // testing api
-            const res = await axios.get(api).then(res=>{
-                setData(res.data);
-            });
+            const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+                .then(res=>{
+                    setData(res.data);
+                })
+                .catch(err=>{
+                    console.log(err);
+                    window.location.reload(false);
+                });
         };
         fetchData();
     },[]);
@@ -66,7 +73,11 @@ const ListPostsView = ()=>{
             </header>
             <CourseBarComponent CourseName={data['CourseName']} />
             <div  className={"PostPreviewContainer"}>
-                {data['ListOfPosts'].map(props=>(<PostPreview key={props.postid} preview={props['preview']} replies={props.replies} resolved={props['resolved']} topic={props.topic} postid={props.postid}/>))}
+                {
+                    data['ListOfPosts'].length > 0 ?
+                        data['ListOfPosts'].map(props=>(<PostPreview key={props.postid} preview={props['preview']} replies={props.replies} resolved={props['resolved']} topic={props.topic} postid={props.postid}/>))
+                        :"This forum has no post yet."
+                }
             </div>
             <Link to={`/${courseId}/Forum/CreatePost`} className={"AddPostContainer"}>
                 <button id={"AddPostBtn"}>Add Post</button>
@@ -121,11 +132,6 @@ const NavBarComponentPlaceHolder = () =>{
             <h2>Biazza</h2>
         </div>
     );
-    // return (
-    //     <div className={"NavBarComponentPlaceHolder"}>
-    //         <h2>Nav Bar Place Holder</h2>
-    //     </div>
-    // );
 };
 
 export {ListPostsView,CourseBarComponent};
