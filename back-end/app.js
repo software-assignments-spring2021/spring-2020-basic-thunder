@@ -19,7 +19,11 @@ const jwtOptions = {
 };
 const strategy = new JwtStrategy(jwtOptions,(jwt_payload,next)=>{
     //extract user from DB
-    User.findOne({_id:jwt_payload.id},(err,user)=>{
+
+    console.log("testing");
+    console.log(jwt_payload.uid);
+
+    User.findOne({uid:jwt_payload.uid},(err,user)=>{
         if(err) {
             next(null,false);
         }
@@ -44,9 +48,8 @@ const allowedOrigins = ['http://localhost:3000','http://127.0.0.1:3000'];
 
 app.use(
     cors({
-        origin: function(origin, cb){
+        origin: (origin, cb)=>{
             // allow requests with no origin
-            // (like mobile apps or curl requests)
             if(!origin) return cb(null, true);
             if(allowedOrigins.indexOf(origin) === -1){
                 const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
@@ -62,6 +65,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 // middleware end
+
+// note: testing code during development, no real use.
+app.get("/verify-access-token",passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const uid =  req.user.uid;
+    res.send({uid:uid});
+});
+
 
 // login
 app.post("/login", (req, res)=>{
@@ -81,7 +91,7 @@ app.post("/login", (req, res)=>{
                         const payload = {
                             "uid": user.uid,
                         };
-                        const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: 60}); //{expiresIn: '30m'}
+                        const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: '30m'}); //{expiresIn: 60}
                         res.json({"access-token": token});
                     }
                     // password do not match with the database record
