@@ -79,7 +79,7 @@ app.post("/login", (req, res)=>{
                     // correct password, issue access token
                     if(passwordMatch===true){
                         const payload = {
-                            "id": user.id,
+                            "uid": user.uid,
                         };
                         const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: 60}); //{expiresIn: '30m'}
                         res.json({"access-token": token});
@@ -132,7 +132,7 @@ app.post("/register", (req, res)=> {
                             else{
                                 // registration complete: issue payload to user
                                 const payload = {
-                                    "id": user.id,
+                                    "uid": user.uid,
                                 };
                                 const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: 60}); //{expiresIn: '30m'}
                                 res.json({"access-token": token});
@@ -341,4 +341,6 @@ app.post("/:courseId/Syllabus",(req,res)=>{
     )
 });
 
+
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+
