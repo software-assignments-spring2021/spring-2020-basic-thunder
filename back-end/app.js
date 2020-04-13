@@ -725,7 +725,7 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
  *  Members List
  */
 
-app.get('/:courseId/members-list', passport.authenticate('jwt',{session:false}), (req, res) => {
+app.get('/:courseId/members-list', (req, res) => {
     const user = req.user
     const courseId = parseInt(req.params.courseId)
 
@@ -746,6 +746,7 @@ app.get('/:courseId/members-list', passport.authenticate('jwt',{session:false}),
                 'email': 'cm222@nyu.edu'}
         ]
     }
+
     res.json(data)
 })
 

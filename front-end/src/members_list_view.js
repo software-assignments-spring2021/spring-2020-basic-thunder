@@ -29,9 +29,7 @@ const data = {
         'email': 'cm222@nyu.edu'}
     ]
 }
-
  */
-
 
 const MembersListView = () => {
     const {courseId} = useParams()
@@ -43,14 +41,19 @@ const MembersListView = () => {
 
     const api = `http://127.0.0.1:5000/${courseId}/members-list`
 
-    /*
-    axios.get(api)
-        .then(res => {
-            console.log(res)
-        })
-
-     */
-
+    useEffect(()=>{
+        const fetchData = async () => {
+            axios.get(api)
+                .then(res => {
+                    setData(res.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                    window.location.reload(false)
+                })
+        };
+        fetchData();
+    },[]);
 
 
     // const [mode, setMode] = useState('instructor')
@@ -74,24 +77,30 @@ const MembersListView = () => {
         <div className={'MembersListView'}>
 
             <header className="biazza-header">
-                <Hamburger />
-                <NavBarComponentPlaceHolder />
+                <Hamburger/>
+                <NavBarComponentPlaceHolder/>
             </header>
-            <CourseBarComponent CourseName={courseName} />
+            <CourseBarComponent CourseName={courseName}/>
 
             <div className={"main"}>
-                {mode === 'instructor' ? <div id="addBtn"><button onClick={handleAdd}>Add New Member</button></div> : ''}
+                {mode === 'instructor' ? <div id="addBtn">
+                    <button onClick={handleAdd}>Add New Member</button>
+                </div> : ''}
                 {add ? <AddModal/> : ''}
 
-            <h3>Instructors</h3>
-            <div className={"members"} id="instructors">
-                {data['instructors'] ? data['instructors'].map(props=>(<Member mode={mode} role={'instructor'} key={props.email} name={props.name} email={props.email}/>)): ''}
-            </div>
+                <h3>Instructors</h3>
+                <div className={"members"} id="instructors">
+                    {data['instructors'] ? data['instructors'].map(props => (
+                        <Member mode={mode} role={'instructor'} key={props.email} name={props.name}
+                                email={props.email}/>)) : ''}
+                </div>
 
-            <h3>Students</h3>
-            <div className={"members"} id="students">
-                {data['students'] ? data['students'].map(props=>(<Member mode={mode} role={'student'} key={props.email} name={props.name} email={props.email}/>)): ''}
-            </div>
+                <h3>Students</h3>
+                <div className={"members"} id="students">
+                    {data['students'] ? data['students'].map(props => (
+                        <Member mode={mode} role={'student'} key={props.email} name={props.name}
+                                email={props.email}/>)) : ''}
+                </div>
 
             </div>
 
