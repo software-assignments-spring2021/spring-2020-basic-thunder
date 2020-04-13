@@ -30,15 +30,105 @@ const SettingsView = () => {
             <div className={"main"}>
 
                 <h1>Settings</h1>
-                <Section value={"username"}/>
-                <Section value={"email"}/>
-                <Section value={"password"}/>
+                <Email email="user001@nyu.edu"/>
+                <Password/>
 
             </div>
 
         </div>
     )
 }
+
+// to be implemented if there's time
+
+const Name = (props) => {
+    const first = props.first
+    const last = props.last
+
+    return (
+        <div className="section" id="nameDiv">
+            <div className={"left"}>
+                <p>Name</p>
+            </div>
+
+            <div className={"right"}>
+
+                <form>
+                    <p>First name: {first}</p>
+                    <label>Edit: </label>
+                    <input type="text"/>
+                    <br/>
+
+                    <p>Last name: {last}</p>
+                    <label>New new name: </label>
+                    <input type="text"/>
+                    <br/>
+
+                    <input type="submit" value="Change Email" />
+
+                </form>
+            </div>
+        </div>
+    )
+}
+
+const Email = (props) => {
+
+    let email = props.email
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+    }
+
+
+    return (
+        <div className="section">
+            <div className={"left"}>
+                <p>Email</p>
+            </div>
+
+            <div className={"right"}>
+
+                <form onSubmit={handleSubmit}>
+                    <p id="email">Current email: {email}</p>
+                    <label>New email: </label>
+                    <input type="text"/>
+                    <br/>
+
+                    <input type="submit" value="Change Email" />
+
+                </form>
+            </div>
+        </div>
+    )
+}
+
+const Password = (props) => {
+
+    return (
+        <div className="section">
+            <div className={"left"}>
+                <p>Password</p>
+            </div>
+
+            <div className={"right"}>
+                <form>
+                    <label>Current password: </label>
+                    <input type="text"/>
+                    <br/>
+
+                    <label>New password: </label>
+                    <input type="text"/>
+                    <br/>
+
+                    <input type="submit" value="Change Password" />
+                </form>
+
+            </div>
+        </div>
+    )
+}
+
 
 const Section = (props) => {
     const value = props.value
