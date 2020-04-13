@@ -15,7 +15,7 @@ I might need to do some fake api call that will simulate adding a post to
 the class's forum.
 */
 
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import "./styles/CreatePost.css"
 import Hamburger from "./HamburgerMenu"
 import {
@@ -27,6 +27,9 @@ import {
     useRouteMatch, Redirect
 } from "react-router-dom";
 import axios from "axios";
+import {LoadingView} from "./loading_view";
+import {CourseBarComponent} from "./list_posts_view"
+
 
 const NavBarComponentPlaceHolder = () => {
     return (
@@ -36,42 +39,57 @@ const NavBarComponentPlaceHolder = () => {
     );
 };
 
-const QuestionTitle = () => {
-	return (
-		<input id="inpt-question-title" type="text" placeholder="Question Title?"/>
-	);
-};
-
-const QuestionContent = () => {
-	return(
-		<input id="inpt-question-content" type="text" placeholder="Body text"/>
-	);
-};
-
 const CreatePost = () => {
-	const postAs = ["Mock User", "Anonymous to Classmates", "Anonymous to Everyone"];
+	const postAs = ["Anonymous to Classmates", "Anonymous to Everyone"];
     const {courseId} = useParams();
-    const api = `http://127.0.0.1:5000/${courseId}/Forum/CreatePost`; // testing api
+    const api = `http://127.0.0.1:5000/${courseId}/Forum/CreatePost`; // backend api
 	const [postId,setPostId] = useState(null);
+	const [data,setData] = useState({course_name:null,username:null});
+
+
+    useEffect(()=>{
+        const fetchData = async () => {
+            const accessToken = localStorage.getItem("access-token");
+            const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+                .then(res=>{
+                    setData(res.data);
+                })
+                .catch(err=>{
+                    console.log(err);
+                    window.location.reload(false);
+                });
+        };
+        fetchData();
+    },[]);
+
+
 
     const handleCreatePost = (e)=>{
         e.preventDefault();
         const title = e.target['inpt-question-title'].value;
         const content = e.target['inpt-question-content'].value;
 		const postAs = e.target['show-my-name-selector'].value;
+        const accessToken = localStorage.getItem("access-token");
+
         axios.post(api,
 			{
 				'title':title,
 				'content': content,
                 'post_as': postAs,
-			}).then(res=>{
+			},{headers: {"Authorization" : `Bearer ${accessToken}`}})
+			.then(res=>{
 				console.log('response data:',res.data);
         		setPostId(res.data['postid']);
-        });
+        	})
+			.catch(err=>{
+				console.log(err);
+				window.location.reload(false);
+			});
     };
 
+    if(data['course_name']===null) return <LoadingView />;
 
-    if(postId !== null) return <Redirect push to={`/${courseId}/Forum/${postId}/post`} />;
+    else if(postId !== null) return <Redirect push to={`/${courseId}/Forum/${postId}/post`} />;
 
 	return(
 		<div id="create-post-container">
@@ -79,17 +97,18 @@ const CreatePost = () => {
 				<Hamburger />
 				<NavBarComponentPlaceHolder />
 			</header>
+			<CourseBarComponent CourseName={data['course_name']} />
 			<form onSubmit={handleCreatePost}>
 				<section className="question-container">
-					<input id="inpt-question-title" type="text" placeholder="Question Title?"/>
-					<textarea id="inpt-question-content" placeholder="Body text"/>
+					<input id="inpt-question-title" type="text" placeholder="Question Title" required={true}/>
+					<textarea id="inpt-question-content" placeholder="Question Body" required={true}/>
 				</section>
 				<div className="post-as-container">
 					<label className="show-my-name-label">Show my name as:</label>
 					<select id="show-my-name-selector">
+						<option>{data['username']}</option>
 						<option>{postAs[0]}</option>
 						<option>{postAs[1]}</option>
-						<option>{postAs[2]}</option>
 					</select>
 				</div>
 				<div id="submit-cancel-container">

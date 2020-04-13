@@ -14,33 +14,6 @@ import {LoadingView} from "./loading_view"
 import './styles/ListPostView.css'
 import Hamburger from './HamburgerMenu'
 
-/*
-schema
-{
-        'CourseName': course name (string),
-        'ListOfPosts': an array of the post previews object
-            [
-                {
-                    'topic':  post topic (string) ,
-                    'preview': string first 122 characters of meessage,
-                    'resolved': whether the post contains an official answer from the professor or marked by professor (boolean),
-                    'postid': the id of the post (int),
-                    'replies': number of repplies int
-                },
-                Example:
-                 {
-                    'topic': 'How to plot all learning rates on one plot',
-                    'preview': "I've been getting erros with my python imports using the prince cluster for over an hour now. And at this point I am",
-                    'resolved': True,
-                    'postid': 6,
-                    'replies': 4
-                },
-
-            ],
-    }
-
- */
-
 /* main */
 const ListPostsView = ()=>{
     const {courseId} = useParams();
@@ -48,9 +21,15 @@ const ListPostsView = ()=>{
     useEffect(()=>{
         const fetchData = async () => {
             const api = `http://127.0.0.1:5000/${courseId}/Forum`; // testing api
-            const res = await axios.get(api).then(res=>{
-                setData(res.data);
-            });
+            const accessToken = localStorage.getItem("access-token");
+            const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+                .then(res=>{
+                    setData(res.data);
+                })
+                .catch(err=>{
+                    console.log(err);
+                    window.location.href = '/LoggedInHome';
+                });
         };
         fetchData();
     },[]);
@@ -59,14 +38,18 @@ const ListPostsView = ()=>{
             <LoadingView />
         );
     return (
-        <div class="ForumView">
+        <div className="ForumView">
             <header className="biazza-header">
                 <Hamburger />
                 <NavBarComponentPlaceHolder />
             </header>
             <CourseBarComponent CourseName={data['CourseName']} />
             <div  className={"PostPreviewContainer"}>
-                {data['ListOfPosts'].map(props=>(<PostPreview key={props.postid} preview={props['preview']} replies={props.replies} resolved={props['resolved']} topic={props.topic} postid={props.postid}/>))}
+                {
+                    data['ListOfPosts'].length > 0 ?
+                        data['ListOfPosts'].reverse().map(props=>(<PostPreview key={props.postid} postid={props.post_id}/>))
+                        :"This forum has no post yet."
+                }
             </div>
             <Link to={`/${courseId}/Forum/CreatePost`} className={"AddPostContainer"}>
                 <button id={"AddPostBtn"}>Add Post</button>
@@ -83,29 +66,41 @@ const CourseBarComponent = ({CourseName})=>{
 
 const PostPreview = (props)=>{
     let { path, url } = useRouteMatch();
-
-    const preview = props['preview'];
-    const replies = props.replies;
-    const resolved = props['resolved'];
-    const topic = props.topic;
     const postid = props.postid;
-    /*
-    need to add this property to link: component={post}
-     */
 
+    const {courseId} = useParams();
+    const [data,setData] = useState({'preview':null,'replies':null,'resolved':null,'topic':null});
+    useEffect(()=>{
+        const fetchData = async () => {
+            const api = `http://127.0.0.1:5000/${courseId}/Forum/${postid}/PostPreview`; // backend api
+            const accessToken = localStorage.getItem("access-token");
+            const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+                .then(res=>{
+                    setData(res.data);
+                })
+                .catch(err=>{
+                    console.log(err);
+                    window.location.href = '/LoggedInHome';
+                });
+        };
+        fetchData();
+    },[]);
+    if(data.resolved === null){
+        return null;
+    }
     return (
         <div>
-            <div className={`PostPreviewDetail ${resolved}`}>
+            <div className={`PostPreviewDetail ${data.resolved}`}>
                 <Link to={`${url}/${postid}/post`}>
                     <div className={"PostTopicHeader"}>
-                        <div className={"PostTopic"}>{topic}</div> <div className={"ReplyInfo"}>[Replies: {replies}]</div>
+                        <div className={"PostTopic"}>{data.topic}</div> <div className={"ReplyInfo"}>[Replies: {data.replies}]</div>
                     </div>
                     <div className={"PostTopicContent"}>
                         <div className={"PostPreview"}>
-                            {preview}
+                            {data.preview}
                         </div>
                         <div className={"PostStatusIconContainer"}>
-                            {resolved? <img className={"PostStatusIcon"} src={resolvedImg}/>:<img className={"PostStatusIcon"} src={unresolvedImg}/>}
+                            {data.resolved? <img className={"PostStatusIcon"} src={resolvedImg}/>:<img className={"PostStatusIcon"} src={unresolvedImg}/>}
                         </div>
                     </div>
                 </Link>
@@ -121,11 +116,6 @@ const NavBarComponentPlaceHolder = () =>{
             <h2>Biazza</h2>
         </div>
     );
-    // return (
-    //     <div className={"NavBarComponentPlaceHolder"}>
-    //         <h2>Nav Bar Place Holder</h2>
-    //     </div>
-    // );
 };
 
-export {ListPostsView,CourseBarComponent};
+export {ListPostsView,CourseBarComponent,NavBarComponentPlaceHolder};

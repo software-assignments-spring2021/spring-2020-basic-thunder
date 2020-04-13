@@ -10,7 +10,6 @@ import {NotLoggedInHomeView} from './home_view'
 import {LoginView} from './login_view'
 import {RegisterView} from './register_view'
 import {MembersListView} from './members_list_view'
-import {SettingsView} from './settings_view'
 import {useState} from 'react';
 import {
     BrowserRouter as Router,
@@ -22,6 +21,7 @@ import {
 import {AuthRequiredFilter} from "./AuthRequiredFilter";
 import Syllabus from "./Syllabus";
 import CreatePost from './CreatePost';
+import {SettingsView} from "./settings_view";
 
 function App() {
 
