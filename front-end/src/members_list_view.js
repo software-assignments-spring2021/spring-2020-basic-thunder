@@ -41,6 +41,8 @@ const MembersListView = () => {
     const [data, setData] = useState({'courseId': -1, 'courseName': null, 'instructors': null, 'students': null})
     const api = `http://127.0.0.1:5000/${courseId}/members-list`
 
+    // fetch data from backend
+    // set 'data' variable to the hard-coded JSON object
     useEffect(()=>{
         const fetchData = async () => {
             axios.get(api)
@@ -61,7 +63,6 @@ const MembersListView = () => {
 
     const [add, setAdd] = useState(false)
     const [del, setDel] = useState(false)
-
 
     const handleAdd = (e) => {
         e.preventDefault()
@@ -139,7 +140,6 @@ const Member = (props) => {
         const card = document.getElementById(email)
         card.style.display = 'none'
 
-
     }
 
     const handleNo = (e) => {
@@ -209,7 +209,9 @@ const AddModal = (props) => {
     const api = `http://127.0.0.1:5000/${courseId}/members-list`
     // const [data,setData] = useState({course_name:null,username:null})
 
+    // which radio button is selected
     const [selected, setSelected] = useState('student')
+    // whether modal to add a member should be visible
     const [visible, setVisible] = useState(true)
 
     const handleClick = (e) => {
