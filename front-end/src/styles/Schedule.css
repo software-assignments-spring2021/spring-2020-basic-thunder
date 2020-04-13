@@ -37,17 +37,17 @@
 }
 
 .detail-buttons-container{
-	width: 150px;
+	width: 130px;
 	margin: 0px 0px 0px 0px;
 	position: absolute;
-	top: 0px;
+	top: 10px;
 	right: 0px;
 }
 
 .edit-date-details{
 	background-color: darkslateblue;
     color: white;
-    padding: 6px 12px;
+    padding: 6px 10px;
     text-align: center;
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
@@ -61,7 +61,7 @@
 .delete-date-details{
 	background-color: darkred;
     color: white;
-    padding: 6px 12px;
+    padding: 6px 8px;
     text-align: center;
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
@@ -72,17 +72,49 @@
 	cursor:pointer;
 }
 
-.save-date-details{
+
+
+#post-save-btn{
 	background-color: darkgreen;
     color: white;
-    padding: 6px 12px;
+    padding: 6px 8px;
     text-align: center;
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
-    /*position: absolute;
-    top: 10px;
-    right: 120px;*/
+}
+
+#post-save-btn:hover{
+	background-color: green;
+	cursor:pointer;
+}
+
+#post-cancel-btn{
+	background-color: darkred;
+    color: white;
+    padding: 6px 8px;
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+
+#post-cancel-btn:hover{
+	background-color: red;
+	cursor:pointer;
+}
+
+
+
+
+.save-date-details{
+	background-color: darkgreen;
+    color: white;
+    padding: 6px 8px;
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
 }
 
 .save-date-details:hover{
@@ -93,17 +125,18 @@
 .cancel-date-details{
 	background-color: darkred;
     color: white;
-    padding: 6px 12px;
+    padding: 6px 8px;
     text-align: center;
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
-    /*position: absolute;
-    top: 10px;
-    right: 100px;*/
 }
 
 .cancel-date-details:hover{
 	background-color: red;
 	cursor:pointer;
+}
+
+.hiding{
+	display: none;
 }
