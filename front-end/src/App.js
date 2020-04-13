@@ -21,6 +21,7 @@ import {
 import {AuthRequiredFilter} from "./AuthRequiredFilter";
 import Syllabus from "./Syllabus";
 import CreatePost from './CreatePost';
+import {SettingsView} from "./settings_view";
 
 function App() {
 
@@ -29,20 +30,21 @@ function App() {
             <div className="App">
                 <Switch>
                     <Route exact path="/">
-                       <Redirect to="/LoggedInHome" />
+                        <Redirect to="/LoggedInHome" />
                     </Route>
                     <Route path={"/home"} component={NotLoggedInHomeView} />
                     <Route path="/sign-up" component={RegisterView} />
                     <Route path="/log-in" component={LoginView} />
 
                     <AuthRequiredFilter>
-                            <Route path="/LoggedInHome" component={HomeView} />
-                            <Route path="/:courseId/Forum/CreatePost" component={CreatePost} />
-                            <Route path="/:courseId/Forum/:postId/post/ReplyPost" component={ReplyPostView}/>
-                            <Route path="/:courseId/Forum/:postId/post" component={PostView}/>
-                            <Route path="/:courseId/Forum" component={ListPostsView} />
-                            <Route path="/:courseId/Syllabus" component={Syllabus} />
-                            <Route path={"/:courseId/members-list"} component={MembersListView} />
+                        <Route path="/LoggedInHome" component={HomeView} />
+                        <Route path="/:courseId/Forum/CreatePost" component={CreatePost} />
+                        <Route path="/:courseId/Forum/:postId/post/ReplyPost" component={ReplyPostView}/>
+                        <Route path="/:courseId/Forum/:postId/post" component={PostView}/>
+                        <Route path="/:courseId/Forum" component={ListPostsView} />
+                        <Route path="/:courseId/Syllabus" component={Syllabus} />
+                        <Route path={"/:courseId/members-list"} component={MembersListView} />
+                        <Route path={"/settings"} component={SettingsView} />
                     </AuthRequiredFilter>
 
                 </Switch>
