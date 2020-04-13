@@ -43,6 +43,9 @@ const PORT = process.env.PORT || 5000;
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+// business logic
+const Biz = require('./lib');
+
 // middleware begin
 const allowedOrigins = ['http://localhost:3000','http://127.0.0.1:3000'];
 
@@ -83,7 +86,7 @@ app.get("/my-courses",passport.authenticate('jwt',{session:false}),(req,res)=> {
 
 app.post("/create-courses",passport.authenticate('jwt',{session:false}),(req,res)=> {
     const user = req.user;
-    if(user.role==='Instructor'&&req.body && req.body.course_name && req.body.term){
+    if(Biz.postCreateCourseFieldCheck(user,req)){
         new Course({
             creator_uid: user.uid,
             firstname:user.firstname,
@@ -122,7 +125,7 @@ app.post("/create-courses",passport.authenticate('jwt',{session:false}),(req,res
 
 // login
 app.post("/login", (req, res)=>{
-    if(req.body && req.body.email && req.body.password){
+    if(Biz.postLoginFieldCheck(req)){
         const email = req.body.email;
         const password = req.body.password;
         const user = User.findOne({"email":email},(err,user,count)=>{
@@ -212,7 +215,7 @@ app.delete('/:courseId/Forum/:postId/post/:replyId/DeleteReply',passport.authent
     const postId = parseInt(req.params.postId);
     const replyId = parseInt(req.params.replyId);
     const user = req.user;
-    const enrolledData = isEnrolled(user,courseId);
+    const enrolledData = Biz.isEnrolled(user,courseId);
     if(!enrolledData['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
@@ -246,7 +249,7 @@ app.get('/:courseId/course/:replyId/reply-detail',passport.authenticate('jwt',{s
     const user = req.user;
     const replyId = parseInt(req.params.replyId);
     const courseId = parseInt(req.params.courseId);
-    const enrolledData = isEnrolled(user,courseId);
+    const enrolledData = Biz.isEnrolled(user,courseId);
 
     if(!enrolledData['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
@@ -259,14 +262,7 @@ app.get('/:courseId/course/:replyId/reply-detail',passport.authenticate('jwt',{s
                     res.status(401).json({err_messagee:"reply do not exist"});
                 }
                 else{
-                    const ins_mode = course.instructor_uids.indexOf(user.uid)!==-1;
-                    let author_name = reply.author;
-                    if(ins_mode && reply.author === 'Anonymous to Classmates'){
-                        author_name += " (" + reply.firstname + " " + reply.lastname + ")";
-                    }
-                    else if(reply.uid===user.uid){
-                        author_name += " (me)"
-                    }
+                    const [author_name,ins_mode] = Biz.getAutherNameAndSetMode(course,reply,user);
                     res.json({
                         has_voted: reply.voter_uid.indexOf(user.uid) !== -1,
                         instructor_mode: ins_mode,
@@ -291,7 +287,7 @@ app.get('/:replyId/add-upvote',passport.authenticate('jwt',{session:false}),(req
             res.status(401).json({err_meessage:"reply not found!"})
         }
         else{
-            if (reply.voter_uid.indexOf(user.uid) !== -1){
+            if (Biz.hasVoted(reply,user)){
                 res.json({
                     upvote: reply.voter_uid.length,
                     hasVoted: true,
@@ -334,7 +330,7 @@ app.get('/:replyId/cancel-upvote',passport.authenticate('jwt',{session:false}),(
             res.status(401).json({err_meessage:"reply not found!"})
         }
         else{
-            const index = reply.voter_uid.indexOf(user.uid);
+            const index = Biz.voterIndex(reply,user);
             if (index === -1){
                 res.json({
                     upvote: reply.voter_uid.length,
@@ -349,7 +345,7 @@ app.get('/:replyId/cancel-upvote',passport.authenticate('jwt',{session:false}),(
                             res.status(401).json({err_message:"document save error"});
                         }
                         else{
-                            reply.voter_uid.splice(index,1);
+                            Biz.removeVoterUid(reply,index);
                             reply.save((err)=>{
                                 if(err){
                                     res.status(401).json({err_message:"document save error"});
@@ -374,7 +370,7 @@ app.get('/:courseId/Forum/:postId/post/ReplyPost',passport.authenticate('jwt',{s
     const postId = parseInt(req.params.postId);
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    const enrolledData = isEnrolled(user,courseId);
+    const enrolledData = Biz.isEnrolled(user,courseId);
 
     if(!enrolledData['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
@@ -414,8 +410,8 @@ app.post('/:courseId/Forum/:postId/post/ReplyPost',passport.authenticate('jwt',{
     const postId = parseInt(req.params.postId);
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    const enrolledData = isEnrolled(user,courseId);
-    if(!req.body||!req.body.reply||!req.body.post_as){
+    const enrolledData = Biz.isEnrolled(user,courseId);
+    if(Biz.replyPostFieldCheck(req)){
         res.status(401).json({err_message:"incomplete request (missing fields)"});
     }
     else if(!enrolledData['isEnrolled']){
@@ -428,11 +424,9 @@ app.post('/:courseId/Forum/:postId/post/ReplyPost',passport.authenticate('jwt',{
             }
             else{
                 Course.findOne({course_id:courseId},(err,course)=>{
-                    const is_official_ans = course.instructor_uids.indexOf(user.uid)!==-1;
-                    let author_name = req.body.post_as;
-                    if(is_official_ans){
-                        author_name = user.firstname + " " + user.lastname;
-                    }
+                    const is_official_ans = Biz.isInstructor(course,user);
+                    const author_name = Biz.getReplyPostAuthorName(req,user,is_official_ans);
+
                     new Reply({
                         "author": author_name,
                         "post_id":post.post_id,
@@ -457,8 +451,9 @@ app.post('/:courseId/Forum/:postId/post/ReplyPost',passport.authenticate('jwt',{
                             if(reply['is_official_ans']){
                                 post['resolved'] = true;
                             }
-                            post.save();
-                            res.json({"message":"success"});
+                            post.save((err)=>{
+                                res.json({"message":"success"});
+                            });
                         }
                     });
                 });
@@ -472,7 +467,7 @@ app.get("/:courseId/Forum/:postId/PostPreview",passport.authenticate('jwt',{sess
     const postId = parseInt(req.params.postId);
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    const enrolledData = isEnrolled(user,courseId);
+    const enrolledData = Biz.isEnrolled(user,courseId);
     if(!enrolledData['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
@@ -482,10 +477,7 @@ app.get("/:courseId/Forum/:postId/PostPreview",passport.authenticate('jwt',{sess
                 res.status(401).json({err_message:"unable to find the post"});
             }
             else{
-                let preview = post.content.replace(/(\r\n|\n|\r|\t)/gm, "");
-                if(preview.length > 122){
-                    preview = preview.slice(0,122);
-                }
+                const preview = Biz.generatePostPreview(post);
                 res.json(
                     {
                         'preview':preview,
@@ -504,7 +496,7 @@ app.get('/:courseId/Forum/:postId/post',passport.authenticate('jwt',{session:fal
     const postId = parseInt(req.params.postId);
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    const enrolledData = isEnrolled(user,courseId);
+    const enrolledData = Biz.isEnrolled(user,courseId);
     if(!enrolledData['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
@@ -569,7 +561,7 @@ app.get('/:courseId/Forum/:postId/post',passport.authenticate('jwt',{session:fal
 app.get('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:false}),(req,res)=>{
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    if(!isEnrolled(user,courseId)['isEnrolled']){
+    if(!Biz.isEnrolled(user,courseId)['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
@@ -586,7 +578,7 @@ app.get('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:false
 app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:false}),(req,res)=>{
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    if(!isEnrolled(user,courseId)['isEnrolled']){
+    if(!Biz.isEnrolled(user,courseId)['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
 
@@ -649,7 +641,7 @@ app.post('/:courseId/Forum/CreatePost',passport.authenticate('jwt',{session:fals
 app.get("/:courseId/Forum",passport.authenticate('jwt',{session:false}),(req,res)=>{
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    if(!isEnrolled(user,courseId)['isEnrolled']){
+    if(!Biz.isEnrolled(user,courseId)['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
@@ -669,7 +661,7 @@ app.get("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req,
     const user = req.user;
     // check if the user is in the class
     // invalid course id or user not in the class
-    if(!isEnrolled(user,courseId)['isEnrolled']){
+    if(!Biz.isEnrolled(user,courseId)['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
@@ -697,7 +689,7 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
     }
     // check if the user is in the class
     // invalid course id or user not in the class
-    else if(!isEnrolled(user,courseId)['isEnrolled']){
+    else if(!Biz.isEnrolled(user,courseId)['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"});
     }
     else{
@@ -722,13 +714,5 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
 });
 
 
-const isEnrolled = (user,course_id)=>{
-    const searchRes = user.courses.find(elem=>elem.course_id === course_id);
-    if(searchRes === undefined){
-        return {'isEnrolled':false,'courseName':null};
-    }
-    return {'isEnrolled':true,'courseName':searchRes['course_name']};
-};
 
-app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
-
+module.exports = app;
