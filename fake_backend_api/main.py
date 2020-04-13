@@ -150,7 +150,7 @@ def getSyllabus(courseId):
         return {
             'courseId': courseId,
             'courseName': 'CS480 Computer Vision',
-            'syllabus': 'Here is the class\'s syllabus returned from the back-end',
+            'schedule': 'Here is the class\'s syllabus returned from the back-end',
             'success': True
         }
     elif request.method == 'POST':
@@ -158,6 +158,34 @@ def getSyllabus(courseId):
             'courseId': courseId,
             'courseName': 'CS480 Computer Vision',
             'syllabus': 'Here is the class\'s updated syllabus',
+            'success': True
+        }
+    else:
+        print(request)
+        print("Invalid request for route")
+        return{
+            'courseId': courseId,
+            'courseName': 'CS480 Computer Vision',
+            'syllabus': null,
+            'success': False
+        }
+
+@app.route("/<int:courseId>/Schedule",methods=["GET","POST"])
+def getSchedule(courseId):
+    if request.method == 'GET':
+        return {
+            'courseId': courseId,
+            'courseName': 'CS480 Computer Vision',
+            'schedule': [["03/01/2020","today's topic is food","notes at https://foodnetwork.com","Assignment 1 info"],["03/03/2020","today's topic is art","notes at your local musuem","Assignment 2 info"] ],
+            'success': True
+        }
+    elif request.method == 'POST':
+        return{
+            'courseId': courseId,
+            'courseName': 'CS480 Computer Vision',
+            'schedule': [["03/01/2020","today's topic is food","notes at https://foodnetwork.com","Assignment 1 info"],
+            ["03/03/2020","today's topic is art","notes at your local musuem","Assignment 2 info"],
+            ["03/05/2020","you posted a new topic","you posted new notes","you posted a new assignment"] ],
             'success': True
         }
     else:

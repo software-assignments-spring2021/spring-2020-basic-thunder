@@ -1,0 +1,109 @@
+.row{
+	box-sizing: border-box;
+	border: 1px solid black;
+	text-align: initial;
+	position: relative;
+}
+.dateField{
+	box-sizing: border-box;
+	margin: 0 !important;
+	padding: 20px 0px !important;
+	font-size: 18px !important;
+	border-top: 0px;
+	border-left: 0px;
+	border-bottom: 0px;
+	text-align: center;
+}
+.topicField{
+	box-sizing: border-box;
+	width: 33%;
+	height: 150px;
+	resize: none;
+	position: relative;
+	bottom: 0px;
+	border-bottom: 1px solid black
+}
+.notesField{
+	box-sizing: border-box;
+	width: 33%;
+	height: 150px;
+	resize: none;
+}
+.asgnField{
+	box-sizing: border-box;
+	width: 34%;
+	height: 150px;
+	resize: none;
+}
+
+.detail-buttons-container{
+	width: 150px;
+	margin: 0px 0px 0px 0px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+.edit-date-details{
+	background-color: darkslateblue;
+    color: white;
+    padding: 6px 12px;
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+.edit-date-details:hover{
+	background-color: mediumpurple;
+    cursor: pointer;
+}
+
+.delete-date-details{
+	background-color: darkred;
+    color: white;
+    padding: 6px 12px;
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+}
+.delete-date-details:hover{
+	background-color: red;
+	cursor:pointer;
+}
+
+.save-date-details{
+	background-color: darkgreen;
+    color: white;
+    padding: 6px 12px;
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+    /*position: absolute;
+    top: 10px;
+    right: 120px;*/
+}
+
+.save-date-details:hover{
+	background-color: green;
+	cursor:pointer;
+}
+
+.cancel-date-details{
+	background-color: darkred;
+    color: white;
+    padding: 6px 12px;
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 8px;
+    /*position: absolute;
+    top: 10px;
+    right: 100px;*/
+}
+
+.cancel-date-details:hover{
+	background-color: red;
+	cursor:pointer;
+}
