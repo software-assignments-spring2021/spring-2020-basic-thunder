@@ -9,7 +9,7 @@ import {ReplyPostView} from "./reply_post_view"
 import {NotLoggedInHomeView} from './home_view'
 import {LoginView} from './login_view'
 import {RegisterView} from './register_view'
-
+import {MembersListView} from './members_list_view'
 import {SettingsView} from './settings_view'
 import {useState} from 'react';
 import {
@@ -19,31 +19,33 @@ import {
     Link,
     Redirect
 } from "react-router-dom";
-
-import Syllabus from "./Syllabus"
-import CreatePost from './CreatePost'
+import {AuthRequiredFilter} from "./AuthRequiredFilter";
+import Syllabus from "./Syllabus";
+import CreatePost from './CreatePost';
 
 function App() {
-    const [loggedIn,setLoggedIn] = useState(false);
 
     return (
         <Router>
             <div className="App">
                 <Switch>
+                    <Route exact path="/">
+                        <Redirect to="/LoggedInHome" />
+                    </Route>
                     <Route path={"/home"} component={NotLoggedInHomeView} />
                     <Route path="/sign-up" component={RegisterView} />
                     <Route path="/log-in" component={LoginView} />
-                    <Route path="/LoggedInHome" component={HomeView} />
-                    <Route path="/:courseId/Forum/CreatePost" component={CreatePost} />
-                    <Route path="/:courseId/Forum/:postId/post/ReplyPost" component={ReplyPostView}/>
-                    <Route path="/:courseId/Forum/:postId/post" component={PostView}/>
-                    <Route path="/:courseId/Forum" component={ListPostsView} />
-                    <Route path="/:courseId/Syllabus" component={Syllabus} />
-                    <Route exact path="/">
-                        {loggedIn ? <Redirect to="/LoggedInHome" /> : <Redirect to={"/home"}/>}
-                    </Route>
 
-                    <Route path={"/settings"} component={SettingsView} />
+                    <AuthRequiredFilter>
+                        <Route path="/LoggedInHome" component={HomeView} />
+                        <Route path="/:courseId/Forum/CreatePost" component={CreatePost} />
+                        <Route path="/:courseId/Forum/:postId/post/ReplyPost" component={ReplyPostView}/>
+                        <Route path="/:courseId/Forum/:postId/post" component={PostView}/>
+                        <Route path="/:courseId/Forum" component={ListPostsView} />
+                        <Route path="/:courseId/Syllabus" component={Syllabus} />
+                        <Route path={"/:courseId/members-list"} component={MembersListView} />
+                        <Route path={"/settings"} component={SettingsView} />
+                    </AuthRequiredFilter>
 
                 </Switch>
             </div>
