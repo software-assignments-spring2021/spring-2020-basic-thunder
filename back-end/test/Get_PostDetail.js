@@ -26,7 +26,7 @@ const Post = mongoose.model("Post");
 const Reply = mongoose.model("Reply");
 // boilerplate end
 
-describe('GET post detail page: /:courseId/Forum/:postId/post', () => {
+describe('GET post detail: /:courseId/Forum/:postId/post', () => {
     before((done) => {
         mockDb.connect()
             .then(() => {

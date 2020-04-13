@@ -27,7 +27,7 @@ const Reply = mongoose.model("Reply");
 
 // boilerplate end
 
-describe('GET /my-courses', () => {
+describe('GET courses: /my-courses', () => {
     before((done) => {
         mockDb.connect()
             .then(() => {
@@ -68,20 +68,16 @@ describe('GET /my-courses', () => {
                 .get("/my-courses")
                 .set("Authorization",`Bearer ${token}`)
                 .end((err,res)=>{
-                    describe("request with an access token",()=>{
-                        it("should return 200 with valid access token",()=> {
-                            res.should.have.status(200);
-                        });
+                    it("should return 200 with valid access token",()=> {
+                        res.should.have.status(200);
                     });
                     const data = JSON.parse(res.text);
-                    describe("should contain appropriate fields in the json data",()=>{
-                        it("should contain role and courses",()=>{
-                            data.should.haveOwnProperty("role");
-                            data.should.haveOwnProperty("courses");
-                            data.role.should.equal('Instructor');
-                            assert.isArray(data.courses);
-                            assert.notStrictEqual(data.courses,[])
-                        });
+                    it("should contain role and courses",()=>{
+                        data.should.haveOwnProperty("role");
+                        data.should.haveOwnProperty("courses");
+                        data.role.should.equal('Instructor');
+                        assert.isArray(data.courses);
+                        assert.notStrictEqual(data.courses,[])
                     });
                     done();
                 });
