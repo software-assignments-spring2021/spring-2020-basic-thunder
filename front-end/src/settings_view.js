@@ -44,13 +44,18 @@ const Section = (props) => {
     const value = props.value
     return(
         <div className={"section"}>
-            <p>{value}</p>
 
+            <div className={"left"}>
+            <p>{value.charAt(0).toUpperCase() + value.slice(1)}</p>
+            </div>
+
+            <div className={"right"}>
             <p>Current {value}: {data[value]}</p>
             <label>New {value}: </label>
             <input type="text"/>
             <br/>
             <button>Change {value}</button>
+            </div>
 
         </div>
     )

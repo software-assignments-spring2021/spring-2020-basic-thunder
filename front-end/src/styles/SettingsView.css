@@ -2,15 +2,57 @@
 
 }
 
+.SettingsView .main {
+    margin: auto;
+    max-width: 1000px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .SettingsView .section {
-    border: 1px solid black;
-    padding: 10px;
-    margin-left: 100px;
-    margin-right: 100px;
-    margin-top: 20px;
+    display: flex;
+    border: 2px solid black;
+    margin-top: 10px;
+    height: 180px;
 }
 
 .SettingsView .section input[type=text] {
     width: 200px;
     height: 30px;
+}
+
+.SettingsView .left {
+    flex: 25%;
+    background-color: #f3f3f3;
+
+}
+
+.SettingsView .left p {
+    padding-top: 40px;
+    font-size: 20px;
+}
+
+.SettingsView .right {
+    flex: 75%;
+    padding-top: 12px;
+}
+
+.SettingsView .right button {
+    font-size: 16px;
+    background-color: #745582;
+    margin-top: 15px;
+    padding: 6px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    transition-duration: 0.4s;
+}
+
+.SettingsView .right button:focus {
+    outline: none;
+}
+
+.SettingsView .right button:hover {
+    background-color: #573069;
 }
