@@ -670,7 +670,7 @@ app.get("/:courseId/Forum",passport.authenticate('jwt',{session:false}),(req,res
 app.get("/:courseId/Schedule",passport.authenticate('jwt',{session:false}),(req,res)=>{
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
-    
+
     Schedule.findOne({"course_id":courseId},(err,schedule)=> {
         if(err){
             res.status(401).json({err_message:"unable to find the schedule for the given course id"});
@@ -718,7 +718,7 @@ app.get("/:courseId/Schedule/:scheduleId",passport.authenticate('jwt',{session:f
 app.post("/:courseId/Schedule/:scheduleId",passport.authenticate('jwt',{session:false}),(req,res)=>{
     const schedule_id = req.params.scheduleId
     const user = req.user;
-    
+
     new ScheduleDay({
         schedule_id: schedule_id,
         date: req.body.date,
