@@ -14,6 +14,10 @@ const Hamburger = () => {
 	let forumLink = `/${courseId}/Forum`
 	let coursLink =  `/LoggedInHome`
 
+	const coursesLink = '/LoggedInHome'
+	const membersLink = `/${courseId}/members-list`
+	const settingsLink = '/settings'
+
     const LogOut = (e)=>{
         localStorage.removeItem('access-token');
     };
@@ -23,10 +27,10 @@ const Hamburger = () => {
 		<Menu>
 	        <a id="syllabus" className="menu-item" href={syllabusLink}>Syllabus</a>
 	        <a id="schedule" className="menu-item" href={scheduleLink}>Schedule</a>
-	        <a id="members" className="menu-item" href="#">Members</a>
+	        <a id="members" className="menu-item" href={membersLink}>Members</a>
 	        <a id="forum" className="menu-item" href={forumLink}>Forum</a>
-	        <a id="courses" className="menu-item" href={coursLink}>Courses</a>
-	        <a id="settings" className="menu-item" href="#">Settings</a>
+	        <a id="courses" className="menu-item" href={coursesLink}>Courses</a>
+	        <a id="settings" className="menu-item" href={settingsLink}>Settings</a>
 	        <a id="logout" className="menu-item" onClick={LogOut} href="/home">Log Out</a>
       	</Menu>
 	);
