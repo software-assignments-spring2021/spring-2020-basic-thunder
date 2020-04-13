@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
+// models
 const UserSchema = new mongoose.Schema({
     "uid":{type: Number},
     "email": {type: String, unique:true, required: true},
@@ -62,7 +63,7 @@ const ReplySchema = new mongoose.Schema({
     "time":{type:Number,required:true},
     "content":{type:String},
     "voter_uid":[Number],
-},{collection:'Post'});
+},{collection:'Reply'});
 
 ReplySchema.plugin(AutoIncrement, {inc_field: 'reply_id'});
 mongoose.model('Reply', ReplySchema);
@@ -87,3 +88,37 @@ const ScheduleDaySchema = new mongoose.Schema({
 mongoose.model("ScheduleDay", ScheduleDaySchema);
 
 mongoose.connect('mongodb://localhost/test');
+
+const DB_URI = 'mongodb://localhost/Biazza';
+
+const connect = () => new Promise((resolve, reject) => {
+    if (process.env.NODE_ENV === 'test') {
+        const Mockgoose = require('mockgoose').Mockgoose;
+        const mockgoose = new Mockgoose(mongoose);
+        mockgoose
+            .prepareStorage()
+            .then(() => {
+                mongoose.connect(DB_URI,
+                    { useNewUrlParser: true, useCreateIndex: true })
+                    .then((res, err) => {
+                        if (err) return reject(err);
+                        resolve();
+                    })
+            })
+    }
+    else {
+        mongoose
+            .connect(DB_URI,
+            { useNewUrlParser: true, useCreateIndex: true })
+            .then((res, err) => {
+                if (err) return reject(err);
+                resolve();
+            })
+    }
+});
+
+const close = () => {
+    return mongoose.disconnect();
+};
+
+module.exports = { connect, close };
