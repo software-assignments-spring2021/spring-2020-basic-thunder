@@ -5,6 +5,8 @@ const User = mongoose.model('User');
 const Course = mongoose.model("Course");
 const Post = mongoose.model("Post");
 const Reply = mongoose.model("Reply");
+const Schedule = mongoose.model("Schedule");
+const ScheduleDay = mongoose.model("ScheduleDay");
 
 // configuration secrets
 require('dotenv').config();
@@ -89,8 +91,6 @@ app.post("/create-courses",passport.authenticate('jwt',{session:false}),(req,res
     if(Biz.postCreateCourseFieldCheck(user,req)){
         new Course({
             creator_uid: user.uid,
-            firstname:user.firstname,
-            lastnname:user.lastname,
             course_name:req.body.course_name,
             term:req.body.term,
             syllabus:null,
@@ -112,7 +112,19 @@ app.post("/create-courses",passport.authenticate('jwt',{session:false}),(req,res
                         res.status(401).json({err_message:"document save error"});
                     }
                     else{
-                        res.json({"message":"success"});
+                        // res.json({"message":"success"});
+                        //Chris's creating new schema
+                        new Schedule({
+                            course_id: course['course_id'],
+                            course_name: course['course_name']
+                        }).save((err2,schedule,ct)=>{
+                            if(err2){
+                                res.status(401).json({err_message:"schedule save error"});
+                            }
+                            else{
+                                res.json({"message":"success"});
+                            }
+                        });
                     }
                 });
             }
@@ -654,6 +666,140 @@ app.get("/:courseId/Forum",passport.authenticate('jwt',{session:false}),(req,res
     }
 });
 
+// Schedule view
+app.get("/:courseId/Schedule",passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const courseId = parseInt(req.params.courseId);
+    const user = req.user;
+    
+    Schedule.findOne({"course_id":courseId},(err,schedule)=> {
+        if(err){
+            res.status(401).json({err_message:"unable to find the schedule for the given course id"});
+        }
+        else{
+            Course.findOne({"course_id":courseId},(err2,course)=>{
+                if(err2){
+                    res.status(401).json({err_message:"unable to find the course on the schedule view"})
+                }
+                res.json(
+                    {
+                        "scheduleId":schedule.schedule_id,
+                        "courseId": schedule.schedule_id,
+                        "courseName":schedule.course_name,
+                        "isInstructor": course.creator_uid === user.uid
+                    })
+            })
+        }
+    });
+});
+
+app.get("/:courseId/Schedule/:scheduleId",passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const schedule_id = req.params.scheduleId
+
+    ScheduleDay.find({"schedule_id":schedule_id}, (err,scheduleDay)=>{
+        if(err){
+            res.status(401).json({err_message:"unable to find the dates for the given schedule id"});
+        }
+        else{
+            let arr = []
+            for(let i = 0; i < scheduleDay.length; i++){
+                arr.push({
+                    "schedule_id":scheduleDay[i].schedule_id,
+                    "date":scheduleDay[i].date,
+                    "topic":scheduleDay[i].topic,
+                    "notes":scheduleDay[i].notes,
+                    "assignment":scheduleDay[i].assignment,
+                });
+            }
+            res.json({arr})
+        }
+    })
+});
+
+app.post("/:courseId/Schedule/:scheduleId",passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const schedule_id = req.params.scheduleId
+    const user = req.user;
+    
+    new ScheduleDay({
+        schedule_id: schedule_id,
+        date: req.body.date,
+        topic: req.body.topic,
+        notes: req.body.notes,
+        assignment: req.body.assignment
+    }).save((err,scheduleDay)=>{
+        if(err){
+            res.status(400).json({err_message:"date info save error"})
+        }
+        else{
+            res.json({"message":"success"});
+        }
+    });
+});
+
+app.delete("/:courseId/Schedule/:scheduleId/Delete/:date",passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const schedule_id = req.params.scheduleId
+    const courseId = req.params.courseId
+    const date = req.params.date
+
+    console.log(schedule_id)
+    console.log(courseId)
+    console.log(date)
+
+    console.log("Hey man I want to delete something")
+    ScheduleDay.findOneAndDelete({"schedule_id":schedule_id, "date":date}, (err,scheduleDay)=>{
+        if(err){
+            res.status(401).json({err_message:"Could not delete file"})
+            console.log(err)
+        }
+        else{
+            console.log(scheduleDay)
+            console.log("Match found?")
+            res.json({"message":"success"})
+        }
+    })
+});
+
+app.put("/:courseId/Schedule/:scheduleId",passport.authenticate('jwt',{session:false}),(req,res)=>{
+    console.log("Actually entered here. The PUT route that is")
+    const schedule_id = req.params.scheduleId
+    const user = req.user;
+
+    ScheduleDay.findOne({"date": req.body.date}, (error, scheduleDay)=>{
+        if(error){
+            res.status(401).json({err_message: "Does not have access to update"})
+        }
+        else{
+            if(scheduleDay === null){
+                new ScheduleDay({
+                    schedule_id: schedule_id,
+                    date: req.body.date,
+                    topic: req.body.topic,
+                    notes: req.body.notes,
+                    assignment: req.body.assignment
+                }).save((err,scheduleDay)=>{
+                    if(err){
+                        res.status(400).json({err_message:"date info save error"})
+                    }
+                    else{
+                        res.json({"message":"success"});
+                    }
+                });
+            }
+            else{
+                scheduleDay.topic = req.body.topic
+                scheduleDay.notes = req.body.notes
+                scheduleDay.assignment = req.body.assignment
+                scheduleDay.save((err) => {
+                    if(err) {
+                        res.status(400).json({err_message:"error updating existing date"})
+                    }
+                    else{
+                        res.json({"message":"Successfully updated existing data"})
+                    }
+                })
+            }
+        }
+    })
+});
 
 
 app.get("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req,res)=>{
@@ -712,6 +858,60 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
         });
     }
 });
+
+/*
+ *  Members List
+ */
+
+app.get('/:courseId/members-list', (req, res) => {
+    const user = req.user
+    const courseId = parseInt(req.params.courseId)
+
+    const data = {
+        'courseId': courseId,
+        'courseName': 'CS480 Computer Vision',
+        'instructors': [
+            {'name': 'A. B.',
+                'email': 'ab123@nyu.edu'},
+            {'name': 'D. E.',
+                'email': 'de111@nyu.edu'}
+        ],
+        'students': [
+            {'name': 'S. J.',
+                'email': 'sj13@nyu.edu'},
+            {'name': 'J. L.',
+                'email': 'jl321@nyu.edu'},
+            {'name': 'C. M.',
+                'email': 'cm222@nyu.edu'}
+        ]
+    }
+
+    res.json(data)
+
+})
+
+
+app.post('/:courseId/members-list', (req, res) => {
+    // data from the form to add new user
+    const addRole = req.body.addRole
+    const addEmail = req.body.addEmail
+
+    // data from the form to delete a user
+    const deleteName = req.body.deleteName
+    const deleteEmail = req.body.deleteEmail
+
+
+    if (addRole && addEmail) {
+        // handle add a member (send invitation)
+        console.log(addRole, addEmail)
+    }
+
+    else if (deleteName, deleteEmail) {
+        // handle delete a member
+        console.log(deleteName, deleteEmail)
+    }
+
+})
 
 
 

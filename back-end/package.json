@@ -25,5 +25,8 @@
     "nyc": "^15.0.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
   }
 }

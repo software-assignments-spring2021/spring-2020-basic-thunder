@@ -9,6 +9,7 @@ import {ReplyPostView} from "./reply_post_view"
 import {NotLoggedInHomeView} from './home_view'
 import {LoginView} from './login_view'
 import {RegisterView} from './register_view'
+import {MembersListView} from './members_list_view'
 import {useState} from 'react';
 import {
     BrowserRouter as Router,
@@ -17,9 +18,13 @@ import {
     Link,
     Redirect
 } from "react-router-dom";
+
 import {AuthRequiredFilter} from "./AuthRequiredFilter";
 import Syllabus from "./Syllabus";
 import CreatePost from './CreatePost';
+
+import Schedule from "./Schedule";
+import {SettingsView} from "./settings_view";
 
 function App() {
 
@@ -28,7 +33,7 @@ function App() {
             <div className="App">
                 <Switch>
                     <Route exact path="/">
-                       <Redirect to="/LoggedInHome" />
+                        <Redirect to="/LoggedInHome" />
                     </Route>
                     <Route path={"/home"} component={NotLoggedInHomeView} />
                     <Route path="/sign-up" component={RegisterView} />
@@ -40,6 +45,9 @@ function App() {
                             <Route path="/:courseId/Forum/:postId/post" component={PostView}/>
                             <Route path="/:courseId/Forum" component={ListPostsView} />
                             <Route path="/:courseId/Syllabus" component={Syllabus} />
+                            <Route path="/:courseId/Schedule" component={Schedule} />
+                            <Route path={"/:courseId/members-list"} component={MembersListView} />
+                            <Route path={"/settings"} component={SettingsView} /> 
                     </AuthRequiredFilter>
                 </Switch>
             </div>

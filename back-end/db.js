@@ -68,6 +68,27 @@ const ReplySchema = new mongoose.Schema({
 ReplySchema.plugin(AutoIncrement, {inc_field: 'reply_id'});
 mongoose.model('Reply', ReplySchema);
 
+const ScheduleSchema = new mongoose.Schema({
+    "schedule_id":{type:Number, unique:true},
+    "course_id":{type:Number},
+    "course_name":{type:String},
+}, {collection:"Schedule"});
+
+ScheduleSchema.plugin(AutoIncrement, {inc_field:"schedule_id"});
+mongoose.model("Schedule", ScheduleSchema);
+
+const ScheduleDaySchema = new mongoose.Schema({
+    "schedule_id":{type:Number, required:true},
+    "date":{type:Date, required:true},
+    "topic":{type:String},
+    "notes":{type:String},
+    "assignment":{type:String}
+}, {collection:"ScheduleDay"});
+
+mongoose.model("ScheduleDay", ScheduleDaySchema);
+
+mongoose.connect('mongodb://localhost/test');
+
 const DB_URI = 'mongodb://localhost/Biazza';
 
 const connect = () => new Promise((resolve, reject) => {
