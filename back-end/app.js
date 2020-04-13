@@ -721,6 +721,60 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
     }
 });
 
+/*
+ *  Members List
+ */
+
+app.get('/:courseId/members-list', (req, res) => {
+    const user = req.user
+    const courseId = parseInt(req.params.courseId)
+
+    const data = {
+        'courseId': courseId,
+        'courseName': 'CS480 Computer Vision',
+        'instructors': [
+            {'name': 'A. B.',
+                'email': 'ab123@nyu.edu'},
+            {'name': 'D. E.',
+                'email': 'de111@nyu.edu'}
+        ],
+        'students': [
+            {'name': 'S. J.',
+                'email': 'sj13@nyu.edu'},
+            {'name': 'J. L.',
+                'email': 'jl321@nyu.edu'},
+            {'name': 'C. M.',
+                'email': 'cm222@nyu.edu'}
+        ]
+    }
+
+    res.json(data)
+
+})
+
+
+app.post('/:courseId/members-list', (req, res) => {
+    // data from the form to add new user
+    const addRole = req.body.addRole
+    const addEmail = req.body.addEmail
+
+    // data from the form to delete a user
+    const deleteName = req.body.deleteName
+    const deleteEmail = req.body.deleteEmail
+
+
+    if (addRole && addEmail) {
+        // handle add a member (send invitation)
+        console.log(addRole, addEmail)
+    }
+
+    else if (deleteName, deleteEmail) {
+        // handle delete a member
+        console.log(deleteName, deleteEmail)
+    }
+
+})
+
 
 const isEnrolled = (user,course_id)=>{
     const searchRes = user.courses.find(elem=>elem.course_id === course_id);
