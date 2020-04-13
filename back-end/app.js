@@ -730,6 +730,7 @@ app.get('/:courseId/members-list', (req, res) => {
     const courseId = parseInt(req.params.courseId)
 
     const data = {
+        'courseId': courseId,
         'courseName': 'CS480 Computer Vision',
         'instructors': [
             {'name': 'A. B.',
@@ -750,10 +751,8 @@ app.get('/:courseId/members-list', (req, res) => {
     res.json(data)
 })
 
-app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false}), (req, res) => {
-    console.log('post members list')
-    console.log(req.params)
-    console.log(res)
+app.post('/:courseId/members-list', (req, res) => {
+    console.log(res.data)
 
 })
 

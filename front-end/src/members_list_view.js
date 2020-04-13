@@ -10,6 +10,7 @@ import {
     useRouteMatch
 } from "react-router-dom";
 import Hamburger from './HamburgerMenu.js'
+import {LoadingView} from "./loading_view";
 
 /*
 const data = {
@@ -37,8 +38,7 @@ const MembersListView = () => {
     const mode = 'instructor'
     // const mode = 'student'
 
-    const [data, setData] = useState({'courseName': null, 'instructors': null, 'students': null})
-
+    const [data, setData] = useState({'courseId': -1, 'courseName': null, 'instructors': null, 'students': null})
     const api = `http://127.0.0.1:5000/${courseId}/members-list`
 
     useEffect(()=>{
@@ -66,6 +66,10 @@ const MembersListView = () => {
     const handleAdd = (e) => {
         e.preventDefault()
         setAdd(true)
+        const modal = document.getElementById('add')
+        if (modal) {
+            modal.style.display = 'block'
+        }
     }
 
     const handleDelete = (e) => {
@@ -197,7 +201,6 @@ const AddModal = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-
         const role = selected  // student or instructor
         const email = e.target['email'].value
 
@@ -205,10 +208,15 @@ const AddModal = (props) => {
             role: role,
             email: email,
         }).then(res => {
-            console.log(res)
+            console.log(res.data)
         }).catch(err => {
             console.log(err)
         })
+
+        e.target.parentNode.style.display = 'none'
+        setSelected('student')
+        e.target['email'].value = ''
+
     }
 
     return (
