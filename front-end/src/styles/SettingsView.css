@@ -28,7 +28,7 @@
 }
 
 .SettingsView .left p {
-    padding-top: 40px;
+    padding-top: 50px;
     font-size: 20px;
 }
 
@@ -37,8 +37,16 @@
     padding-top: 12px;
 }
 
+.SettingsView .right p {
+    font-size: 17px;
+}
+
+.SettingsView .right label {
+    font-size: 17px;
+}
+
 .SettingsView .right button {
-    font-size: 16px;
+    font-size: 18px;
     background-color: #745582;
     margin-top: 15px;
     padding: 6px;
