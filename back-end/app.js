@@ -763,7 +763,7 @@ app.post('/:courseId/members-list', (req, res) => {
     const deleteEmail = req.body.deleteEmail
 
 
-    if (addRole & addEmail) {
+    if (addRole && addEmail) {
         // handle add a member (send invitation)
         console.log(addRole, addEmail)
     }
