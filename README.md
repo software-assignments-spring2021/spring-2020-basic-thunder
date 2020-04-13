@@ -12,7 +12,8 @@ The demo is composed of a series of wireframe diagrams.
 
 Please visit the [demo](https://invis.io/28W5IVVJ67M) page for more detail.
 
-## How to Run and Test Biazza
+## How to Run and Test Biazza'
+
 Please ensure you have `MongoDb` installed on your machine.
 ### Steps to Run the Biazza
 * Start up MongoDb server.
@@ -23,6 +24,7 @@ Please ensure you have `MongoDb` installed on your machine.
   * type `npm start` command
 * Start the backend by
   * `cd` into the `back-end` folder
+  * create a `.env` file using any editor and paste the secret content supplied by us.
   * type `npm install` command
   * type `npm start` command
 
