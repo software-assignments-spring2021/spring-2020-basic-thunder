@@ -749,10 +749,29 @@ app.get('/:courseId/members-list', (req, res) => {
     }
 
     res.json(data)
+
 })
 
+
 app.post('/:courseId/members-list', (req, res) => {
-    console.log(res.data)
+    // data from the form to add new user
+    const addRole = req.body.addRole
+    const addEmail = req.body.addEmail
+
+    // data from the form to delete a user
+    const deleteName = req.body.deleteName
+    const deleteEmail = req.body.deleteEmail
+
+
+    if (addRole & addEmail) {
+        // handle add a member (send invitation)
+        console.log(addRole, addEmail)
+    }
+
+    else if (deleteName, deleteEmail) {
+        // handle delete a member
+        console.log(deleteName, deleteEmail)
+    }
 
 })
 

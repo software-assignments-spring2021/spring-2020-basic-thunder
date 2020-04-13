@@ -113,16 +113,40 @@ const MembersListView = () => {
 }
 
 const Member = (props) => {
+    const {courseId} = useParams()
+    const api = `http://127.0.0.1:5000/${courseId}/members-list`
+
+    const name = props.name
+    const email = props.email
 
     // add backend & database code later
     const handleYes = (e) => {
         e.preventDefault()
-        e.currentTarget.parentElement.style.display = 'none'
+        const popup = e.currentTarget.parentNode
+        const main = document.querySelector('.main')
+        main.removeChild(popup)
+
+        axios.post(api,{
+            deleteName: name,
+            deleteEmail: email
+        }).then(res => {
+            console.log(res)
+        }).catch(err => {
+            console.log(err)
+        })
+
+        // remove deleted user card from page
+        const card = document.getElementById(email)
+        card.style.display = 'none'
+
+
     }
 
     const handleNo = (e) => {
         e.preventDefault()
-        e.currentTarget.parentElement.style.display = 'none'
+        const popup = e.currentTarget.parentNode
+        const main = document.querySelector('.main')
+        main.removeChild(popup)
     }
 
     const handleDelete = (e) => {
@@ -161,7 +185,7 @@ const Member = (props) => {
 
     if (props.mode === 'instructor') {
         return (
-            <div className={"member"}>
+            <div className={"member"} id={props.email}>
                 <div id="deleteBtn"><button onClick={handleDelete}>Delete</button></div>
                 <p id="name"> {props.name} </p>
                 <p id="email"> {props.email} </p>
@@ -169,7 +193,7 @@ const Member = (props) => {
         )
     } else if (props.mode === 'student') {
         return (
-            <div className={"member"}>
+            <div className={"member"} id={props.email}>
                 <p id="name"> {props.name} </p>
                 <p id="email"> {props.email} </p>
             </div>
@@ -205,10 +229,10 @@ const AddModal = (props) => {
         const email = e.target['email'].value
 
         axios.post(api,{
-            role: role,
-            email: email,
+            addRole: role,
+            addEmail: email,
         }).then(res => {
-            console.log(res.data)
+            console.log(res)
         }).catch(err => {
             console.log(err)
         })
@@ -216,7 +240,6 @@ const AddModal = (props) => {
         e.target.parentNode.style.display = 'none'
         setSelected('student')
         e.target['email'].value = ''
-
     }
 
     return (
