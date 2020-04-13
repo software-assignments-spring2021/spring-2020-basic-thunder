@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import Hamburger from './HamburgerMenu.js'
 
+/*
 const data = {
     'courseName': 'CS480 Computer Vision',
     'instructors': [
@@ -29,12 +30,27 @@ const data = {
     ]
 }
 
+ */
+
 
 const MembersListView = () => {
     const {courseId} = useParams()
     const courseName = 'Computer Vision'
     const mode = 'instructor'
     // const mode = 'student'
+
+    const [data, setData] = useState({'courseName': null, 'instructors': null, 'students': null})
+
+    const api = `http://127.0.0.1:5000/${courseId}/members-list`
+
+    /*
+    axios.get(api)
+        .then(res => {
+            console.log(res)
+        })
+
+     */
+
 
 
     // const [mode, setMode] = useState('instructor')
@@ -69,12 +85,12 @@ const MembersListView = () => {
 
             <h3>Instructors</h3>
             <div className={"members"} id="instructors">
-                {data['instructors'].map(props=>(<Member mode={mode} role={'instructor'} key={props.email} name={props.name} email={props.email}/>))}
+                {data['instructors'] ? data['instructors'].map(props=>(<Member mode={mode} role={'instructor'} key={props.email} name={props.name} email={props.email}/>)): ''}
             </div>
 
             <h3>Students</h3>
             <div className={"members"} id="students">
-                {data['students'].map(props=>(<Member mode={mode} role={'student'} key={props.email} name={props.name} email={props.email}/>))}
+                {data['students'] ? data['students'].map(props=>(<Member mode={mode} role={'student'} key={props.email} name={props.name} email={props.email}/>)): ''}
             </div>
 
             </div>
