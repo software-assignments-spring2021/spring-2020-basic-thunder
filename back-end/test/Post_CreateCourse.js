@@ -8,6 +8,17 @@ const mockDb = require('../db.js');
 const app = require("../app.js");
 const assert = chai.assert;
 
+require('dotenv').config();
+const passport = require('passport');
+const passportJWT = require('passport-jwt');
+const ExtractJwt = passportJWT.ExtractJwt;
+const jwt = require('jsonwebtoken');
+const jwtOptions = {
+    jwtFromRequest:ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.SECRET_OR_KEY,
+};
+
+
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Course = mongoose.model("Course");
@@ -18,7 +29,10 @@ const Reply = mongoose.model("Reply");
 describe('POST /create-courses', () => {
     before((done) => {
         mockDb.connect()
-            .then(() => done())
+            .then(() => {
+                this.kkk = 4;
+                done()
+            })
             .catch((err) => done(err));
     });
 
@@ -38,47 +52,34 @@ describe('POST /create-courses', () => {
     });
 
     it("should reject request from authenticated user but with missing fields", (done) => {
-        new User({
-            email: "abc@nyu.edu",
-            firstname: "Aaa",
-            lastname: "Bbb",
-            role: "Instructor",
-            password: "xxx",
-            courses: [],
-        }).save((err,user)=>{
-            chai.request(app)
-                .post("/create-courses")
-                .set("Authorization",'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU4Njc1MDg1NiwiZXhwIjoyNjE4Mjg2ODU2fQ.b_5mxdzfhMvEtFhkMGDUUu-QBhIowfxac4WqznO4lQg')
-                .end((err,res)=>{
-                    it("should reject such reuqests",()=> {
-                        res.should.have.status(401);
-                    });
-                    done();
+        const payload = {uid:1};
+        const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: 300});
+
+        chai.request(app)
+            .post("/create-courses")
+            .set("Authorization",`Bearer ${token}`)
+            .end((err,res)=>{
+                it("should reject such reuqests",()=> {
+                    res.should.have.status(401);
                 });
-        });
+                done();
+            });
     });
 
     it("should return appropriate json to authenticated user with appropriate fields", (done) => {
-        new User({
-            email: "abc@nyu.edu",
-            firstname: "Aaa",
-            lastname: "Bbb",
-            role: "Instructor",
-            password: "xxx",
-            courses: [],
-        }).save((err,user)=>{
-            chai.request(app)
-                .post("/create-courses")
-                .set("Authorization",'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU4Njc1MDg1NiwiZXhwIjoyNjE4Mjg2ODU2fQ.b_5mxdzfhMvEtFhkMGDUUu-QBhIowfxac4WqznO4lQg')
-                .send({course_name:"Agile",term:"Spring 2020"})
-                .end((err,res)=>{
-                    res.should.have.status(200);
-                    const data = JSON.parse(res.text);
-                    data.should.haveOwnProperty("message");
-                    data.message.should.be.equal("success");
-                    done();
-                });
-        });
+        const payload = {uid:1};
+        const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: 300});
+        chai.request(app)
+            .post("/create-courses")
+            .set("Authorization",`Bearer ${token}`)
+            .send({course_name:"Agile",term:"Spring 2020"})
+            .end((err,res)=>{
+                res.should.have.status(200);
+                const data = JSON.parse(res.text);
+                data.should.haveOwnProperty("message");
+                data.message.should.be.equal("success");
+                done();
+            });
     });
 
 });

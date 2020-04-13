@@ -8,17 +8,40 @@ const mockDb = require('../db.js');
 const app = require("../app.js");
 const assert = chai.assert;
 
+require('dotenv').config();
+const passport = require('passport');
+const passportJWT = require('passport-jwt');
+const ExtractJwt = passportJWT.ExtractJwt;
+const jwt = require('jsonwebtoken');
+const jwtOptions = {
+    jwtFromRequest:ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.SECRET_OR_KEY,
+};
+
+
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Course = mongoose.model("Course");
 const Post = mongoose.model("Post");
 const Reply = mongoose.model("Reply");
+
 // boilerplate end
 
 describe('GET /my-courses', () => {
     before((done) => {
         mockDb.connect()
-            .then(() => done())
+            .then(() => {
+                new User({
+                    email: "abc@nyu.edu",
+                    firstname: "Aaa",
+                    lastname: "Bbb",
+                    role: "Instructor",
+                    password: "xxx",
+                    courses: [],
+                }).save(err=>{
+                    done();
+                })
+            })
             .catch((err) => done(err));
     });
 
@@ -38,25 +61,18 @@ describe('GET /my-courses', () => {
     });
 
     it("should return appropriate json to authenticated user", (done) => {
-        new User({
-            email: "abc@nyu.edu",
-            firstname: "Aaa",
-            lastname: "Bbb",
-            role: "Instructor",
-            password: "xxx",
-            courses: [],
-        }).save((err,user)=>{
+        User.findOne({uid:1},(err,user)=>{
+            const payload = {uid:user.uid};
+            const token = jwt.sign(payload, jwtOptions.secretOrKey,{expiresIn: 300});
             chai.request(app)
                 .get("/my-courses")
-                .set("Authorization",'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU4Njc1MDg1NiwiZXhwIjoyNjE4Mjg2ODU2fQ.b_5mxdzfhMvEtFhkMGDUUu-QBhIowfxac4WqznO4lQg')
+                .set("Authorization",`Bearer ${token}`)
                 .end((err,res)=>{
-
                     describe("request with an access token",()=>{
                         it("should return 200 with valid access token",()=> {
                             res.should.have.status(200);
                         });
                     });
-
                     const data = JSON.parse(res.text);
                     describe("should contain appropriate fields in the json data",()=>{
                         it("should contain role and courses",()=>{
@@ -67,7 +83,6 @@ describe('GET /my-courses', () => {
                             assert.notStrictEqual(data.courses,[])
                         });
                     });
-
                     done();
                 });
         });

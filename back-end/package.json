@@ -1,11 +1,11 @@
 {
   "name": "back-end",
   "version": "1.0.0",
-  "description": "",
+  "description": "Biazza Web Application Backend",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "nyc --reporter=text mocha --timeout 120000 --recursive --exit"
+    "start": "node --no-warnings index.js",
+    "test": "nyc --reporter=text mocha --timeout 120000 --recursive --exit --no-warnings"
   },
   "author": "",
   "license": "ISC",
