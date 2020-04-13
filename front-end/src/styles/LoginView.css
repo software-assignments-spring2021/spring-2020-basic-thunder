@@ -69,7 +69,7 @@
 
 .LoginView input {
     text-align: center;
-    width: 70%;
+    width: 100%;
 }
 
 .LoginView input[type=text] {
@@ -102,6 +102,33 @@
     padding-top: 15px;
     padding-bottom: 35px;
 }
+
+.SignUpLink:hover{
+    color:red;
+}
+
+.LoginErrMsgBlock{
+    display: block;
+    /*text-align: center;*/
+    color: #9a0000;
+    margin-bottom: 10px;
+}
+
+.LoginRegisInputs{
+    text-align: center;
+    width: 100%;
+    padding: 7px 0 7px 0;
+    margin: 5px 0 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: inline-block;
+    font-size: 25px;
+    /*font-weight: lighter;*/
+    padding-top:5px;
+}
+
+
 
 /*
 button {

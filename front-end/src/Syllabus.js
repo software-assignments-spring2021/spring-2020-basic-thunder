@@ -59,20 +59,25 @@ const EditBtn = (instructorMode) => {
 const SaveBtn = (courseId) => {
 	let postSyllabus = async () => {
 		let text = document.querySelector('textarea')
-		// console.log(text)
 		let apiSyllabusRoute = `http://127.0.0.1:5000/${parseInt(courseId.courseId)}/Syllabus`
-		let result = await axios.post(apiSyllabusRoute, text.value).then(result => {
-			console.log("success")
-			console.log(result)
-			let attr = document.createAttribute("readonly")
-			text.setAttributeNode(attr)
-			document.querySelector("#submit-btn").classList.add("student")
-			document.querySelector("#cancel-btn").classList.add("student")
-			document.querySelector("#edit-btn").classList.remove("student")
-			// text.defaultValue = result.data.syllabus
-			text.value = result.data.syllabus
-			// setData(result.data)
-		})
+
+        const accessToken = localStorage.getItem("access-token");
+
+
+        let result = await axios.post(apiSyllabusRoute, {syllabus:text.value}, {headers: {"Authorization" : `Bearer ${accessToken}`}})
+			.then(result => {
+				console.log(result)
+				let attr = document.createAttribute("readonly")
+				text.setAttributeNode(attr)
+				document.querySelector("#submit-btn").classList.add("student")
+				document.querySelector("#cancel-btn").classList.add("student")
+				document.querySelector("#edit-btn").classList.remove("student")
+				// setData(result.data)
+			})
+			.catch(err=>{
+				console.log(err);
+                window.location.reload(false);
+            })
 	}
 	return(
 		<button className="student" id="submit-btn" onClick={postSyllabus}>Submit</button>
@@ -82,8 +87,10 @@ const SaveBtn = (courseId) => {
 const CancelBtn = (courseId) =>{
 
 	let cancel = async () => {
+        const accessToken = localStorage.getItem("access-token");
+
 		let apiSyllabusRoute = `http://127.0.0.1:5000/${parseInt(courseId.courseId)}/Syllabus`
-		let result = await axios.get(apiSyllabusRoute).then(result => {
+		let result = await axios.get(apiSyllabusRoute,{headers: {"Authorization" : `Bearer ${accessToken}`}}).then(result => {
 			let attr = document.createAttribute("readonly")
 			let txtArea = document.querySelector('textarea')
 			txtArea.setAttributeNode(attr)
@@ -101,19 +108,26 @@ const CancelBtn = (courseId) =>{
 
 const Syllabus = () => {
 	const courseId = useParams()
-	const [data, setData] = useState({"courseId":-1,"courseName":null,"syllabus":null,"success":null})
-	let dataArray = [data.courseId, data.courseName, data.syllabus, data.success]
-	const [instructorMode, setInstructorMode] = useState(true)
+	const [data, setData] = useState({"courseId":-1,"courseName":null,"syllabus":null})
+	let dataArray = [data.courseId, data.courseName, data.syllabus]
+	const [instructorMode, setInstructorMode] = useState(false);
 	// console.log(data)
 	// console.log(courseId)
 	// console.log(parseInt(courseId.courseId))
 
 	useEffect( ()=>{
 			let fetch = async() => {
+                const accessToken = localStorage.getItem("access-token");
 				let api = `http://127.0.0.1:5000/${parseInt(courseId.courseId)}/Syllabus`
-				let result = await axios.get(api).then(result => {
-					setData(result.data)
-				})
+				axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+					.then(result => {
+						setData(result.data);
+						setInstructorMode(result.data['isInstructor']);
+					})
+					.catch(err=>{
+						// you are not allowed to view this page
+                        window.location.href = '/LoggedInHome';
+					});
 			}
 			fetch()
 		},
@@ -121,8 +135,7 @@ const Syllabus = () => {
 
 	if (data.courseId == -1)
 		return ( <LoadingView />)
-	else if(data.success == false)
-		return(<h1>"Error occurred reload the page"</h1>)
+
 	else{
 		return(
 			<div id="syllabus-container">

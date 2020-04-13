@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import './styles/RegisterView.css'
-import {Link} from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 import {Header} from './home_view'
 import axios from "axios";
 
@@ -20,55 +20,59 @@ const RegisterView = () => {
 
         </div>
     )
-}
+};
 
 const SignUpForm = (props) => {
-
-    const state = {
-        role: 'Student'
-    }
-
-    let authenticated = true;
-    let api = 'http://127.0.0.1:5000'
+    const [doneRegister,setDoneRegister] = useState(false);
+    const [role,setRole] = useState('Student');
+    const [registerErrMsg,setRegisterErrMsg] = useState(false);
 
     const handleClick = function(event) {
-        event.preventDefault()
-        const buttons = document.querySelectorAll('#buttons input')
+        event.preventDefault();
+        const buttons = document.querySelectorAll('#buttons input');
         buttons.forEach((button) => {
             button.id = 'off'
-        })
-        event.target.id = 'on'
-        state.role = event.target.value
-    }
+        });
+        event.target.id = 'on';
+        setRole(event.target.value);
+    };
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        postData()
+        e.preventDefault();
+        console.log(e.target);
+        const email = e.target['email'].value;
+        const pw = e.target['pass'].value;
+        const firstname = e.target['firstname'].value;
+        const lastname = e.target['lastname'].value;
 
-        if (authenticated) {
-            e.preventDefault()
-            window.location.href = '/LoggedInHome'
-        }
-        // validation
-        /*
-        event.preventDefault()
-        const form = event.target
-        const firstName = form.querySelector('[name=first_name]')
-        if (!firstName.value) {
-            const message = document.createElement('p')
-            message.textContent = 'Name required.'
-            firstName.parentNode.append(message)
-        }*/
+        axios.post('http://127.0.0.1:5000/register',
+            {
+                email: email,
+                firstname:firstname,
+                lastname:lastname,
+                password:pw,
+                role:role,
+            }
+        ).then(res=>{
+            // register success: store access token
+            console.log("access-token:",res.data['access-token']);
+            localStorage.setItem('access-token',res.data['access-token']);
+            setDoneRegister(true);
+        }).catch(err=>{
+            // register failed
+            localStorage.removeItem('access-token');
+            setRegisterErrMsg(true);
+            document.getElementById("pass").value = null;
+        });
+    };
+
+    if (doneRegister){
+        return <Redirect push to={`/LoggedInHome`} />;
     }
-
-    const postData = async() => {
-        await axios.post(api, 'data').then(res => {
-            console.log(res)
-        })
-    }
-
     return (
         <div>
+            <ErrorMsg activate={registerErrMsg} />
+
             <form onSubmit={handleSubmit}>
                 <div id="buttons">
                     <input id="on" type="button" value="Student" onClick={handleClick}/>
@@ -77,28 +81,28 @@ const SignUpForm = (props) => {
 
                 <label>
                     <span>First Name:</span>
-                    <input type="text" name="first_name"/>
+                    <input type="text" name="first_name" id={"firstname"} required={true} className={"LoginRegisInputs"}/>
                 </label>
 
                 <label>
                     <span>Last Name:</span>
-                    <input type="text" name="last_name" />
+                    <input type="text" name="last_name" id={"lastname"} required={true} className={"LoginRegisInputs"}/>
                 </label>
 
                 <label>
                     <span>Email:</span>
-                    <input type="text" name="email" />
+                    <input type="email" name="email" id={"email"} required={true} className={"LoginRegisInputs"} />
                 </label>
 
                 <label>
                     <span>Password:</span>
-                    <input type="text" name="password" />
+                    <input type="password" name="password" id={"pass"} required={true} minLength={3} className={"LoginRegisInputs"}/>
                 </label>
 
                 <input type="submit" value="Sign Up"/>
 
                 <p>Already have an account?<br/>
-                    <Link to="log-in">
+                    <Link to="log-in" className={"LinkToLogin"}>
                         <span> Log In</span>
                     </Link>
                 </p>
@@ -106,6 +110,19 @@ const SignUpForm = (props) => {
 
         </div>
     )
-}
+};
+
+const ErrorMsg = ({activate}) =>{
+    if(activate){
+        return (
+            <div className={"RegisterErrMsgBlock"}>
+                <h3>Register Failed</h3>
+                This email has already been registered.
+            </div>
+        );
+    }
+    return null;
+};
+
 
 export {RegisterView}

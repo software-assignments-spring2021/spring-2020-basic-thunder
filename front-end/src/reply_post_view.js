@@ -13,32 +13,35 @@ import {
 //     useRouteMatch,
 //     Redirect
 } from "react-router-dom";
+import Hamburger from "./HamburgerMenu";
+import {CourseBarComponent, NavBarComponentPlaceHolder} from "./list_posts_view";
 
 /* main */
 const ReplyPostView = () =>{
     const {courseId,postId} = useParams();
     const [awaitingData,setAwaitingData] = useState(true);
-    const [myId,setMyId] = useState(201); // current user's id (mock data)
     const [data,setData] = useState({'CourseName':null, 'ListOfPosts':[]});
-    const [instructorMode,setInstructorMode] = useState(false); // assuming we are not the instructor
     const [goToPost,setGoToPost] = useState(false);
     const api = `http://127.0.0.1:5000/${courseId}/Forum/${postId}/post/ReplyPost`; // testing api
     const postUrl = `http://locohost:3000/${courseId}/Forum/${postId}/post`; // temp url
-    const [postAsOptions,setPostAsOptions] = useState([]);
+    const postAsOptions = ["Anonymous to Classmates","Anonymous to Everyone"];
     const [authorName,setAuthorName] = useState(null);
 
 
 
     useEffect(()=>{
         const fetchData = async () => {
-            const res = await axios.get(api).then(res=>{
-                setData(res.data);
-                setAuthorName("Jiaqi"); // mock data
-                //setPostAsOptions
-                setPostAsOptions(["Jiaqi","Anonymous To Classmates","Anonymous To Everyone"]); // mock data
-                setAwaitingData(false);
-
-            });
+            const accessToken = localStorage.getItem("access-token");
+            const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
+                .then(res=>{
+                    setData(res.data);
+                    setAuthorName(res.data['author_name']); // mock data
+                    setAwaitingData(false);
+                })
+                .catch(err=>{
+                    console.log(err);
+                    window.location.href = '/LoggedInHome';
+                });
         };
         fetchData();
     },[]);
@@ -47,9 +50,18 @@ const ReplyPostView = () =>{
     const handleReplyPost = (e)=>{
         e.preventDefault();
         console.log(e.target['ReplyTextArea'].value);
-        axios.post(api,{'reply':e.target['ReplyTextArea'].value}).then(res=>{
-            setGoToPost(true);
-        });
+        const accessToken = localStorage.getItem("access-token");
+        axios.post(api,{
+            'reply':e.target['ReplyTextArea'].value,
+            'post_as':e.target['ShowMyNameSelector'].value
+        },{headers: {"Authorization" : `Bearer ${accessToken}`}})
+            .then(res=>{
+                setGoToPost(true);
+            })
+            .catch(e=>{
+                console.log(e);
+                window.location.href = '/LoggedInHome';
+            });
     };
 
     if (awaitingData)
@@ -61,22 +73,31 @@ const ReplyPostView = () =>{
     }
     else{
         return (
-            <div className={"PostDetailContainer"}>
-                <Question postid={data['postid']} topic={data['topic']} content={data['content']} time={data['time']}
-                          author={data['author']} resolved={data['resolved']}/>
-                <form onSubmit={handleReplyPost}>
-                    <textarea id={"ReplyTextArea"} />
-                    <div className={"PostAsContainer"}>
-                        <label className={"ShowMyNameLabel"}>Show my name as:</label>
-                        <select id="ShowMyNameSelector" defaultValue={authorName}>
-                            {postAsOptions.map(e=>(<option className={"ShowMyNameOption"} value={e}>{e}</option>))}
-                        </select>
-                    </div>
-                    <div className={"PostReplyBtnContainer"} >
-                        <PostReplyBtn type={"submit"}/>
-                    </div>
-                </form>
-                <BackToPostBtn />
+            <div>
+                <header className="biazza-header">
+                    <Hamburger />
+                    <NavBarComponentPlaceHolder />
+                </header>
+                <CourseBarComponent CourseName={data['CourseName']} />
+                <div className={"PostDetailContainer"}>
+                    <Question postid={data['postid']} topic={data['topic']} content={data['content']} time={data['time']}
+                              author={data['author']} resolved={data['resolved']}/>
+                    <form onSubmit={handleReplyPost}>
+                        <textarea id={"ReplyTextArea"} required={true} placeholder={"Answer Body"}/>
+                        <div className={"PostAsContainer"}>
+                            <label className={"ShowMyNameLabel"}>Show my name as:</label>
+                            <select id="ShowMyNameSelector" defaultValue={authorName}>
+                                <option className={"ShowMyNameOption"} value={authorName}>{authorName}</option>
+                                {!data['is_instructor']? postAsOptions.map(e=>(<option className={"ShowMyNameOption"} value={e}>{e}</option>)):null}
+                            </select>
+                            {data['is_instructor']?<p>Instructor cannot reply anonymously.</p>:null}
+                        </div>
+                        <div className={"PostReplyBtnContainer"} >
+                            <PostReplyBtn type={"submit"}/>
+                        </div>
+                    </form>
+                    <BackToPostBtn />
+                </div>
             </div>
         );
     }
