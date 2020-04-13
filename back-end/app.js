@@ -721,6 +721,16 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
     }
 });
 
+/*
+ *  Members List
+ */
+
+app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false}), (req, res) => {
+    console.log('post members list')
+    console.log(req.params)
+
+})
+
 
 const isEnrolled = (user,course_id)=>{
     const searchRes = user.courses.find(elem=>elem.course_id === course_id);

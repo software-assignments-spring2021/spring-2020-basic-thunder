@@ -32,9 +32,13 @@ const data = {
 
 const MembersListView = () => {
     const {courseId} = useParams()
-    const courseName = 'CS480 Computer Vision'
+    const courseName = 'Computer Vision'
     const mode = 'instructor'
     // const mode = 'student'
+
+
+    // const [mode, setMode] = useState('instructor')
+    // const [data, setData] = useState({'courseId': -1, 'courseName': null, 'members': null})
 
     const [add, setAdd] = useState(false)
     const [del, setDel] = useState(false)
@@ -42,7 +46,6 @@ const MembersListView = () => {
 
     const handleAdd = (e) => {
         e.preventDefault()
-        console.log(add)
         setAdd(true)
     }
 
@@ -149,16 +152,34 @@ const Member = (props) => {
 
 // modal dialog for adding a member
 const AddModal = (props) => {
+    const {courseId} = useParams()
     const [selected, setSelected] = useState('student')
     const [visible, setVisible] = useState(true)
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+        e.preventDefault()
         setVisible(false)
         window.location.reload()
     }
 
     const handleChange = (e) => {
+        e.preventDefault()
         setSelected(e.currentTarget.value)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const role = selected  // student or instructor
+        const email = e.target['email'].value
+
+        axios.post(`http://127.0.0.1:5000/${courseId}/members-list`,{
+            role: role,
+            email: email,
+        }).then(res => {
+            console.log(res)
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     return (
@@ -166,7 +187,7 @@ const AddModal = (props) => {
         <div id="add">
             <button id="closeAdd" onClick={handleClick}>Close</button>
             <h2>Add New Member</h2>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <label>
                     <span>Email:</span>
                     <input type="text" name="email" />
@@ -199,7 +220,6 @@ const DeleteModal = (props) => {
         </div>
     )
 }
-
 
 const NavBarComponentPlaceHolder = () =>{
     return (
