@@ -32,24 +32,6 @@ const data = {
 
 const MembersListView = () => {
     const {courseId} = useParams()
-    const api = `http://127.0.0.1:5000/${courseId}/members-list`
-    const [d,setD] = useState({course_name:null,username:null})
-
-    useEffect(()=>{
-        const fetchData = async () => {
-            const accessToken = localStorage.getItem("access-token")
-            const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
-                .then(res=>{
-                    setD(res.d)
-                })
-                .catch(err=>{
-                    console.log(err)
-                    window.location.reload(false)
-                });
-        };
-        fetchData()
-    },[])
-
     const courseName = 'Computer Vision'
     const mode = 'instructor'
     // const mode = 'student'
@@ -170,9 +152,9 @@ const Member = (props) => {
 
 // modal dialog for adding a member
 const AddModal = (props) => {
-
     const {courseId} = useParams()
     const api = `http://127.0.0.1:5000/${courseId}/members-list`
+    // const [data,setData] = useState({course_name:null,username:null})
 
     const [selected, setSelected] = useState('student')
     const [visible, setVisible] = useState(true)

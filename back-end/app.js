@@ -725,9 +725,34 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
  *  Members List
  */
 
+app.get('/:courseId/members-list', passport.authenticate('jwt',{session:false}), (req, res) => {
+    const user = req.user
+    const courseId = parseInt(req.params.courseId)
+
+    const data = {
+        'courseName': 'CS480 Computer Vision',
+        'instructors': [
+            {'name': 'A. B.',
+                'email': 'ab123@nyu.edu'},
+            {'name': 'D. E.',
+                'email': 'de111@nyu.edu'}
+        ],
+        'students': [
+            {'name': 'S. J.',
+                'email': 'sj13@nyu.edu'},
+            {'name': 'J. L.',
+                'email': 'jl321@nyu.edu'},
+            {'name': 'C. M.',
+                'email': 'cm222@nyu.edu'}
+        ]
+    }
+    res.json(data)
+})
+
 app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false}), (req, res) => {
     console.log('post members list')
     console.log(req.params)
+    console.log(res)
 
 })
 
