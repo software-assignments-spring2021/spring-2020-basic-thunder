@@ -12,6 +12,25 @@ The demo is composed of a series of wireframe diagrams.
 
 Please visit the [demo](https://invis.io/28W5IVVJ67M) page for more detail.
 
+## How to Run and Test Biazza
+Please ensure you have `MongoDb` installed on your machine.
+### Steps to Run the Biazza
+* Start up MongoDb server.
+* Start up the backend
+* Start the frontend by
+  * `cd` into the `front-end` folder
+  * type `npm install` command
+  * type `npm start` command
+* Start the backend by
+  * `cd` into the `back-end` folder
+  * type `npm install` command
+  * type `npm start` command
+
+### Steps to Test Biazza
+  * `cd` into the `back-end` folder
+  * type `npm install` command
+  * type `npm test` command
+
 ## History of Project
 The Biazza project was originally proposed by Jiaqi Liu and Lingyi Ju. Inspired by the easy-to-use forums such as Stack Overflow, Piazza, and Campuswire, Jiaqi and Lingyu sought an opportunity to provide realize a full-stack web application that integrates the characteristics of the above user-friendly forums.
 
