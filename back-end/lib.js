@@ -47,7 +47,7 @@ const isInstructor = (course,user)=>{
     return course.instructor_uids.indexOf(user.uid)!==-1;
 };
 
-const getReplyPostAuthorName = () =>{
+const getReplyPostAuthorName = (req,user,is_official_ans) =>{
     return is_official_ans? req.body.post_as: user.firstname + " " + user.lastname;
 };
 
