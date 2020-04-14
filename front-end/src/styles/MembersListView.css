@@ -4,7 +4,6 @@
 
 .MembersListView .bar {
     text-align: center;
-
 }
 
 .MembersListView #addBtn {
@@ -72,6 +71,14 @@
 
 .MembersListView #add input[type=text] {
    height: 10px;
+}
+
+.MembersListView #add input[type=email] {
+    height: 30px;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    font-size: 16px;
 }
 
 .MembersListView #add input[type=submit] {

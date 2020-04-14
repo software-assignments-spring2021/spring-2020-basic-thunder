@@ -903,14 +903,21 @@ app.post('/:courseId/members-list', (req, res) => {
 
     if (addRole && addEmail) {
         // handle add a member (send invitation)
-        console.log(addRole, addEmail)
+        // console.log(addRole, addEmail)
+    }
+
+    else if (addRole || addEmail) {
+        // if there are missing fields
+        // console.log('missing fields')
+        res.status(400).send()
     }
 
     else if (deleteName, deleteEmail) {
         // handle delete a member
-        console.log(deleteName, deleteEmail)
+        // console.log(deleteName, deleteEmail)
     }
 
+    res.status(200).send()
 })
 
 /*
@@ -933,13 +940,21 @@ app.post('/settings', (req, res) => {
 
     if (newEmail) {
         // handle change email
-        console.log(newEmail)
+        // console.log(newEmail)
     }
 
-    if (currPw && newPw) {
+    else if (currPw && newPw) {
         // handle change password
-        console.log(currPw, newPw)
+        // compare with encrypted current pw in database
+        // console.log(currPw, newPw)
     }
+
+    else {
+        // if there are missing fields
+        res.status(400).send()
+    }
+
+    res.status(200).send()
 })
 
 
