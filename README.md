@@ -51,7 +51,5 @@ Here is a list of websites that we have considered when designing and implementi
 ## Team Members
 (sorted by last name)
   * Sylvia Ji
-  * Lingyi Ju
   * Jiaqi Liu
   * Chris Molina
-  * Ashley Nussbaum
