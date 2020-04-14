@@ -911,6 +911,7 @@ app.post('/:courseId/members-list', (req, res) => {
         console.log(deleteName, deleteEmail)
     }
 
+    res.status(200).send()
 })
 
 /*
@@ -940,6 +941,8 @@ app.post('/settings', (req, res) => {
         // handle change password
         console.log(currPw, newPw)
     }
+
+    res.status(200).send()
 })
 
 
