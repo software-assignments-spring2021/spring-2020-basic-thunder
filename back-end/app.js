@@ -913,6 +913,34 @@ app.post('/:courseId/members-list', (req, res) => {
 
 })
 
+/*
+ *  Settings
+ */
+
+app.get('/settings', (req, res) => {
+    const data = {
+        'email': 'user001@nyu.edu'
+    }
+    res.json(data)
+
+})
+
+
+app.post('/settings', (req, res) => {
+    const newEmail = req.body.newEmail
+    const currPw = req.body.currPw
+    const newPw = req.body.newPw
+
+    if (newEmail) {
+        // handle change email
+        console.log(newEmail)
+    }
+
+    if (currPw && newPw) {
+        // handle change password
+        console.log(currPw, newPw)
+    }
+})
 
 
 module.exports = app;
