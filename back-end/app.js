@@ -903,12 +903,18 @@ app.post('/:courseId/members-list', (req, res) => {
 
     if (addRole && addEmail) {
         // handle add a member (send invitation)
-        console.log(addRole, addEmail)
+        // console.log(addRole, addEmail)
+    }
+
+    else if (addRole || addEmail) {
+        // if there are missing fields
+        // console.log('missing fields')
+        res.status(400).send()
     }
 
     else if (deleteName, deleteEmail) {
         // handle delete a member
-        console.log(deleteName, deleteEmail)
+        // console.log(deleteName, deleteEmail)
     }
 
     res.status(200).send()

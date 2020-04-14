@@ -65,5 +65,31 @@ describe('GET members-list /:courseId/members-list', () => {
 })
 
 describe('POST members-list /:courseId/members-list', () => {
-    it ('')
+    it('should send a status code of 200', (done) => {
+        chai.request(app)
+            .post('/1/members-list')
+            .send({"addRole":"student","addEmail":"student@nyu.edu"})
+            .end((err, res) => {
+                res.should.have.status(200)
+
+            })
+
+        chai.request(app)
+            .post('/3/members-list')
+            .send({deleteName: "D. E.", deleteEmail: "de111@nyu.edu"})
+            .end((err, res) => {
+                res.should.have.status(200)
+                done()
+            })
+    })
+
+    it('should sent a status of 400 if there are missing fields', (done) => {
+        chai.request(app)
+            .post('/5/members-list')
+            .send({"addRole":"student","addEmail":""})
+            .end((err, res) => {
+                res.should.have.status(400)
+                done()
+            })
+    })
 })
