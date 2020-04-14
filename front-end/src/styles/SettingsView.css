@@ -22,6 +22,21 @@
     height: 30px;
 }
 
+.SettingsView .section input[type=password] {
+    margin-top: 15px;
+    font-size: 20px;
+    width: 200px;
+    height: 30px;
+}
+
+.SettingsView .section input[type=text]:focus {
+    outline: none;
+}
+
+.SettingsView .section input[type=password]:focus {
+    outline: none;
+}
+
 .SettingsView .left {
     flex: 25%;
     background-color: #f3f3f3;

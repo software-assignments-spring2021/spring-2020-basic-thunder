@@ -19,6 +19,24 @@ const data = {
 
 const SettingsView = () => {
 
+    const [data, setData] = useState({'email': null})
+    const api = 'http://127.0.0.1:5000/settings'
+
+    // fetch data from backend
+    useEffect(()=>{
+        const fetchData = async () => {
+            axios.get(api)
+                .then(res => {
+                    setData(res.data)
+                })
+                .catch(err => {
+                    console.log(err)
+                    window.location.reload(false)
+                })
+        };
+        fetchData();
+    },[]);
+
     return (
         <div className={"SettingsView"}>
 
@@ -30,7 +48,7 @@ const SettingsView = () => {
             <div className={"main"}>
 
                 <h1>Settings</h1>
-                <Email email="user001@nyu.edu"/>
+                <Email email={data['email']}/>
                 <Password/>
 
             </div>
@@ -74,12 +92,30 @@ const Name = (props) => {
 
 const Email = (props) => {
 
-    let email = props.email
+    // let email = props.email
+
+    const [email, setEmail] = useState(props.email)
+    // if the email has been modified
+    const [modified, setModified] = useState(false)
 
     const handleSubmit = (e) => {
         e.preventDefault()
-    }
+        const api = 'http://127.0.0.1:5000/settings'
+        const newEmail = e.target['email'].value
+        setEmail(newEmail)
+        setModified(true)
 
+        axios.post(api,{
+            newEmail: newEmail
+        }).then(res => {
+            console.log(res)
+        }).catch(err => {
+            console.log(err)
+        })
+
+        e.target['email'].value = ''
+
+    }
 
     return (
         <div className="section">
@@ -90,9 +126,9 @@ const Email = (props) => {
             <div className={"right"}>
 
                 <form onSubmit={handleSubmit}>
-                    <p id="email">Current email: {email}</p>
+                    <p id="email">Current email: {modified ? email: props.email}</p>
                     <label>New email: </label>
-                    <input type="text"/>
+                    <input type="text" name="email"/>
                     <br/>
 
                     <input type="submit" value="Change Email" />
@@ -105,6 +141,25 @@ const Email = (props) => {
 
 const Password = (props) => {
 
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const api = 'http://127.0.0.1:5000/settings'
+        const currPw = e.target['currPw'].value
+        const newPw = e.target['newPw'].value
+
+        axios.post(api,{
+            currPw: currPw,
+            newPw: newPw
+        }).then(res => {
+            console.log(res)
+        }).catch(err => {
+            console.log(err)
+        })
+
+        e.target['currPw'].value = ''
+        e.target['newPw'].value = ''
+    }
+
     return (
         <div className="section">
             <div className={"left"}>
@@ -112,13 +167,13 @@ const Password = (props) => {
             </div>
 
             <div className={"right"}>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <label>Current password: </label>
-                    <input type="text"/>
+                    <input type="password" name="currPw"/>
                     <br/>
 
                     <label>New password: </label>
-                    <input type="text"/>
+                    <input type="password" name="newPw"/>
                     <br/>
 
                     <input type="submit" value="Change Password" />
