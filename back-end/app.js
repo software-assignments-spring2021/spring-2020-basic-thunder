@@ -941,9 +941,6 @@ app.post('/settings', (req, res) => {
     if (newEmail) {
         // handle change email
         // console.log(newEmail)
-        if (!newEmail.includes('@')) {
-            res.status(400).send()
-        }
     }
 
     else if (currPw && newPw) {

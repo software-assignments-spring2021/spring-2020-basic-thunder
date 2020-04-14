@@ -127,7 +127,7 @@ const Email = (props) => {
                 <form onSubmit={handleSubmit}>
                     <p id="email">Current email: {modified ? email: props.email}</p>
                     <label>New email: </label>
-                    <input type="text" name="email"/>
+                    <input type="email" name="email" required/>
                     <br/>
 
                     <input type="submit" value="Change Email" />
@@ -168,11 +168,11 @@ const Password = (props) => {
             <div className={"right"}>
                 <form onSubmit={handleSubmit}>
                     <label>Current password: </label>
-                    <input type="password" name="currPw"/>
+                    <input type="password" required minLength={3} name="currPw"/>
                     <br/>
 
                     <label>New password: </label>
-                    <input type="password" name="newPw"/>
+                    <input type="password" required minLength={3} name="newPw"/>
                     <br/>
 
                     <input type="submit" value="Change Password" />

@@ -230,14 +230,22 @@ const AddModal = (props) => {
         const role = selected  // student or instructor
         const email = e.target['email'].value
 
+        let status = ''
+
         axios.post(api,{
             addRole: role,
             addEmail: email,
         }).then(res => {
             console.log(res)
+            status = res.statusText
+            console.log(res.status)
         }).catch(err => {
             console.log(err)
         })
+
+        console.log(status)
+
+
 
         e.target.parentNode.style.display = 'none'
         setSelected('student')
@@ -252,7 +260,7 @@ const AddModal = (props) => {
             <form onSubmit={handleSubmit}>
                 <label>
                     <span>Email:</span>
-                    <input type="text" name="email" />
+                    <input type="email" required name="email" />
                 </label>
 
                 <label>
