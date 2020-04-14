@@ -41,15 +41,6 @@ Basic Thunder is the team that is responsible for realizing the Biazza proposal.
 ## Ways to Contribute
 Please visit the [Contribution](https://github.com/nyu-software-engineering/spring-2020-basic-thunder/blob/master/CONTRIBUTING.md) page for more detail.
 
-## How to Build and Test this Project?
-__We have not reach the building and testing stage. This section will be updated in future.__
-
-Here are some general information regarding the  technical background of the project. Please be aware that the information below is _tentative_ and is subject to change as we move forward.
-
-The project will use `Apache Flask` as backend and `React` as frontend. We will use `MongoDb` as our NoSQL database.
-
-Please ensure you have the relevant environment before building and testing the project.
-
 ## Relevant Websites
 Here is a list of websites that we have considered when designing and implementing the functionalities of this Biazza project:
 * [NYUClasses](https://newclasses.nyu.edu)
