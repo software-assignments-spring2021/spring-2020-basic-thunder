@@ -940,12 +940,21 @@ app.post('/settings', (req, res) => {
 
     if (newEmail) {
         // handle change email
-        console.log(newEmail)
+        // console.log(newEmail)
+        if (!newEmail.includes('@')) {
+            res.status(400).send()
+        }
     }
 
-    if (currPw && newPw) {
+    else if (currPw && newPw) {
         // handle change password
-        console.log(currPw, newPw)
+        // compare with encrypted current pw in database
+        // console.log(currPw, newPw)
+    }
+
+    else {
+        // if there are missing fields
+        res.status(400).send()
     }
 
     res.status(200).send()

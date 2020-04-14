@@ -36,7 +36,7 @@ describe('GET members-list /:courseId/members-list', () => {
             })
     })
 
-    it('should get a JSON object back', (done) => {
+    it('should get an object back', (done) => {
         chai.request(app)
             .get('/1/members-list')
             .end((err, res) => {
@@ -83,7 +83,7 @@ describe('POST members-list /:courseId/members-list', () => {
             })
     })
 
-    it('should sent a status of 400 if there are missing fields', (done) => {
+    it('should send a status of 400 if there are missing fields', (done) => {
         chai.request(app)
             .post('/5/members-list')
             .send({"addRole":"student","addEmail":""})
