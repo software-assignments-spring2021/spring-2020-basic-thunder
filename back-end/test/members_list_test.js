@@ -89,6 +89,13 @@ describe('POST members-list /:courseId/members-list', () => {
             .send({"addRole":"student","addEmail":""})
             .end((err, res) => {
                 res.should.have.status(400)
+            })
+
+        chai.request(app)
+            .post('/5/members-list')
+            .send({"addRole":"","addEmail":"role@nyu.edu"})
+            .end((err, res) => {
+                res.should.have.status(400)
                 done()
             })
     })
