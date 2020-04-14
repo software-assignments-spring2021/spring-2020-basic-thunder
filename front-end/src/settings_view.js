@@ -18,7 +18,6 @@ const data = {
 }
 
 const SettingsView = () => {
-
     const [data, setData] = useState({'email': null})
     const api = 'http://127.0.0.1:5000/settings'
 
@@ -184,7 +183,6 @@ const Password = (props) => {
     )
 }
 
-
 const Section = (props) => {
     const value = props.value
     return(
@@ -205,7 +203,6 @@ const Section = (props) => {
         </div>
     )
 }
-
 
 const NavBarComponentPlaceHolder = () =>{
     return (
