@@ -137,6 +137,7 @@ const Member = (props) => {
         })
 
         // remove deleted user card from page
+        // this only removes a user temporarily for now
         const card = document.getElementById(email)
         card.style.display = 'none'
 
@@ -221,7 +222,6 @@ const AddModal = (props) => {
     }
 
     const handleChange = (e) => {
-        e.preventDefault()
         setSelected(e.currentTarget.value)
     }
 
