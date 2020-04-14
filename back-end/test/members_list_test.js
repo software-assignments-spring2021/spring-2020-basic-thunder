@@ -62,6 +62,17 @@ describe('GET members-list /:courseId/members-list', () => {
                 done()
             })
     })
+
+    it('should get members data back', (done) => {
+        chai.request(app)
+            .get('/11/members-list')
+            .end((err, res) => {
+                const data = JSON.parse(res.text)
+                data.should.haveOwnProperty('instructors')
+                data.should.haveOwnProperty('students')
+                done()
+            })
+    })
 })
 
 describe('POST members-list /:courseId/members-list', () => {

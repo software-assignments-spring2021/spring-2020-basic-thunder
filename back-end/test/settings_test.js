@@ -26,6 +26,17 @@ describe('GET settings /settings', () => {
                 done()
             })
     })
+
+    it('should get the user email back', (done) => {
+        chai.request(app)
+            .get('/settings')
+            .end((err, res) => {
+                const data = JSON.parse(res.text)
+                data.should.haveOwnProperty('email')
+                done()
+            })
+    })
+
 })
 
 describe('POST settings /settings', () => {
