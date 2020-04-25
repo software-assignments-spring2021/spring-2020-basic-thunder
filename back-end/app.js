@@ -1,3 +1,6 @@
+// configuration secrets
+require('dotenv').config();
+
 // database related
 require("./db"); // schema
 const mongoose = require('mongoose');
@@ -7,9 +10,6 @@ const Post = mongoose.model("Post");
 const Reply = mongoose.model("Reply");
 const Schedule = mongoose.model("Schedule");
 const ScheduleDay = mongoose.model("ScheduleDay");
-
-// configuration secrets
-require('dotenv').config();
 
 // authentication related
 // Note: we are going to use JWT (json web token) to perform authentication
