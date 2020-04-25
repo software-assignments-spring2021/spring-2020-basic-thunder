@@ -11,6 +11,8 @@ const ScheduleDay = mongoose.model("ScheduleDay");
 // configuration secrets
 require('dotenv').config();
 
+mongoose.set('useFindAndModify', false)
+
 // authentication related
 // Note: we are going to use JWT (json web token) to perform authentication
 const passport = require('passport');
@@ -868,9 +870,6 @@ app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(
     const courseId = parseInt(req.params.courseId)
     const enrolledData = Biz.isEnrolled(user,courseId)
 
-    if (!enrolledData['isEnrolled']){
-        res.status(401).json({err_message:"unable to find the given course id"})
-    }
 
     const data = {}
     const instructors = []
@@ -925,6 +924,7 @@ app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(
 app.post('/:courseId/members-list', (req, res) => {
     const user = req.user
     const courseId = parseInt(req.params.courseId)
+    const query = {course_id: courseId}
 
     // data from the form to add new user
     const addRole = req.body.addRole
@@ -943,16 +943,20 @@ app.post('/:courseId/members-list', (req, res) => {
         // handle add a member (send invitation)
 
         // find course in database
-        Course.findOne({course_id: courseId}, (err, course) => {
+        Course.findOne(query, (err, course) => {
             if (err) {
                 res.status(401).json({err_message: 'unable to find the course'})
             } else {
                 const courseName = course.course_name
 
+                // generate random password string
+                // reference: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
                 let pw = ''
                 while (pw.length < 3) {
                     pw = Math.random().toString(36).substring(7)
                 }
+
+                console.log(pw)
 
                 // create a new user and save to database
                 const saltRounds = 10
@@ -967,24 +971,47 @@ app.post('/:courseId/members-list', (req, res) => {
                         courses: [{course_id: courseId, course_name: courseName}]
                     }).save((err, user, count) => {
                         if (err) {
+                            console.log('err occurred')
                             res.status(401).json({err_message:"document save error"})
                         } else {
                             // send email to newly created user
+                            console.log('saved')
+                            console.log(user.uid)
+
+                            // update course
+                            const uid = user.uid
+
+                            console.log(addRole)
+
+                            if (addRole === 'Instructor') {
+                                course.instructor_uids.push(uid)
+                                Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
+                                    if (err) {
+
+                                    } else {
+
+                                    }
+                                })
+
+                            } else if (addRole === 'Student') {
+
+                                course.student_uids.push(uid)
+                                console.log(course)
+                                Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
+                                    if (err) {
+
+                                    } else {
+
+                                    }
+                                })
+
+                            }
                         }
                     })
                 })
 
-
-
             }
         })
-
-
-        // generate random password string
-        // reference: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
-
-
-
 
 
     }

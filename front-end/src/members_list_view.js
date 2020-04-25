@@ -197,7 +197,7 @@ const AddModal = (props) => {
     // const [data,setData] = useState({course_name:null,username:null})
 
     // which radio button is selected
-    const [selected, setSelected] = useState('student')
+    const [selected, setSelected] = useState('Student')
     // whether modal to add a member should be visible
     const [visible, setVisible] = useState(true)
 
@@ -238,7 +238,7 @@ const AddModal = (props) => {
 
 
         e.target.parentNode.style.display = 'none'
-        setSelected('student')
+        setSelected('Student')
         e.target['email'].value = ''
     }
 
@@ -267,10 +267,10 @@ const AddModal = (props) => {
                 <label>
                     <span>Type:</span><br/>
 
-                    <input type="radio" id="radio-1" value="student" checked={selected === 'student'} onChange={handleChange}/>
+                    <input type="radio" id="radio-1" value="Student" checked={selected === 'Student'} onChange={handleChange}/>
                     <label id="label-1" htmlFor="student">Student</label><br/>
 
-                    <input type="radio" id="radio-2" value="instructor" checked={selected === 'instructor'} onChange={handleChange}/>
+                    <input type="radio" id="radio-2" value="Instructor" checked={selected === 'Instructor'} onChange={handleChange}/>
                     <label id="label-2" htmlFor="instructor">Instructor</label><br/>
 
                 </label>
