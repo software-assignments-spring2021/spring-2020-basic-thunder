@@ -113,21 +113,19 @@ const Member = (props) => {
         const main = document.querySelector('.main')
         main.removeChild(popup)
 
+        const accessToken = localStorage.getItem("access-token")
+
         axios.post(api,{
             deleteName: name,
             deleteEmail: email
-        }).then(res => {
+        }, {headers: {"Authorization" : `Bearer ${accessToken}`}})
+            .then(res => {
             if (res.data.deletedUser) {
                 window.location.reload()
             }
         }).catch(err => {
             console.log(err)
         })
-
-        // remove deleted user card from page
-        // this only removes a user temporarily for now
-        // const card = document.getElementById(email)
-        // card.style.display = 'none'
 
     }
 
@@ -220,13 +218,14 @@ const AddModal = (props) => {
         const firstname = e.target['firstname'].value
         const lastname = e.target['lastname'].value
 
-
+        const accessToken = localStorage.getItem("access-token")
 
         axios.post(api,{
             addRole: role,
             addEmail: email,
             addFirstName: firstname,
             addLastName: lastname
+        }, {headers: {"Authorization" : `Bearer ${accessToken}`}
         }).then(res => {
             console.log(res)
             console.log(res.status)

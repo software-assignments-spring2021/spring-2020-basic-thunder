@@ -921,10 +921,13 @@ app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(
 })
 
 
-app.post('/:courseId/members-list', (req, res) => {
-    const user = req.user
+app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false}), (req, res) => {
+    const currUser = req.user
     const courseId = parseInt(req.params.courseId)
     const query = {course_id: courseId}
+
+    console.log(currUser)
+
 
     // data from the form to add new user
     const addRole = req.body.addRole
@@ -983,26 +986,18 @@ app.post('/:courseId/members-list', (req, res) => {
 
                             if (addRole === 'Instructor') {
                                 course.instructor_uids.push(uid)
-                                Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
-                                    if (err) {
-
-                                    } else {
-                                        res.json({newUser: user})
-                                    }
-                                })
 
                             } else if (addRole === 'Student') {
-
                                 course.student_uids.push(uid)
                                 console.log(course)
-                                Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
-                                    if (err) {
-
-                                    } else {
-                                        res.json({newUser: user})
-                                    }
-                                })
                             }
+                            Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
+                                if (err) {
+
+                                } else {
+                                    res.json({newUser: user})
+                                }
+                            })
                         }
                     })
                 })
@@ -1022,11 +1017,13 @@ app.post('/:courseId/members-list', (req, res) => {
         // find the course in database
         Course.findOne(query, (err, course) => {
             if (err) {
+                console.log('unable to find the course')
                 res.status(401).json({err_message: 'unable to find the course'})
             } else {
                 // find the user in database
                 User.findOne({email: deleteEmail}, (err2, user) => {
                     if (err2) {
+                        console.log('unable to find the user')
                         res.status(401).json({err_message: 'unable to find the user'})
                     } else {
                         user.courses = user.courses.filter(c => c.course_id !== courseId)
@@ -1040,7 +1037,6 @@ app.post('/:courseId/members-list', (req, res) => {
                                 // update course
                                 const role = user.role
                                 const uid = user.uid
-
 
                                 if (role === 'Instructor') {
                                     course.instructor_uids = course.instructor_uids.filter(id => id !== uid)
@@ -1058,7 +1054,6 @@ app.post('/:courseId/members-list', (req, res) => {
                                 })
                             }
                         })
-
                     }
                 })
             }
