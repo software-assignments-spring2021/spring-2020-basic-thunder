@@ -936,8 +936,6 @@ app.post('/:courseId/members-list', (req, res) => {
     const deleteName = req.body.deleteName
     const deleteEmail = req.body.deleteEmail
 
-    console.log(addFirstName, addLastName)
-
 
     if (addRole && addEmail && addFirstName && addLastName) {
         // handle add a member (send invitation)
@@ -989,7 +987,7 @@ app.post('/:courseId/members-list', (req, res) => {
                                     if (err) {
 
                                     } else {
-
+                                        res.json({newUser: user})
                                     }
                                 })
 
@@ -1001,7 +999,7 @@ app.post('/:courseId/members-list', (req, res) => {
                                     if (err) {
 
                                     } else {
-
+                                        res.json({newUser: user})
                                     }
                                 })
 
@@ -1012,8 +1010,6 @@ app.post('/:courseId/members-list', (req, res) => {
 
             }
         })
-
-
     }
 
     else if (addRole || addEmail || addFirstName || addLastName) {
@@ -1022,12 +1018,12 @@ app.post('/:courseId/members-list', (req, res) => {
         res.status(400).send()
     }
 
-    else if (deleteName, deleteEmail) {
+    else if (deleteName && deleteEmail) {
         // handle delete a member
         // console.log(deleteName, deleteEmail)
     }
 
-    res.status(200).send()
+    // res.status(200).send()
 })
 
 /*

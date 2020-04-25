@@ -218,7 +218,7 @@ const AddModal = (props) => {
         const firstname = e.target['firstname'].value
         const lastname = e.target['lastname'].value
 
-        let status = ''
+
 
         axios.post(api,{
             addRole: role,
@@ -227,14 +227,14 @@ const AddModal = (props) => {
             addLastName: lastname
         }).then(res => {
             console.log(res)
-            status = res.statusText
             console.log(res.status)
+
+            if (res.data.newUser) {
+                window.location.reload()
+            }
         }).catch(err => {
             console.log(err)
         })
-
-        console.log(status)
-
 
 
         e.target.parentNode.style.display = 'none'
