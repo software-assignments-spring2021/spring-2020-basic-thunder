@@ -866,8 +866,9 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
 app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(req,res)=>{
     const user = req.user
     const courseId = parseInt(req.params.courseId)
+    const enrolledData = Biz.isEnrolled(user,courseId)
 
-    if(!Biz.isEnrolled(user,courseId)['isEnrolled']){
+    if (!enrolledData['isEnrolled']){
         res.status(401).json({err_message:"unable to find the given course id"})
     }
 
@@ -922,21 +923,73 @@ app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(
 
 
 app.post('/:courseId/members-list', (req, res) => {
+    const user = req.user
+    const courseId = parseInt(req.params.courseId)
+
     // data from the form to add new user
     const addRole = req.body.addRole
     const addEmail = req.body.addEmail
+    const addFirstName = req.body.addFirstName
+    const addLastName = req.body.addLastName
 
     // data from the form to delete a user
     const deleteName = req.body.deleteName
     const deleteEmail = req.body.deleteEmail
 
+    console.log(addFirstName, addLastName)
 
-    if (addRole && addEmail) {
+
+    if (addRole && addEmail && addFirstName && addLastName) {
         // handle add a member (send invitation)
-        // console.log(addRole, addEmail)
+
+        // find course in database
+        Course.findOne({course_id: courseId}, (err, course) => {
+            if (err) {
+                res.status(401).json({err_message: 'unable to find the course'})
+            } else {
+                const courseName = course.course_name
+
+                let pw = ''
+                while (pw.length < 3) {
+                    pw = Math.random().toString(36).substring(7)
+                }
+
+                // create a new user and save to database
+                const saltRounds = 10
+                bcrypt.hash(pw, saltRounds, (err, hash) => {
+                    new User({
+                        email: addEmail,
+                        firstname: addFirstName,
+                        lastname: addLastName,
+                        role: addRole,
+                        password: hash,
+                        // course name
+                        courses: [{course_id: courseId, course_name: courseName}]
+                    }).save((err, user, count) => {
+                        if (err) {
+                            res.status(401).json({err_message:"document save error"})
+                        } else {
+                            // send email to newly created user
+                        }
+                    })
+                })
+
+
+
+            }
+        })
+
+
+        // generate random password string
+        // reference: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+
+
+
+
+
     }
 
-    else if (addRole || addEmail) {
+    else if (addRole || addEmail || addFirstName || addLastName) {
         // if there are missing fields
         // console.log('missing fields')
         res.status(400).send()

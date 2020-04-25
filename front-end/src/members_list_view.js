@@ -18,7 +18,6 @@ const MembersListView = () => {
     // const mode = 'instructor'
     // const mode = 'student'
 
-
     const [courseName, setCourseName] = useState('')
     const [mode, setMode] = useState('instructor')
     const [data, setData] = useState({'courseId': -1, 'courseName': null, 'instructors': null, 'students': null})
@@ -216,12 +215,16 @@ const AddModal = (props) => {
         e.preventDefault()
         const role = selected  // student or instructor
         const email = e.target['email'].value
+        const firstname = e.target['firstname'].value
+        const lastname = e.target['lastname'].value
 
         let status = ''
 
         axios.post(api,{
             addRole: role,
             addEmail: email,
+            addFirstName: firstname,
+            addLastName: lastname
         }).then(res => {
             console.log(res)
             status = res.statusText
@@ -245,9 +248,20 @@ const AddModal = (props) => {
             <button id="closeAdd" onClick={handleClick}>Close</button>
             <h2>Add New Member</h2>
             <form onSubmit={handleSubmit}>
+
                 <label>
                     <span>Email:</span>
                     <input type="email" required name="email" />
+                </label>
+
+                <label>
+                    <span>First name:</span>
+                    <input type="text" required name="firstname" />
+                </label>
+
+                <label>
+                    <span>Last name:</span>
+                    <input type="text" required name="lastname" />
                 </label>
 
                 <label>
