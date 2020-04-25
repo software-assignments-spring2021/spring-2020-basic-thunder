@@ -863,31 +863,61 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
  *  Members List
  */
 
-app.get('/:courseId/members-list', (req, res) => {
+app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(req,res)=>{
     const user = req.user
     const courseId = parseInt(req.params.courseId)
 
-    const data = {
-        'courseId': courseId,
-        'courseName': 'CS480 Computer Vision',
-        'instructors': [
-            {'name': 'A. B.',
-                'email': 'ab123@nyu.edu'},
-            {'name': 'D. E.',
-                'email': 'de111@nyu.edu'}
-        ],
-        'students': [
-            {'name': 'S. J.',
-                'email': 'sj13@nyu.edu'},
-            {'name': 'J. L.',
-                'email': 'jl321@nyu.edu'},
-            {'name': 'C. M.',
-                'email': 'cm222@nyu.edu'}
-        ]
+    if(!Biz.isEnrolled(user,courseId)['isEnrolled']){
+        res.status(401).json({err_message:"unable to find the given course id"})
     }
 
-    res.json(data)
+    const data = {}
+    const instructors = []
+    const students  =[]
 
+    Course.findOne({'course_id': courseId}, (err, course) => {
+        if (err) {
+            res.status(401).json({err_message: 'failed to load members data'})
+        } else {
+            data.courseId = course.course_id
+            data.courseName = course.course_name
+            data.isInstructor = course.instructor_uids.includes(user.uid)
+
+            User.find().where('uid').in(course.instructor_uids).exec((err2, users1) => {
+                if (err2) {
+                    res.status(401).json({err_message: 'failed to load instructors data'})
+                } else {
+                    users1.forEach((instructor) => {
+                        instructors.push(
+                            {
+                                'name': instructor.firstname + ' ' + instructor.lastname,
+                                'email': instructor.email
+                            }
+                        )
+                    })
+
+                    data.instructors = instructors
+
+                    User.find().where('uid').in(course.student_uids).exec((err3, users2) => {
+                        if (err3) {
+                            res.status(401).json({err_message: 'failed to load students data'})
+                        } else {
+                            users2.forEach((student) => {
+                                students.push(
+                                    {
+                                        'name': student.firstname + ' ' + student.lastname,
+                                        'email': student.email
+                                    }
+                                )
+                            })
+                            data.students = students
+                            res.json(data)
+                        }
+                    })
+                }
+            })
+        }
+    })
 })
 
 

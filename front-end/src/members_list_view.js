@@ -12,32 +12,15 @@ import {
 import Hamburger from './HamburgerMenu.js'
 import {LoadingView} from "./loading_view";
 
-/*
-const data = {
-    'courseName': 'CS480 Computer Vision',
-    'instructors': [
-        {'name': 'A. B.',
-        'email': 'ab123@nyu.edu'},
-        {'name': 'D. E.',
-        'email': 'de111@nyu.edu'}
-    ],
-    'students': [
-        {'name': 'S. J.',
-        'email': 'sj13@nyu.edu'},
-        {'name': 'J. L.',
-        'email': 'jl321@nyu.edu'},
-        {'name': 'C. M.',
-        'email': 'cm222@nyu.edu'}
-    ]
-}
- */
-
 const MembersListView = () => {
     const {courseId} = useParams()
-    const courseName = 'Computer Vision'
-    const mode = 'instructor'
+    // const courseName = 'Computer Vision'
+    // const mode = 'instructor'
     // const mode = 'student'
 
+
+    const [courseName, setCourseName] = useState('')
+    const [mode, setMode] = useState('instructor')
     const [data, setData] = useState({'courseId': -1, 'courseName': null, 'instructors': null, 'students': null})
     const api = `http://127.0.0.1:5000/${courseId}/members-list`
 
@@ -45,8 +28,12 @@ const MembersListView = () => {
     // set 'data' variable to the hard-coded JSON object
     useEffect(()=>{
         const fetchData = async () => {
-            axios.get(api)
+            const accessToken = localStorage.getItem("access-token");
+            axios.get(api, {headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res => {
+                    setCourseName(res.data.courseName)
+                    setMode(res.data.isInstructor ?  'instructor' : 'student')
+
                     setData(res.data)
                 })
                 .catch(err => {
