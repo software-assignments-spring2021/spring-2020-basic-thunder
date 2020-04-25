@@ -117,15 +117,17 @@ const Member = (props) => {
             deleteName: name,
             deleteEmail: email
         }).then(res => {
-            console.log(res)
+            if (res.data.deletedUser) {
+                window.location.reload()
+            }
         }).catch(err => {
             console.log(err)
         })
 
         // remove deleted user card from page
         // this only removes a user temporarily for now
-        const card = document.getElementById(email)
-        card.style.display = 'none'
+        // const card = document.getElementById(email)
+        // card.style.display = 'none'
 
     }
 

@@ -1002,12 +1002,10 @@ app.post('/:courseId/members-list', (req, res) => {
                                         res.json({newUser: user})
                                     }
                                 })
-
                             }
                         }
                     })
                 })
-
             }
         })
     }
@@ -1020,7 +1018,51 @@ app.post('/:courseId/members-list', (req, res) => {
 
     else if (deleteName && deleteEmail) {
         // handle delete a member
-        // console.log(deleteName, deleteEmail)
+
+        // find the course in database
+        Course.findOne(query, (err, course) => {
+            if (err) {
+                res.status(401).json({err_message: 'unable to find the course'})
+            } else {
+                // find the user in database
+                User.findOne({email: deleteEmail}, (err2, user) => {
+                    if (err2) {
+                        res.status(401).json({err_message: 'unable to find the user'})
+                    } else {
+                        user.courses = user.courses.filter(c => c.course_id !== courseId)
+
+                        // update user
+                        User.findOneAndUpdate({email: deleteEmail}, user, {upsert: true}, (err3, user2) => {
+                            if (err3) {
+
+                            } else {
+
+                                // update course
+                                const role = user.role
+                                const uid = user.uid
+
+
+                                if (role === 'Instructor') {
+                                    course.instructor_uids = course.instructor_uids.filter(id => id !== uid)
+
+                                } else if (role === 'Student') {
+                                    course.student_uids = course.student_uids.filter(id => id !== uid)
+                                }
+
+                                Course.findOneAndUpdate(query, course, {upsert: true}, (err4, doc) => {
+                                    if (err4) {
+
+                                    } else {
+                                        res.json({deletedUser: user})
+                                    }
+                                })
+                            }
+                        })
+
+                    }
+                })
+            }
+        })
     }
 
     // res.status(200).send()
