@@ -959,47 +959,87 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
 
                 console.log(pw)
 
-                // create a new user and save to database
-                const saltRounds = 10
-                bcrypt.hash(pw, saltRounds, (err, hash) => {
-                    new User({
-                        email: addEmail,
-                        firstname: addFirstName,
-                        lastname: addLastName,
-                        role: addRole,
-                        password: hash,
-                        // course name
-                        courses: [{course_id: courseId, course_name: courseName}]
-                    }).save((err, user, count) => {
-                        if (err) {
-                            console.log('err occurred')
-                            res.status(401).json({err_message:"document save error"})
-                        } else {
-                            // send email to newly created user
-                            console.log('saved')
-                            console.log(user.uid)
+                User.findOne({email: addEmail}, (err, result) => {
+                    if (result) {
+                        // user already exists
 
-                            // update course
-                            const uid = user.uid
+                        let enrolled = false
+                        result.courses.forEach(c => {
+                            if (c.course_id === courseId) {
+                                enrolled = true
+                            }
+                        })
 
-                            console.log(addRole)
+
+                        if (!enrolled) {
+                            // enroll user to the course
+                            result.courses.push({course_id: courseId, course_name: courseName})
+
+                            const uid = result.uid
 
                             if (addRole === 'Instructor') {
                                 course.instructor_uids.push(uid)
 
                             } else if (addRole === 'Student') {
                                 course.student_uids.push(uid)
-                                console.log(course)
                             }
                             Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
                                 if (err) {
+                                    res.status(401).json({err_message: 'database error'})
 
                                 } else {
-                                    res.json({newUser: user})
+                                    User.findOneAndUpdate({email: addEmail}, result, (err2, doc2) => {
+                                        if (err2) {
+                                            res.status(401).json({err_message: 'database error'})
+
+                                        } else {
+                                            res.json({newUser: result})
+                                        }
+                                    })
                                 }
                             })
                         }
-                    })
+
+                    } else {
+                        // create a new user and save to database
+                        const saltRounds = 10
+                        bcrypt.hash(pw, saltRounds, (err, hash) => {
+                            new User({
+                                email: addEmail,
+                                firstname: addFirstName,
+                                lastname: addLastName,
+                                role: addRole,
+                                password: hash,
+                                courses: [{course_id: courseId, course_name: courseName}]
+                            }).save((err, user, count) => {
+                                if (err) {
+                                    console.log('document save error')
+                                    res.status(401).json({err_message: 'document save error'})
+                                } else {
+                                    // send email to newly created user
+                                    console.log('saved')
+                                    console.log(user.uid)
+
+                                    // update course
+                                    const uid = user.uid
+
+                                    if (addRole === 'Instructor') {
+                                        course.instructor_uids.push(uid)
+
+                                    } else if (addRole === 'Student') {
+                                        course.student_uids.push(uid)
+                                    }
+                                    Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
+                                        if (err) {
+
+                                        } else {
+                                            res.json({newUser: user})
+                                        }
+                                    })
+                                }
+                            })
+                        })
+                    }
                 })
             }
         })
