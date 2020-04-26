@@ -35,7 +35,7 @@ const MembersListView = () => {
                 })
                 .catch(err => {
                     console.log(err)
-                    window.location.reload(false)
+                    window.location.href = '/LoggedInHome'
                 })
         };
         fetchData();
@@ -231,7 +231,6 @@ const AddModal = (props) => {
         }).catch(err => {
             console.log(err)
         })
-
 
         e.target.parentNode.style.display = 'none'
         setSelected('Student')

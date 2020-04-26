@@ -11,6 +11,16 @@ const ScheduleDay = mongoose.model("ScheduleDay");
 // configuration secrets
 require('dotenv').config();
 
+// nodemailer
+const nodemailer = require('nodemailer')
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.MAILER_USER,
+        pass: process.env.MAILER_PW
+    }
+})
+
 mongoose.set('useFindAndModify', false)
 
 // authentication related
@@ -869,6 +879,12 @@ app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(
     const user = req.user
     const courseId = parseInt(req.params.courseId)
 
+    const enrolledData = Biz.isEnrolled(user,courseId);
+    if(!enrolledData['isEnrolled']){
+        res.status(401).json({err_message: 'unable to find the given course id'})
+        return
+    }
+
     const data = {currEmail: user.email}
     const instructors = []
     const students  =[]
@@ -1114,6 +1130,9 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
         })
     }
 })
+
+
+
 
 /*
  *  Settings
