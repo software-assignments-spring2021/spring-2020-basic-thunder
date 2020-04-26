@@ -983,8 +983,6 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
                     pw = Math.random().toString(36).substring(7)
                 }
 
-                console.log(pw)
-
                 User.findOne({email: addEmail}, (err, result) => {
                     if (result) {
                         // user already exists
@@ -1040,24 +1038,56 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
                                     console.log('document save error')
                                     res.status(401).json({err_message: 'document save error'})
                                 } else {
-                                    // send email to newly created user
-                                    console.log('saved')
-                                    console.log(user.uid)
 
                                     // update course
                                     const uid = user.uid
+                                    let mail_text
 
                                     if (addRole === 'Instructor') {
                                         course.instructor_uids.push(uid)
+                                        mail_text = 'Dear ' + addFirstName + ', \n\n'
+                                            + currUser.firstname + ' ' + currUser.lastname + ' from ' +
+                                            courseName + ' has created an account for you on Biazza and registered you as an instructor.\n'
+                                            + 'Your temporary password is: ' + pw + '\n'
+                                            + 'You may change your password in settings. \n\n'
+                                            + 'Best, \n'
+                                            + 'Biazza Team'
 
                                     } else if (addRole === 'Student') {
                                         course.student_uids.push(uid)
+                                        mail_text = 'Dear ' + addFirstName + ', \n\n'
+                                            + 'Your instructor ' + currUser.firstname + ' ' + currUser.lastname + ' from ' +
+                                            courseName + ' has created an account for you on Biazza.\n'
+                                            + 'Your temporary password is: ' + pw + '\n'
+                                            + 'You may change your password in settings. \n\n'
+                                            + 'Best, \n'
+                                            + 'Biazza Team'
                                     }
                                     Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
                                         if (err) {
-
+                                            res.status(401).json({err_message: 'Database error'})
                                         } else {
                                             res.json({newUser: user})
+
+                                            // send email to newly created user
+
+                                            const mailOptions = {
+                                                from: process.env.MAILER_USER,
+                                                to: addEmail,
+                                                subject: 'Welcome to Biazza',
+                                                text: mail_text
+                                            }
+
+                                            transporter.sendMail(mailOptions, (error, info) => {
+                                                if (error) {
+                                                    console.log(error)
+                                                    console.log('Failed to send email')
+                                                    res.status(401).json({err_message: 'Failed to send email'})
+                                                } else {
+                                                    console.log('Message sent: %s', info.messageId)
+                                                    res.json({success_message: 'Invitation sent'})
+                                                }
+                                            })
                                         }
                                     })
                                 }
@@ -1121,6 +1151,7 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
 
                                 Course.findOneAndUpdate(query, course, {upsert: true}, (err4, doc) => {
                                     if (err4) {
+                                        res.status(401).json({err_message: 'Database error'})
 
                                     } else {
                                         res.json({deletedUser: user})
