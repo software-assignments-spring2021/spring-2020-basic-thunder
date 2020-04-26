@@ -1,3 +1,6 @@
+// configuration secrets
+require('dotenv').config();
+
 // database related
 require("./db"); // schema
 const mongoose = require('mongoose');
