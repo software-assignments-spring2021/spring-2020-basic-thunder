@@ -683,25 +683,29 @@ app.get("/:courseId/Schedule",passport.authenticate('jwt',{session:false}),(req,
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
 
-    Schedule.findOne({"course_id":courseId},(err,schedule)=> {
-        if(err){
-            res.status(401).json({err_message:"unable to find the schedule for the given course id"});
-        }
-        else{
-            Course.findOne({"course_id":courseId},(err2,course)=>{
-                if(err2){
-                    res.status(401).json({err_message:"unable to find the course on the schedule view"})
-                }
-                res.json(
-                    {
-                        "scheduleId":schedule.schedule_id,
-                        "courseId": schedule.schedule_id,
-                        "courseName":schedule.course_name,
-                        "isInstructor": course.creator_uid === user.uid
-                    })
-            })
-        }
-    });
+    if (!Biz.isEnrolled(user,courseId)['isEnrolled']){
+        res.status(401).json({err_message: 'unable to find the given course id'})
+    } else {
+        Schedule.findOne({"course_id":courseId},(err,schedule)=> {
+            if(err){
+                res.status(401).json({err_message:"unable to find the schedule for the given course id"});
+            }
+            else{
+                Course.findOne({"course_id":courseId},(err2,course)=>{
+                    if(err2){
+                        res.status(401).json({err_message:"unable to find the course on the schedule view"})
+                    }
+                    res.json(
+                        {
+                            "scheduleId":schedule.schedule_id,
+                            "courseId": schedule.schedule_id,
+                            "courseName":schedule.course_name,
+                            "isInstructor": course.creator_uid === user.uid
+                        })
+                })
+            }
+        });
+    }
 });
 
 app.get("/:courseId/Schedule/:scheduleId",passport.authenticate('jwt',{session:false}),(req,res)=>{
