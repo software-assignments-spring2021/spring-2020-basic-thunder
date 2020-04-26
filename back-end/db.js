@@ -22,6 +22,7 @@ const CourseSchema = new mongoose.Schema({
     "syllabus":{type:String},
     "creator_uid":{type:Number,required:true},
     "instructor_uids":[Number],
+    "student_uids": [Number],
     "list_of_posts":[
         {
             "post_id":Number,

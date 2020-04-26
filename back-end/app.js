@@ -11,6 +11,21 @@ const Reply = mongoose.model("Reply");
 const Schedule = mongoose.model("Schedule");
 const ScheduleDay = mongoose.model("ScheduleDay");
 
+// configuration secrets
+require('dotenv').config();
+
+// nodemailer
+const nodemailer = require('nodemailer')
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.MAILER_USER,
+        pass: process.env.MAILER_PW
+    }
+})
+
+mongoose.set('useFindAndModify', false)
+
 // authentication related
 // Note: we are going to use JWT (json web token) to perform authentication
 const passport = require('passport');
@@ -671,25 +686,29 @@ app.get("/:courseId/Schedule",passport.authenticate('jwt',{session:false}),(req,
     const courseId = parseInt(req.params.courseId);
     const user = req.user;
 
-    Schedule.findOne({"course_id":courseId},(err,schedule)=> {
-        if(err){
-            res.status(401).json({err_message:"unable to find the schedule for the given course id"});
-        }
-        else{
-            Course.findOne({"course_id":courseId},(err2,course)=>{
-                if(err2){
-                    res.status(401).json({err_message:"unable to find the course on the schedule view"})
-                }
-                res.json(
-                    {
-                        "scheduleId":schedule.schedule_id,
-                        "courseId": schedule.schedule_id,
-                        "courseName":schedule.course_name,
-                        "isInstructor": course.creator_uid === user.uid
-                    })
-            })
-        }
-    });
+    if (!Biz.isEnrolled(user,courseId)['isEnrolled']){
+        res.status(401).json({err_message: 'unable to find the given course id'})
+    } else {
+        Schedule.findOne({"course_id":courseId},(err,schedule)=> {
+            if(err){
+                res.status(401).json({err_message:"unable to find the schedule for the given course id"});
+            }
+            else{
+                Course.findOne({"course_id":courseId},(err2,course)=>{
+                    if(err2){
+                        res.status(401).json({err_message:"unable to find the course on the schedule view"})
+                    }
+                    res.json(
+                        {
+                            "scheduleId":schedule.schedule_id,
+                            "courseId": schedule.schedule_id,
+                            "courseName":schedule.course_name,
+                            "isInstructor": course.creator_uid === user.uid
+                        })
+                })
+            }
+        });
+    }
 });
 
 app.get("/:courseId/Schedule/:scheduleId",passport.authenticate('jwt',{session:false}),(req,res)=>{
@@ -863,62 +882,295 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
  *  Members List
  */
 
-app.get('/:courseId/members-list', (req, res) => {
+app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(req,res)=>{
     const user = req.user
     const courseId = parseInt(req.params.courseId)
 
-    const data = {
-        'courseId': courseId,
-        'courseName': 'CS480 Computer Vision',
-        'instructors': [
-            {'name': 'A. B.',
-                'email': 'ab123@nyu.edu'},
-            {'name': 'D. E.',
-                'email': 'de111@nyu.edu'}
-        ],
-        'students': [
-            {'name': 'S. J.',
-                'email': 'sj13@nyu.edu'},
-            {'name': 'J. L.',
-                'email': 'jl321@nyu.edu'},
-            {'name': 'C. M.',
-                'email': 'cm222@nyu.edu'}
-        ]
+    const enrolledData = Biz.isEnrolled(user,courseId);
+    if(!enrolledData['isEnrolled']){
+        res.status(401).json({err_message: 'unable to find the given course id'})
+        return
     }
 
-    res.json(data)
+    const data = {currEmail: user.email}
+    const instructors = []
+    const students  =[]
 
+    Course.findOne({'course_id': courseId}, (err, course) => {
+        if (err) {
+            res.status(401).json({err_message: 'failed to load members data'})
+        } else {
+            data.courseId = course.course_id
+            data.courseName = course.course_name
+            data.isInstructor = course.instructor_uids.includes(user.uid)
+
+            User.find().where('uid').in(course.instructor_uids).exec((err2, users1) => {
+                if (err2) {
+                    res.status(401).json({err_message: 'failed to load instructors data'})
+                } else {
+                    users1.forEach((instructor) => {
+                        instructors.push(
+                            {
+                                'name': instructor.firstname + ' ' + instructor.lastname,
+                                'email': instructor.email
+                            }
+                        )
+                    })
+
+                    data.instructors = instructors
+
+                    User.find().where('uid').in(course.student_uids).exec((err3, users2) => {
+                        if (err3) {
+                            res.status(401).json({err_message: 'failed to load students data'})
+                        } else {
+                            users2.forEach((student) => {
+                                students.push(
+                                    {
+                                        'name': student.firstname + ' ' + student.lastname,
+                                        'email': student.email
+                                    }
+                                )
+                            })
+                            data.students = students
+                            res.json(data)
+                        }
+                    })
+                }
+            })
+        }
+    })
 })
 
 
-app.post('/:courseId/members-list', (req, res) => {
+app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false}), (req, res) => {
+    const currUser = req.user
+    const courseId = parseInt(req.params.courseId)
+    const query = {course_id: courseId}
+
+
     // data from the form to add new user
     const addRole = req.body.addRole
     const addEmail = req.body.addEmail
+    const addFirstName = req.body.addFirstName
+    const addLastName = req.body.addLastName
 
     // data from the form to delete a user
     const deleteName = req.body.deleteName
     const deleteEmail = req.body.deleteEmail
 
 
-    if (addRole && addEmail) {
+    if (addRole && addEmail && addFirstName && addLastName) {
+
+        if (addRole !== 'Student' && addRole !== 'Instructor') {
+            res.status(401).json({err_message: 'invalid role'})
+            return
+        }
+
+        if (!Biz.isEmailValid(addEmail)) {
+            res.status(401).json({err_message: 'invalid email'})
+            return
+        }
+
         // handle add a member (send invitation)
-        // console.log(addRole, addEmail)
+        // find course in database
+        Course.findOne(query, (err, course) => {
+            if (err) {
+                res.status(401).json({err_message: 'unable to find the course'})
+            } else {
+                const courseName = course.course_name
+
+                // generate random password string
+                // reference: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+                let pw = ''
+                while (pw.length < 3) {
+                    pw = Math.random().toString(36).substring(7)
+                }
+
+                User.findOne({email: addEmail}, (err, result) => {
+                    if (result) {
+                        // user already exists
+                        let enrolled = false
+                        result.courses.forEach(c => {
+                            if (c.course_id === courseId) {
+                                enrolled = true
+                            }
+                        })
+
+                        if (!enrolled) {
+                            // enroll user to the course
+                            result.courses.push({course_id: courseId, course_name: courseName})
+
+                            const uid = result.uid
+
+                            if (addRole === 'Instructor') {
+                                course.instructor_uids.push(uid)
+
+                            } else if (addRole === 'Student') {
+                                course.student_uids.push(uid)
+                            }
+                            Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
+                                if (err) {
+                                    res.status(401).json({err_message: 'database error'})
+
+                                } else {
+                                    User.findOneAndUpdate({email: addEmail}, result, (err2, doc2) => {
+                                        if (err2) {
+                                            res.status(401).json({err_message: 'database error'})
+
+                                        } else {
+                                            res.json({newUser: result})
+                                        }
+                                    })
+                                }
+                            })
+                        }
+
+                    } else {
+                        // create a new user and save to database
+                        const saltRounds = 10
+                        bcrypt.hash(pw, saltRounds, (err, hash) => {
+                            new User({
+                                email: addEmail,
+                                firstname: addFirstName,
+                                lastname: addLastName,
+                                role: addRole,
+                                password: hash,
+                                courses: [{course_id: courseId, course_name: courseName}]
+                            }).save((err, user, count) => {
+                                if (err) {
+                                    console.log('document save error')
+                                    res.status(401).json({err_message: 'document save error'})
+                                } else {
+
+                                    // update course
+                                    const uid = user.uid
+                                    let mail_text
+
+                                    if (addRole === 'Instructor') {
+                                        course.instructor_uids.push(uid)
+                                        mail_text = 'Dear ' + addFirstName + ', \n\n'
+                                            + currUser.firstname + ' ' + currUser.lastname + ' from ' +
+                                            courseName + ' has created an account for you on Biazza and registered you as an instructor.\n'
+                                            + 'Your temporary password is: ' + pw + '\n'
+                                            + 'You may change your password anytime in Settings. \n\n'
+                                            + 'Best, \n'
+                                            + 'Biazza Team'
+
+                                    } else if (addRole === 'Student') {
+                                        course.student_uids.push(uid)
+                                        mail_text = 'Dear ' + addFirstName + ', \n\n'
+                                            + 'Your instructor ' + currUser.firstname + ' ' + currUser.lastname + ' from ' +
+                                            courseName + ' has created an account for you on Biazza.\n'
+                                            + 'Your temporary password is: ' + pw + '\n'
+                                            + 'You may change your password anytime in Settings. \n\n'
+                                            + 'Best, \n'
+                                            + 'Biazza Team'
+                                    }
+
+                                    Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
+                                        if (err) {
+                                            res.status(401).json({err_message: 'Database error'})
+                                        } else {
+                                            res.json({newUser: user})
+
+                                            // send email to newly created user
+                                            const mailOptions = {
+                                                from: process.env.MAILER_USER,
+                                                to: addEmail,
+                                                subject: 'Welcome to Biazza',
+                                                text: mail_text
+                                            }
+
+                                            transporter.sendMail(mailOptions, (error, info) => {
+                                                if (error) {
+                                                    console.log(error)
+                                                    console.log('Failed to send email')
+                                                    res.status(401).json({err_message: 'Failed to send email'})
+                                                } else {
+                                                    console.log('Message sent: %s', info.messageId)
+                                                    res.json({success_message: 'Invitation sent'})
+                                                }
+                                            })
+                                        }
+                                    })
+                                }
+                            })
+                        })
+                    }
+                })
+            }
+        })
     }
 
-    else if (addRole || addEmail) {
+    else if (addRole || addEmail || addFirstName || addLastName) {
         // if there are missing fields
         // console.log('missing fields')
-        res.status(400).send()
+        res.status(400).json({err_message: 'missing fields'})
     }
 
-    else if (deleteName, deleteEmail) {
+    else if (deleteName && deleteEmail) {
         // handle delete a member
-        // console.log(deleteName, deleteEmail)
-    }
 
-    res.status(200).send()
+        if (deleteEmail === currUser.email) {
+            res.status(401).json({err_message: 'cannot delete oneself'})
+            return
+        }
+
+        if (!Biz.isEmailValid(deleteEmail)) {
+            res.status(401).json({err_message: 'invalid email'})
+            return
+        }
+
+        // find the course in database
+        Course.findOne(query, (err, course) => {
+            if (err) {
+                console.log('unable to find the course')
+                res.status(401).json({err_message: 'unable to find the course'})
+            } else {
+                // find the user in database
+                User.findOne({email: deleteEmail}, (err2, user) => {
+                    if (err2) {
+                        console.log('unable to find the user')
+                        res.status(401).json({err_message: 'unable to find the user'})
+                    } else {
+                        user.courses = user.courses.filter(c => c.course_id !== courseId)
+
+                        // update user
+                        User.findOneAndUpdate({email: deleteEmail}, user, {upsert: true}, (err3, user2) => {
+                            if (err3) {
+
+                            } else {
+
+                                // update course
+                                const role = user.role
+                                const uid = user.uid
+
+                                if (role === 'Instructor') {
+                                    course.instructor_uids = course.instructor_uids.filter(id => id !== uid)
+
+                                } else if (role === 'Student') {
+                                    course.student_uids = course.student_uids.filter(id => id !== uid)
+                                }
+
+                                Course.findOneAndUpdate(query, course, {upsert: true}, (err4, doc) => {
+                                    if (err4) {
+                                        res.status(401).json({err_message: 'Database error'})
+
+                                    } else {
+                                        res.json({deletedUser: user})
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
 })
+
+
+
 
 /*
  *  Settings
