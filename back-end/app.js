@@ -1049,7 +1049,7 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
                                             + currUser.firstname + ' ' + currUser.lastname + ' from ' +
                                             courseName + ' has created an account for you on Biazza and registered you as an instructor.\n'
                                             + 'Your temporary password is: ' + pw + '\n'
-                                            + 'You may change your password in settings. \n\n'
+                                            + 'You may change your password anytime in Settings. \n\n'
                                             + 'Best, \n'
                                             + 'Biazza Team'
 
@@ -1059,10 +1059,11 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
                                             + 'Your instructor ' + currUser.firstname + ' ' + currUser.lastname + ' from ' +
                                             courseName + ' has created an account for you on Biazza.\n'
                                             + 'Your temporary password is: ' + pw + '\n'
-                                            + 'You may change your password in settings. \n\n'
+                                            + 'You may change your password anytime in Settings. \n\n'
                                             + 'Best, \n'
                                             + 'Biazza Team'
                                     }
+
                                     Course.findOneAndUpdate(query, course, {upsert: true}, (err, doc) => {
                                         if (err) {
                                             res.status(401).json({err_message: 'Database error'})
@@ -1070,7 +1071,6 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
                                             res.json({newUser: user})
 
                                             // send email to newly created user
-
                                             const mailOptions = {
                                                 from: process.env.MAILER_USER,
                                                 to: addEmail,
