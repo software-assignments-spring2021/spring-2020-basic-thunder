@@ -14,10 +14,8 @@ import {LoadingView} from "./loading_view";
 
 const MembersListView = () => {
     const {courseId} = useParams()
-    // const courseName = 'Computer Vision'
-    // const mode = 'instructor'
-    // const mode = 'student'
 
+    const [currEmail, setCurrEmail] = useState('')
     const [courseName, setCourseName] = useState('')
     const [mode, setMode] = useState('instructor')
     const [data, setData] = useState({'courseId': -1, 'courseName': null, 'instructors': null, 'students': null})
@@ -32,7 +30,7 @@ const MembersListView = () => {
                 .then(res => {
                     setCourseName(res.data.courseName)
                     setMode(res.data.isInstructor ?  'instructor' : 'student')
-
+                    setCurrEmail(res.data.currEmail)
                     setData(res.data)
                 })
                 .catch(err => {
@@ -83,7 +81,7 @@ const MembersListView = () => {
                 <div className={"members"} id="instructors">
                     {data['instructors'] ? data['instructors'].map(props => (
                         <Member mode={mode} role={'instructor'} key={props.email} name={props.name}
-                                email={props.email}/>)) : ''}
+                                email={props.email} isCurr={props.email===currEmail} />)) : ''}
                 </div>
 
                 <h3>Students</h3>
@@ -126,7 +124,6 @@ const Member = (props) => {
         }).catch(err => {
             console.log(err)
         })
-
     }
 
     const handleNo = (e) => {
@@ -170,7 +167,7 @@ const Member = (props) => {
         document.querySelector('.main').prepend(div)
     }
 
-    if (props.mode === 'instructor') {
+    if (props.mode === 'instructor' && !props.isCurr) {
         return (
             <div className={"member"} id={props.email}>
                 <div id="deleteBtn"><button onClick={handleDelete}>Delete</button></div>
@@ -178,15 +175,13 @@ const Member = (props) => {
                 <p id="email"> {props.email} </p>
             </div>
         )
-    } else if (props.mode === 'student') {
+    } else {
         return (
             <div className={"member"} id={props.email}>
                 <p id="name"> {props.name} </p>
                 <p id="email"> {props.email} </p>
             </div>
         )
-    } else {
-        return null
     }
 }
 

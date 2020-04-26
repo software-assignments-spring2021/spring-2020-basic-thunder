@@ -868,10 +868,9 @@ app.post("/:courseId/Syllabus",passport.authenticate('jwt',{session:false}),(req
 app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(req,res)=>{
     const user = req.user
     const courseId = parseInt(req.params.courseId)
-    const enrolledData = Biz.isEnrolled(user,courseId)
 
 
-    const data = {}
+    const data = {currEmail: user.email}
     const instructors = []
     const students  =[]
 
@@ -925,8 +924,6 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
     const currUser = req.user
     const courseId = parseInt(req.params.courseId)
     const query = {course_id: courseId}
-
-    console.log(currUser)
 
 
     // data from the form to add new user
