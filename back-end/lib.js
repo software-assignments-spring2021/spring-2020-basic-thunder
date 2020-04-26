@@ -59,6 +59,16 @@ const generatePostPreview = (post) =>{
     return preview;
 };
 
+const isEmailValid = (email) => {
+    if (!email.includes('@')) {
+        return false
+    }
+    if (email.split('@').length < 2) {
+        return false
+    }
+    return true
+}
+
 
 
 module.exports = {
@@ -73,4 +83,5 @@ module.exports = {
     isInstructor:isInstructor,
     getReplyPostAuthorName:getReplyPostAuthorName,
     generatePostPreview:generatePostPreview,
+    isEmailValid: isEmailValid,
 };

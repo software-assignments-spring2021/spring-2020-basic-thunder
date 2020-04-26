@@ -869,7 +869,6 @@ app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(
     const user = req.user
     const courseId = parseInt(req.params.courseId)
 
-
     const data = {currEmail: user.email}
     const instructors = []
     const students  =[]
@@ -938,8 +937,18 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
 
 
     if (addRole && addEmail && addFirstName && addLastName) {
-        // handle add a member (send invitation)
 
+        if (addRole !== 'Student' && addRole !== 'Instructor') {
+            res.status(401).json({err_message: 'invalid role'})
+            return
+        }
+
+        if (!Biz.isEmailValid(addEmail)) {
+            res.status(401).json({err_message: 'invalid email'})
+            return
+        }
+
+        // handle add a member (send invitation)
         // find course in database
         Course.findOne(query, (err, course) => {
             if (err) {
@@ -959,14 +968,12 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
                 User.findOne({email: addEmail}, (err, result) => {
                     if (result) {
                         // user already exists
-
                         let enrolled = false
                         result.courses.forEach(c => {
                             if (c.course_id === courseId) {
                                 enrolled = true
                             }
                         })
-
 
                         if (!enrolled) {
                             // enroll user to the course
@@ -1045,11 +1052,21 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
     else if (addRole || addEmail || addFirstName || addLastName) {
         // if there are missing fields
         // console.log('missing fields')
-        res.status(400).send()
+        res.status(400).json({err_message: 'missing fields'})
     }
 
     else if (deleteName && deleteEmail) {
         // handle delete a member
+
+        if (deleteEmail === currUser.email) {
+            res.status(401).json({err_message: 'cannot delete oneself'})
+            return
+        }
+
+        if (!Biz.isEmailValid(deleteEmail)) {
+            res.status(401).json({err_message: 'invalid email'})
+            return
+        }
 
         // find the course in database
         Course.findOne(query, (err, course) => {
@@ -1096,8 +1113,6 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
             }
         })
     }
-
-    // res.status(200).send()
 })
 
 /*
