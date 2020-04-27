@@ -13,6 +13,7 @@ import unresolvedImg from "./img/unresolved.png"
 import {LoadingView} from "./loading_view"
 import './styles/ListPostView.css'
 import Hamburger from './HamburgerMenu'
+import SubNav from "./SubNav.js"
 
 /* main */
 const ListPostsView = ()=>{
@@ -37,12 +38,14 @@ const ListPostsView = ()=>{
         return (
             <LoadingView />
         );
+    // console.log(typeof(parseInt(courseId)))
     return (
         <div className="ForumView">
             <header className="biazza-header">
                 <Hamburger />
                 <NavBarComponentPlaceHolder />
             </header>
+            <SubNav courseId={parseInt(courseId)} />
             <CourseBarComponent CourseName={data['CourseName']} />
             <div  className={"PostPreviewContainer"}>
                 {

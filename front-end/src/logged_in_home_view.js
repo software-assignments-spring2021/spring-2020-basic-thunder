@@ -9,6 +9,7 @@ import {
     useRouteMatch
 } from "react-router-dom";
 import banner from "./img/ys.jpg"
+import Hamburger from "./HamburgerMenu.js"
 import {LoadingView} from "./loading_view"
 import './styles/loggedInHomeView.css'
 
@@ -28,6 +29,7 @@ const HomeView = ()=>{
         <div>
             <div id={"InsHomeView"} >
                 <header className="biazza-header">
+                    <Hamburger />
                     <NavBarComponentPlaceHolder />
                 </header>
                 <Banner />

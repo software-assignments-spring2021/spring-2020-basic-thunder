@@ -17,8 +17,14 @@
     height: 100vh;
 }
 
+#syllabus-content{
+    text-align: left;
+    margin-left: 100px;
+    margin-right: 10px;
+}
+
 #syllabus-text-area{
-	width: 80%;
+	width: 100%;
 	height: 60vh;
 	min-height: 300px;
     font-size: 22px;

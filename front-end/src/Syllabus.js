@@ -6,6 +6,7 @@ import {
 
 import "./styles/Syllabus.css"
 import Hamburger from "./HamburgerMenu.js"
+import SubNav from "./SubNav.js"
 import {LoadingView} from "./loading_view"
 
 const NavBarComponentPlaceHolder = () => {
@@ -16,8 +17,8 @@ const NavBarComponentPlaceHolder = () => {
     );
 }
 
-const CourseBarComponent = (courseName) => {
-	let text = "Syllabus: "+courseName.courseName;
+const CourseBarComponent = (props) => {
+	let text = "Syllabus: "+props.courseName;
 	// console.log(text)
 	return(
 		<h2>{text}</h2>
@@ -111,6 +112,7 @@ const Syllabus = () => {
 	const [data, setData] = useState({"courseId":-1,"courseName":null,"syllabus":null})
 	let dataArray = [data.courseId, data.courseName, data.syllabus]
 	const [instructorMode, setInstructorMode] = useState(false);
+	// console.log(courseId)
 	// console.log(data)
 	// console.log(courseId)
 	// console.log(parseInt(courseId.courseId))
@@ -139,12 +141,13 @@ const Syllabus = () => {
 	else{
 		return(
 			<div id="syllabus-container">
-				<header class="biazza-header">
+				<header className="biazza-header">
 					<Hamburger />
 					<NavBarComponentPlaceHolder />
 				</header>
+				<SubNav courseId={parseInt(courseId.courseId)} />
 				<CourseBarComponent courseName={data.courseName}/>
-				<section id="sylllabus-content">
+				<section id="syllabus-content">
 					<SyllabusContent defaultVal={data.syllabus} syllabusText={data.syllabus} />
 				</section>
 				<div>

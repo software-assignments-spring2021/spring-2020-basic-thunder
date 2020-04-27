@@ -10,6 +10,7 @@ import {
     useRouteMatch
 } from "react-router-dom";
 import Hamburger from './HamburgerMenu.js'
+import SubNav from "./SubNav.js"
 import {LoadingView} from "./loading_view";
 
 const MembersListView = () => {
@@ -61,7 +62,6 @@ const MembersListView = () => {
         e.preventDefault()
         setDel(true)
     }
-
     return (
         <div className={'MembersListView'}>
 
@@ -69,8 +69,8 @@ const MembersListView = () => {
                 <Hamburger/>
                 <NavBarComponentPlaceHolder/>
             </header>
+            <SubNav courseId={data.courseId} />
             <CourseBarComponent CourseName={courseName}/>
-
             <div className={"main"}>
                 {mode === 'instructor' ? <div id="addBtn">
                     <button onClick={handleAdd}>Add New Member</button>
