@@ -1239,49 +1239,42 @@ app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) =
         // handle change password
         // compare with encrypted current pw in database
 
-        const saltRounds = 10
-        bcrypt.hash(currPw, saltRounds, (err, hash) => {
-            if (hash) {
-                User.findOne(query, (err, res_user) => {
-                    if (err) {
-                        res.status(401).json({err_message: 'Failed to find user'})
-                    } else {
-                        const old_hash = res_user.password
-                        console.log(hash)
-                        console.log(old_hash)
-                        if (hash === old_hash) {
-                            console.log('password matches')
-                            // update password
-                            bcrypt.hash(newPw, saltRounds, (err, new_hash) => {
-                                if (new_hash) {
-                                    const update = {password: new_hash}
-                                    User.findOneAndUpdate(query, {$set: update}, (err, result) => {
-                                        if (err) {
-                                            res.json({modifyPw: 'failure'})
-                                            res.status(401).json({err_message: 'password update failed'})
-                                        } else {
-                                            res.status(200).json({nameSuccess: true})
-                                        }
-                                    })
-                                }
-                            })
+        User.findOne(query, (err, res_user) => {
+            if (err) {
+                res.status(401).json({err_message: 'user not found'})
+            } else {
 
-                        } else {
-                            console.log('password not match')
-                            res.json({modifyPw: 'wrong'})
-                        }
+                // compare password
+                bcrypt.compare(currPw, res_user.password, (err, match) => {
+                    if (match) {
+                        console.log('password match')
+                        const saltRounds = 10
+                        bcrypt.hash(newPw, saltRounds, (err, hash) => {
+                            if (hash) {
+                                res_user.password = hash
+                                User.findOneAndUpdate(query, res_user, (err, doc) =>{
+                                    if (err) {
+                                        res.status(401).json({err_message: 'database save error'})
+                                    } else {
+                                        console.log('password update success')
+                                        res.status(200).json({success: true})
+                                    }
+                                })
+                            }
+                        })
+
+                    } else {
+                        console.log('password not match')
+                        res.status(401).json({err_message: 'wrong password'})
                     }
                 })
-
-
             }
         })
-
     }
 
     else {
         // if there are missing fields
-        res.status(401).send({err_message: 'missing fields'})
+        res.status(401).json({err_message: 'missing fields'})
     }
 })
 
