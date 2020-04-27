@@ -58,7 +58,6 @@ const SettingsView = () => {
     )
 }
 
-// to be implemented if there's time
 
 const Name = (props) => {
     const [first, setFirst] = useState(props.first)

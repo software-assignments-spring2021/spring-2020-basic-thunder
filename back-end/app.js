@@ -1206,7 +1206,7 @@ app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) =
         const update = {firstname: newFirst, lastname: newLast}
         User.findOneAndUpdate(query, {$set: update}, (err, result) => {
             if (err) {
-                res.status(401).json({err_message: 'name update failure'})
+                res.json({err_message: 'name update failure'})
             } else {
                 res.status(200).json({message: 'name update success'})
             }
