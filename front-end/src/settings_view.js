@@ -67,6 +67,7 @@ const Name = (props) => {
     const [modified, setModified] = useState(false)
 
     const [res, setRes] = useState('')
+    const [message, setMessage] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -85,8 +86,11 @@ const Name = (props) => {
         }, {headers: {"Authorization" : `Bearer ${accessToken}`}})
             .then(res => {
                 setRes('success')
+                setMessage(res.data.message)
             }).catch(err => {
                 setRes('failure')
+                setMessage('name update failure')
+
         })
 
         e.target['firstname'].value = ''
@@ -111,6 +115,8 @@ const Name = (props) => {
                     <label>New last name: </label>
                     <input type="text" name="lastname" required/>
                     <br/>
+
+                    <p className="message" id={res}>{message}</p>
 
                     <input type="submit" value="Change Name" />
 
@@ -171,6 +177,8 @@ const Email = (props) => {
 }
 
 const Password = (props) => {
+    const [res, setRes] = useState('')
+    const [message, setMessage] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -185,9 +193,17 @@ const Password = (props) => {
             newPw: newPw
         }, {headers: {"Authorization" : `Bearer ${accessToken}`}})
             .then(res => {
-            console.log(res)
+                if (res.data.err_message) {
+                    setRes('failure')
+                    setMessage(res.data.err_message)
+                } else {
+                    setRes('success')
+                    setMessage('password update success')
+                }
+
         }).catch(err => {
-            console.log(err)
+                console.log(err)
+                setRes('failure')
         })
 
         e.target['currPw'].value = ''
@@ -195,7 +211,7 @@ const Password = (props) => {
     }
 
     return (
-        <div className="section">
+        <div className="section" id="pwDiv">
             <div className={"left"}>
                 <p>Password</p>
             </div>
@@ -209,6 +225,8 @@ const Password = (props) => {
                     <label>New password: </label>
                     <input type="password" required minLength={3} name="newPw"/>
                     <br/>
+
+                    <p className="message" id={res}>{message}</p>
 
                     <input type="submit" value="Change Password" />
                 </form>

@@ -14,7 +14,7 @@
     display: flex;
     border: 2px solid black;
     margin-top: 10px;
-    min-height: 180px;
+    min-height: 190px;
 }
 
 .SettingsView .section input[type=text] {
@@ -91,4 +91,22 @@
 
 .SettingsView #nameDiv {
     height: 235px;
+}
+
+.SettingsView #nameDiv .message {
+    margin-top: -2px;
+    margin-bottom: -5px;
+}
+
+.SettingsView #pwDiv .message {
+    margin-top: 3px;
+    margin-bottom: -5px;
+}
+
+.SettingsView #success {
+    color: green;
+}
+
+.SettingsView #failure {
+    color: red;
 }

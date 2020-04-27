@@ -1206,9 +1206,9 @@ app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) =
         const update = {firstname: newFirst, lastname: newLast}
         User.findOneAndUpdate(query, {$set: update}, (err, result) => {
             if (err) {
-                res.status(401).json({err_message: 'name update failed'})
+                res.status(401).json({err_message: 'name update failure'})
             } else {
-                res.status(200).json({nameSuccess: true})
+                res.status(200).json({message: 'name update success'})
             }
         })
     }
@@ -1254,7 +1254,7 @@ app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) =
                                 res_user.password = hash
                                 User.findOneAndUpdate(query, res_user, (err, doc) =>{
                                     if (err) {
-                                        res.status(401).json({err_message: 'database save error'})
+                                        res.json({err_message: 'database save error'})
                                     } else {
                                         console.log('password update success')
                                         res.status(200).json({success: true})
@@ -1265,7 +1265,7 @@ app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) =
 
                     } else {
                         console.log('password not match')
-                        res.status(401).json({err_message: 'wrong password'})
+                        res.json({err_message: 'wrong password'})
                     }
                 })
             }
