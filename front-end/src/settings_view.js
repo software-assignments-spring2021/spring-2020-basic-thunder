@@ -18,7 +18,7 @@ const data = {
 }
 
 const SettingsView = () => {
-    const [data, setData] = useState({'email': null})
+    const [data, setData] = useState({'email': null, 'firstname': null, 'lastname': null})
     const api = 'http://127.0.0.1:5000/settings'
 
     const accessToken = localStorage.getItem("access-token")
@@ -49,7 +49,7 @@ const SettingsView = () => {
             <div className={"main"}>
 
                 <h1>Settings</h1>
-                <Name />
+                <Name first={data['firstname']} last={data['lastname']}/>
                 <Email email={data['email']}/>
                 <Password/>
 

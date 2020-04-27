@@ -1181,13 +1181,13 @@ app.get('/settings', passport.authenticate('jwt',{session:false}), (req, res) =>
 
     if (!user) {
         res.status(401).json({err_message: 'not logged in'})
-        return
+    } else {
+        const data = {}
+        data.email = user.email
+        data.firstname = user.firstname
+        data.lastname = user.lastname
+        res.status(200).json(data)
     }
-
-    const data = {
-        'email': 'user001@nyu.edu'
-    }
-    res.json(data)
 })
 
 
