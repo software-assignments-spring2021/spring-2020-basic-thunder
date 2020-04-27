@@ -6,6 +6,7 @@ import {
 
 import "./styles/Schedule.css"
 import Hamburger from "./HamburgerMenu.js"
+import SubNav from "./SubNav.js"
 import {LoadingView} from "./loading_view"
 
 
@@ -14,17 +15,18 @@ const NavBarComponentPlaceHolder = () => {
         <div className="biazza-header-title">
             <h2>Biazza</h2>
         </div>
-    );
+    )
 }
 
 const CourseBarComponent = (props) => {
-	let text = "Schedule: "+props.courseName;
+	let text = "Schedule: "+props.courseName
 
 	return(
 		<h2>{text}</h2>
 	)
 }
 
+//
 // After editing, the detail-buttons-container don't show up
 // After saving, they don't show up either
 // Delete doesn't remove element from the page
@@ -482,129 +484,6 @@ const DelBtn = (props) => {
 	)
 }
 
-// const EditBtn = (props) => {
-// 	let action = (evt) => {
-// 		evt.preventDefault()
-// 		evt.target.classList.add("hiding")
-// 		let rowElement = evt.target.parentElement.parentElement
-// 		console.dir(rowElement)
-// 		console.dir(rowElement.children[0])
-
-// 		for(let i = 0; i <= 4; i++){
-// 			rowElement.children[i].disabled = false
-// 		}
-
-// 		let btnContainer = evt.target.parentElement
-// 		let allBtnContainers = document.getElementsByClassName("detail-buttons-container")
-// 		for(let k = 0; k < allBtnContainers.length; k++){
-// 			if(allBtnContainers[k] !== btnContainer)
-// 				allBtnContainers[k].classList.add("hiding")
-// 		}
-
-// 		while(btnContainer.hasChildNodes()){
-// 			btnContainer.removeChild(btnContainer.firstChild)
-// 		}
-
-// 		let saveBtn = document.createElement("button")
-// 		saveBtn.innerHTML = "Save"
-// 		saveBtn.classList.add("save-date-details")
-// 		saveBtn.addEventListener("click", (evt)=>{
-// 			evt.preventDefault()
-
-// 			let form = evt.target.parentElement.parentElement
-// 			let date = form.children[0].value
-// 			let topic = form.children[1].value
-// 			let notes = form.children[2].value
-// 			let assignment = form.children[3].value
-
-// 			let d = date.split("\/")
-// 			d[0] = parseInt(d[0]);
-// 			d[1] = parseInt(d[1]);
-// 			d[2] = parseInt(d[2]);
-
-// 			if(d[0] > 12 || d[0] < 1){
-// 				alert("Not a valid month")
-// 			}
-// 			else if(d[1] > 31 || d[1] < 1){
-// 				alert("Not a valid day")
-// 			}
-// 			else{
-// 				let dateValue = new Date(date);
-// 				( async() => {
-// 					console.log(props)
-// 					let putDateRoute = `http://127.0.0.1:5000/${props.courseId}/Schedule/${props.scheduleId}`
-// 					let accessToken = localStorage.getItem("access-token")
-// 					console.log(putDateRoute)
-// 					let res = await axios.put(putDateRoute,{date: dateValue,topic: topic,notes: notes,assignment: assignment}, {headers: {"Authorization" : `Bearer ${accessToken}`}}).then(result => {
-// 						console.log(result)
-// 						document.querySelector("#add-day-btn").classList.remove("hiding")
-// 						for(let i = 0; i <= 4; i++){
-// 							rowElement.children[i].disabled = true
-// 							rowElement.children[i].value = rowElement.children[i].defaultValue
-// 						}
-// 					})
-// 				}) ();
-// 			}
-// 		})
-
-// 		let cancBtn = document.createElement("button")
-// 		cancBtn.innerHTML = "Cancel"
-// 		cancBtn.classList.add("cancel-date-details")
-// 		cancBtn.addEventListener("click", (evt)=>{
-// 			evt.preventDefault()
-// 			for(let k = 0; k < allBtnContainers.length; k++){
-// 				allBtnContainers[k].classList.remove("hiding")
-// 			}
-// 			for(let i = 0; i <= 4; i++){
-// 				rowElement.children[i].disabled = true
-// 				rowElement.children[i].value = rowElement.children[i].defaultValue
-// 			}
-// 			document.querySelector("#add-day-btn").classList.remove("hiding")
-
-// 			while(btnContainer.hasChildNodes()){
-// 				btnContainer.removeChild(btnContainer.firstChild)
-// 			}
-
-// 			let edit = document.createElement("button")
-// 			edit.className = "edit-date-details"
-// 			edit.innerHTML = "Edit"
-// 			edit.onClick = action
-
-// 			let del = document.createElement("button")
-// 			del.className = "delete-date-details"
-// 			del.innerHTML = "Delete"
-// 			del.addEventListener("click", (evt) => {
-// 				evt.preventDefault()
-// 				(async() =>{
-// 					let date = evt.target.parentElement.parentElement.firstChild
-// 					console.log("This here my datee:",date)
-// 					let accessToken = localStorage.getItem("access-token");
-// 					console.log("These are my delete props:",props)
-// 					console.log(date.value)
-// 					let deleteRoute = `http://127.0.0.1:5000/${props.courseId}/Schedule/${props.scheduleId}/Delete/${new Date(date.value)}`
-
-// 					await axios.delete(deleteRoute, {headers: {"Authorization" : `Bearer ${accessToken}`}}).then(res =>{
-// 						console.log(res)
-// 					})
-// 					.catch(err =>{
-// 						console.log(err)
-// 					})
-// 				}) ()
-// 			})
-
-// 			btnContainer.appendChild(edit)
-// 			btnContainer.appendChild(del)
-// 		})
-
-// 		btnContainer.appendChild(saveBtn)
-// 		btnContainer.appendChild(cancBtn)
-// 	}
-
-// 	return(
-// 		<button className="edit-date-details" onClick={action}>Edit</button>
-// 	)
-// }
-
 const Calendar = (props) => {
 	const [awaitingData,setAwaitingData] = useState(true);
 	const [dates, setDates] = useState([]);
@@ -678,7 +557,6 @@ const Schedule = () => {
 				axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
 					.then(res => {
 						// console.log("Received data:", res.data)
-						// console.log("Current page data:",data)
 						let tempObj = {scheduleId:res.data.scheduleId, courseId:res.data.courseId, courseName:res.data.courseName}
 						setInstructorMode(res.data.isInstructor)
 						setData(tempObj);
@@ -695,14 +573,14 @@ const Schedule = () => {
 	if (data.courseId == -1)
 		return ( <LoadingView />)
 	else{
-		// console.log("Get me my complete data:",data)
-		// console.log("Am I an instructor: ",instructorMode)
+		console.log(data)
 		return(
 			<div id="schedule-container">
 				<header className="biazza-header">
 					<Hamburger />
 					<NavBarComponentPlaceHolder />
 				</header>
+				<SubNav courseId={data.courseId} />
 				<CourseBarComponent courseName={data.courseName}/>
 				<Calendar scheduleId={data.scheduleId} isInstructor={instructorMode}/>
 			</div>
