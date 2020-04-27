@@ -47,6 +47,7 @@ const SettingsView = () => {
             <div className={"main"}>
 
                 <h1>Settings</h1>
+                <Name />
                 <Email email={data['email']}/>
                 <Password/>
 
@@ -71,17 +72,17 @@ const Name = (props) => {
             <div className={"right"}>
 
                 <form>
-                    <p>First name: {first}</p>
-                    <label>Edit: </label>
-                    <input type="text"/>
+                    <p>Current name: {first + ' ' + last}</p>
+
+                    <label>New first name: </label>
+                    <input type="text" name="firstname" required/>
                     <br/>
 
-                    <p>Last name: {last}</p>
-                    <label>New new name: </label>
-                    <input type="text"/>
+                    <label>New last name: </label>
+                    <input type="text" name="lastname" required/>
                     <br/>
 
-                    <input type="submit" value="Change Email" />
+                    <input type="submit" value="Change Name" />
 
                 </form>
             </div>
@@ -91,7 +92,6 @@ const Name = (props) => {
 
 const Email = (props) => {
 
-    // let email = props.email
 
     const [email, setEmail] = useState(props.email)
     // if the email has been modified

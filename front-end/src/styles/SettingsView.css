@@ -18,10 +18,10 @@
 }
 
 .SettingsView .section input[type=text] {
+    font-size: 20px;
     width: 200px;
-    height: 30px;
+    height: 35px;
 }
-
 
 .SettingsView .section input[type=email] {
     font-size: 20px;
@@ -90,5 +90,5 @@
 }
 
 .SettingsView #nameDiv {
-    height: 280px;
+    height: 235px;
 }
