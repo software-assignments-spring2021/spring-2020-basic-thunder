@@ -1176,16 +1176,22 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
  *  Settings
  */
 
-app.get('/settings', (req, res) => {
+app.get('/settings', passport.authenticate('jwt',{session:false}), (req, res) => {
+    const user = req.user
+
+    if (!user) {
+        res.status(401).json({err_message: 'not logged in'})
+        return
+    }
+
     const data = {
         'email': 'user001@nyu.edu'
     }
     res.json(data)
-
 })
 
 
-app.post('/settings', (req, res) => {
+app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) => {
     const newEmail = req.body.newEmail
     const currPw = req.body.currPw
     const newPw = req.body.newPw
