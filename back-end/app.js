@@ -1192,27 +1192,97 @@ app.get('/settings', passport.authenticate('jwt',{session:false}), (req, res) =>
 
 
 app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) => {
-    const newEmail = req.body.newEmail
+    const user = req.user
+    const newFirst = req.body.newFirst
+    const newLast = req.body.newLast
+    // const newEmail = req.body.newEmail
     const currPw = req.body.currPw
     const newPw = req.body.newPw
 
-    if (newEmail) {
-        // handle change email
-        // console.log(newEmail)
+    const query = {uid: user.uid}
+
+    if (newFirst && newLast) {
+        // handle change name
+        const update = {firstname: newFirst, lastname: newLast}
+        User.findOneAndUpdate(query, {$set: update}, (err, result) => {
+            if (err) {
+                res.status(401).json({err_message: 'name update failed'})
+            } else {
+                res.status(200).json({nameSuccess: true})
+            }
+        })
     }
+
+    /*
+    else if (newEmail) {
+        // handle change email
+        const update = {email: newEmail}
+
+        // check if email is already registered
+        User.findOne(update, (err, result) => {
+            if (result) {
+                res.json(401).json({err_message: 'Email already registered'})
+            } else {
+                User.findOneAndUpdate(query, {$set: update}, (err, result) => {
+                    if (err) {
+                        res.status(401).json({err_message: 'email update failed'})
+                    } else {
+                        res.status(200).json({emailSuccess: true})
+                    }
+                })
+            }
+        })
+    }
+    */
 
     else if (currPw && newPw) {
         // handle change password
         // compare with encrypted current pw in database
-        // console.log(currPw, newPw)
+
+        const saltRounds = 10
+        bcrypt.hash(currPw, saltRounds, (err, hash) => {
+            if (hash) {
+                User.findOne(query, (err, res_user) => {
+                    if (err) {
+                        res.status(401).json({err_message: 'Failed to find user'})
+                    } else {
+                        const old_hash = res_user.password
+                        console.log(hash)
+                        console.log(old_hash)
+                        if (hash === old_hash) {
+                            console.log('password matches')
+                            // update password
+                            bcrypt.hash(newPw, saltRounds, (err, new_hash) => {
+                                if (new_hash) {
+                                    const update = {password: new_hash}
+                                    User.findOneAndUpdate(query, {$set: update}, (err, result) => {
+                                        if (err) {
+                                            res.json({modifyPw: 'failure'})
+                                            res.status(401).json({err_message: 'password update failed'})
+                                        } else {
+                                            res.status(200).json({nameSuccess: true})
+                                        }
+                                    })
+                                }
+                            })
+
+                        } else {
+                            console.log('password not match')
+                            res.json({modifyPw: 'wrong'})
+                        }
+                    }
+                })
+
+
+            }
+        })
+
     }
 
     else {
         // if there are missing fields
-        res.status(400).send()
+        res.status(401).send({err_message: 'missing fields'})
     }
-
-    res.status(200).send()
 })
 
 

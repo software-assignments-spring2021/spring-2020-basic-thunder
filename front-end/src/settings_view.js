@@ -18,7 +18,7 @@ const data = {
 }
 
 const SettingsView = () => {
-    const [data, setData] = useState({'email': null, 'firstname': null, 'lastname': null})
+    const [data, setData] = useState({'email': '', 'firstname': '', 'lastname': ''})
     const api = 'http://127.0.0.1:5000/settings'
 
     const accessToken = localStorage.getItem("access-token")
@@ -50,7 +50,6 @@ const SettingsView = () => {
 
                 <h1>Settings</h1>
                 <Name first={data['firstname']} last={data['lastname']}/>
-                <Email email={data['email']}/>
                 <Password/>
 
             </div>
@@ -66,6 +65,8 @@ const Name = (props) => {
     const [last, setLast] = useState(props.last)
     // if first name and last name modified
     const [modified, setModified] = useState(false)
+
+    const [res, setRes] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -83,14 +84,13 @@ const Name = (props) => {
             newLast: newLast
         }, {headers: {"Authorization" : `Bearer ${accessToken}`}})
             .then(res => {
-                console.log(res)
+                setRes('success')
             }).catch(err => {
-            console.log(err)
+                setRes('failure')
         })
 
         e.target['firstname'].value = ''
         e.target['lastname'].value = ''
-
     }
 
     return (
@@ -102,7 +102,7 @@ const Name = (props) => {
             <div className={"right"}>
 
                 <form onSubmit={handleSubmit}>
-                    <p>Current name: {modified? first + ' ' + last : props.first + ' ' + props.last}</p>
+                    <p>Current name: {res === 'success' ? first + ' ' + last : props.first + ' ' + props.last}</p>
 
                     <label>New first name: </label>
                     <input type="text" name="firstname" required/>
