@@ -13,32 +13,12 @@ import Hamburger from './HamburgerMenu.js'
 import SubNav from "./SubNav.js"
 import {LoadingView} from "./loading_view";
 
-/*
-const data = {
-    'courseName': 'CS480 Computer Vision',
-    'instructors': [
-        {'name': 'A. B.',
-        'email': 'ab123@nyu.edu'},
-        {'name': 'D. E.',
-        'email': 'de111@nyu.edu'}
-    ],
-    'students': [
-        {'name': 'S. J.',
-        'email': 'sj13@nyu.edu'},
-        {'name': 'J. L.',
-        'email': 'jl321@nyu.edu'},
-        {'name': 'C. M.',
-        'email': 'cm222@nyu.edu'}
-    ]
-}
- */
-
 const MembersListView = () => {
     const {courseId} = useParams()
-    const courseName = 'Computer Vision'
-    const mode = 'instructor'
-    // const mode = 'student'
 
+    const [currEmail, setCurrEmail] = useState('')
+    const [courseName, setCourseName] = useState('')
+    const [mode, setMode] = useState('instructor')
     const [data, setData] = useState({'courseId': -1, 'courseName': null, 'instructors': null, 'students': null})
     const api = `http://127.0.0.1:5000/${courseId}/members-list`
 
@@ -46,13 +26,17 @@ const MembersListView = () => {
     // set 'data' variable to the hard-coded JSON object
     useEffect(()=>{
         const fetchData = async () => {
-            axios.get(api)
+            const accessToken = localStorage.getItem("access-token");
+            axios.get(api, {headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res => {
+                    setCourseName(res.data.courseName)
+                    setMode(res.data.isInstructor ?  'instructor' : 'student')
+                    setCurrEmail(res.data.currEmail)
                     setData(res.data)
                 })
                 .catch(err => {
                     console.log(err)
-                    window.location.reload(false)
+                    window.location.href = '/LoggedInHome'
                 })
         };
         fetchData();
@@ -97,7 +81,7 @@ const MembersListView = () => {
                 <div className={"members"} id="instructors">
                     {data['instructors'] ? data['instructors'].map(props => (
                         <Member mode={mode} role={'instructor'} key={props.email} name={props.name}
-                                email={props.email}/>)) : ''}
+                                email={props.email} isCurr={props.email===currEmail} />)) : ''}
                 </div>
 
                 <h3>Students</h3>
@@ -127,20 +111,19 @@ const Member = (props) => {
         const main = document.querySelector('.main')
         main.removeChild(popup)
 
+        const accessToken = localStorage.getItem("access-token")
+
         axios.post(api,{
             deleteName: name,
             deleteEmail: email
-        }).then(res => {
-            console.log(res)
+        }, {headers: {"Authorization" : `Bearer ${accessToken}`}})
+            .then(res => {
+            if (res.data.deletedUser) {
+                window.location.reload()
+            }
         }).catch(err => {
             console.log(err)
         })
-
-        // remove deleted user card from page
-        // this only removes a user temporarily for now
-        const card = document.getElementById(email)
-        card.style.display = 'none'
-
     }
 
     const handleNo = (e) => {
@@ -184,7 +167,7 @@ const Member = (props) => {
         document.querySelector('.main').prepend(div)
     }
 
-    if (props.mode === 'instructor') {
+    if (props.mode === 'instructor' && !props.isCurr) {
         return (
             <div className={"member"} id={props.email}>
                 <div id="deleteBtn"><button onClick={handleDelete}>Delete</button></div>
@@ -192,15 +175,13 @@ const Member = (props) => {
                 <p id="email"> {props.email} </p>
             </div>
         )
-    } else if (props.mode === 'student') {
+    } else {
         return (
             <div className={"member"} id={props.email}>
                 <p id="name"> {props.name} </p>
                 <p id="email"> {props.email} </p>
             </div>
         )
-    } else {
-        return null
     }
 }
 
@@ -211,7 +192,7 @@ const AddModal = (props) => {
     // const [data,setData] = useState({course_name:null,username:null})
 
     // which radio button is selected
-    const [selected, setSelected] = useState('student')
+    const [selected, setSelected] = useState('Student')
     // whether modal to add a member should be visible
     const [visible, setVisible] = useState(true)
 
@@ -229,26 +210,30 @@ const AddModal = (props) => {
         e.preventDefault()
         const role = selected  // student or instructor
         const email = e.target['email'].value
+        const firstname = e.target['firstname'].value
+        const lastname = e.target['lastname'].value
 
-        let status = ''
+        const accessToken = localStorage.getItem("access-token")
 
         axios.post(api,{
             addRole: role,
             addEmail: email,
+            addFirstName: firstname,
+            addLastName: lastname
+        }, {headers: {"Authorization" : `Bearer ${accessToken}`}
         }).then(res => {
             console.log(res)
-            status = res.statusText
             console.log(res.status)
+
+            if (res.data.newUser) {
+                window.location.reload()
+            }
         }).catch(err => {
             console.log(err)
         })
 
-        console.log(status)
-
-
-
         e.target.parentNode.style.display = 'none'
-        setSelected('student')
+        setSelected('Student')
         e.target['email'].value = ''
     }
 
@@ -258,18 +243,29 @@ const AddModal = (props) => {
             <button id="closeAdd" onClick={handleClick}>Close</button>
             <h2>Add New Member</h2>
             <form onSubmit={handleSubmit}>
+
                 <label>
                     <span>Email:</span>
                     <input type="email" required name="email" />
                 </label>
 
                 <label>
+                    <span>First name:</span>
+                    <input type="text" required name="firstname" />
+                </label>
+
+                <label>
+                    <span>Last name:</span>
+                    <input type="text" required name="lastname" />
+                </label>
+
+                <label>
                     <span>Type:</span><br/>
 
-                    <input type="radio" id="radio-1" value="student" checked={selected === 'student'} onChange={handleChange}/>
+                    <input type="radio" id="radio-1" value="Student" checked={selected === 'Student'} onChange={handleChange}/>
                     <label id="label-1" htmlFor="student">Student</label><br/>
 
-                    <input type="radio" id="radio-2" value="instructor" checked={selected === 'instructor'} onChange={handleChange}/>
+                    <input type="radio" id="radio-2" value="Instructor" checked={selected === 'Instructor'} onChange={handleChange}/>
                     <label id="label-2" htmlFor="instructor">Instructor</label><br/>
 
                 </label>

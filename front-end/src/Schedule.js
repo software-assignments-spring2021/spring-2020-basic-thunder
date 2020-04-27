@@ -501,7 +501,7 @@ const Calendar = (props) => {
 					})
 					.catch(err=>{
 						// you are not allowed to view this page
-	                    // window.location.href = '/LoggedInHome';
+	                    window.location.href = '/LoggedInHome';
 	                    console.log(err)
 					});
 			}
@@ -563,7 +563,7 @@ const Schedule = () => {
 					})
 					.catch(err=>{
 						// you are not allowed to view this page
-                        // window.location.href = '/LoggedInHome';
+                        window.location.href = '/LoggedInHome';
                         console.log(err)
 					});
 			}

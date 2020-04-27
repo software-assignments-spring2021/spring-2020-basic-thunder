@@ -26,7 +26,7 @@
     top: 12rem;
     z-index: 1;
     width:400px;
-    height: 400px;
+    height: 500px;
     margin-left:-200px;
     left:50%;
     border-radius: 4px;
@@ -71,14 +71,16 @@
 }
 
 .MembersListView #add input[type=text] {
-   height: 10px;
+    height: 35px;
+    width: 102%;
+    font-size: 16px;
 }
 
 .MembersListView #add input[type=email] {
     height: 30px;
     width: 100%;
-    margin-top: 15px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     font-size: 16px;
 }
 

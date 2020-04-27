@@ -22,6 +22,7 @@ const CourseSchema = new mongoose.Schema({
     "syllabus":{type:String},
     "creator_uid":{type:Number,required:true},
     "instructor_uids":[Number],
+    "student_uids": [Number],
     "list_of_posts":[
         {
             "post_id":Number,
@@ -87,9 +88,16 @@ const ScheduleDaySchema = new mongoose.Schema({
 
 mongoose.model("ScheduleDay", ScheduleDaySchema);
 
-mongoose.connect('mongodb://localhost/test');
+// configure connection string
 
-const DB_URI = 'mongodb://localhost/Biazza';
+let DB_URI = null;
+
+if (process.env.NODE_ENV === 'production'){
+  DB_URI = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PW}@biazzadb-4rhn1.mongodb.net/Biazza?retryWrites=true&w=majority`
+}
+else{
+  DB_URI = `mongodb://localhost/Biazza`;
+}
 
 const connect = () => new Promise((resolve, reject) => {
     if (process.env.NODE_ENV === 'test') {
@@ -112,6 +120,12 @@ const connect = () => new Promise((resolve, reject) => {
             { useNewUrlParser: true, useCreateIndex: true })
             .then((res, err) => {
                 if (err) return reject(err);
+                else if (process.env.NODE_ENV === 'production'){
+                  console.log("You are connected to production database on MongoDb Atlas.");
+                }
+                else if(process.env.NODE_ENV !== 'production'){
+                  console.log("You are connected to your local database.");
+                }
                 resolve();
             })
     }
