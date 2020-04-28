@@ -18,19 +18,21 @@ const data = {
 }
 
 const SettingsView = () => {
-    const [data, setData] = useState({'email': null})
+    const [data, setData] = useState({'email': '', 'firstname': '', 'lastname': ''})
     const api = 'http://127.0.0.1:5000/settings'
+
+    const accessToken = localStorage.getItem("access-token")
 
     // fetch data from backend
     useEffect(()=>{
         const fetchData = async () => {
-            axios.get(api)
+            axios.get(api, {headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res => {
                     setData(res.data)
                 })
                 .catch(err => {
                     console.log(err)
-                    window.location.reload(false)
+                    window.location.href = '/home'
                 })
         };
         fetchData();
@@ -47,7 +49,7 @@ const SettingsView = () => {
             <div className={"main"}>
 
                 <h1>Settings</h1>
-                <Email email={data['email']}/>
+                <Name first={data['firstname']} last={data['lastname']}/>
                 <Password/>
 
             </div>
@@ -56,11 +58,43 @@ const SettingsView = () => {
     )
 }
 
-// to be implemented if there's time
 
 const Name = (props) => {
-    const first = props.first
-    const last = props.last
+    const [first, setFirst] = useState(props.first)
+    const [last, setLast] = useState(props.last)
+    // if first name and last name modified
+    const [modified, setModified] = useState(false)
+
+    const [res, setRes] = useState('')
+    const [message, setMessage] = useState('')
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const api = 'http://127.0.0.1:5000/settings'
+        const newFirst = e.target['firstname'].value
+        const newLast = e.target['lastname'].value
+        setFirst(newFirst)
+        setLast(newLast)
+        setModified(true)
+
+        const accessToken = localStorage.getItem("access-token")
+
+        axios.post(api,{
+            newFirst: newFirst,
+            newLast: newLast
+        }, {headers: {"Authorization" : `Bearer ${accessToken}`}})
+            .then(res => {
+                setRes('success')
+                setMessage(res.data.message)
+            }).catch(err => {
+                setRes('failure')
+                setMessage('name update failure')
+
+        })
+
+        e.target['firstname'].value = ''
+        e.target['lastname'].value = ''
+    }
 
     return (
         <div className="section" id="nameDiv">
@@ -70,18 +104,20 @@ const Name = (props) => {
 
             <div className={"right"}>
 
-                <form>
-                    <p>First name: {first}</p>
-                    <label>Edit: </label>
-                    <input type="text"/>
+                <form onSubmit={handleSubmit}>
+                    <p>Current name: {res === 'success' ? first + ' ' + last : props.first + ' ' + props.last}</p>
+
+                    <label>New first name: </label>
+                    <input type="text" name="firstname" required/>
                     <br/>
 
-                    <p>Last name: {last}</p>
-                    <label>New new name: </label>
-                    <input type="text"/>
+                    <label>New last name: </label>
+                    <input type="text" name="lastname" required/>
                     <br/>
 
-                    <input type="submit" value="Change Email" />
+                    <p className="message" id={res}>{message}</p>
+
+                    <input type="submit" value="Change Name" />
 
                 </form>
             </div>
@@ -90,8 +126,6 @@ const Name = (props) => {
 }
 
 const Email = (props) => {
-
-    // let email = props.email
 
     const [email, setEmail] = useState(props.email)
     // if the email has been modified
@@ -104,9 +138,12 @@ const Email = (props) => {
         setEmail(newEmail)
         setModified(true)
 
+        const accessToken = localStorage.getItem("access-token")
+
         axios.post(api,{
             newEmail: newEmail
-        }).then(res => {
+        }, {headers: {"Authorization" : `Bearer ${accessToken}`}})
+            .then(res => {
             console.log(res)
         }).catch(err => {
             console.log(err)
@@ -139,6 +176,8 @@ const Email = (props) => {
 }
 
 const Password = (props) => {
+    const [res, setRes] = useState('')
+    const [message, setMessage] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -146,13 +185,24 @@ const Password = (props) => {
         const currPw = e.target['currPw'].value
         const newPw = e.target['newPw'].value
 
+        const accessToken = localStorage.getItem("access-token")
+
         axios.post(api,{
             currPw: currPw,
             newPw: newPw
-        }).then(res => {
-            console.log(res)
+        }, {headers: {"Authorization" : `Bearer ${accessToken}`}})
+            .then(res => {
+                if (res.data.err_message) {
+                    setRes('failure')
+                    setMessage(res.data.err_message)
+                } else {
+                    setRes('success')
+                    setMessage('password update success')
+                }
+
         }).catch(err => {
-            console.log(err)
+                console.log(err)
+                setRes('failure')
         })
 
         e.target['currPw'].value = ''
@@ -160,7 +210,7 @@ const Password = (props) => {
     }
 
     return (
-        <div className="section">
+        <div className="section" id="pwDiv">
             <div className={"left"}>
                 <p>Password</p>
             </div>
@@ -174,6 +224,8 @@ const Password = (props) => {
                     <label>New password: </label>
                     <input type="password" required minLength={3} name="newPw"/>
                     <br/>
+
+                    <p className="message" id={res}>{message}</p>
 
                     <input type="submit" value="Change Password" />
                 </form>

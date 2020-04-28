@@ -1176,37 +1176,106 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
  *  Settings
  */
 
-app.get('/settings', (req, res) => {
-    const data = {
-        'email': 'user001@nyu.edu'
-    }
-    res.json(data)
+app.get('/settings', passport.authenticate('jwt',{session:false}), (req, res) => {
+    const user = req.user
 
+    if (!user) {
+        res.status(401).json({err_message: 'not logged in'})
+    } else {
+        const data = {}
+        data.email = user.email
+        data.firstname = user.firstname
+        data.lastname = user.lastname
+        res.status(200).json(data)
+    }
 })
 
 
-app.post('/settings', (req, res) => {
-    const newEmail = req.body.newEmail
+app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) => {
+    const user = req.user
+    const newFirst = req.body.newFirst
+    const newLast = req.body.newLast
+    // const newEmail = req.body.newEmail
     const currPw = req.body.currPw
     const newPw = req.body.newPw
 
-    if (newEmail) {
-        // handle change email
-        // console.log(newEmail)
+    const query = {uid: user.uid}
+
+    if (newFirst && newLast) {
+        // handle change name
+        const update = {firstname: newFirst, lastname: newLast}
+        User.findOneAndUpdate(query, {$set: update}, (err, result) => {
+            if (err) {
+                res.json({err_message: 'name update failure'})
+            } else {
+                res.status(200).json({message: 'name update success'})
+            }
+        })
     }
+
+    /*
+    else if (newEmail) {
+        // handle change email
+        const update = {email: newEmail}
+
+        // check if email is already registered
+        User.findOne(update, (err, result) => {
+            if (result) {
+                res.json(401).json({err_message: 'Email already registered'})
+            } else {
+                User.findOneAndUpdate(query, {$set: update}, (err, result) => {
+                    if (err) {
+                        res.status(401).json({err_message: 'email update failed'})
+                    } else {
+                        res.status(200).json({emailSuccess: true})
+                    }
+                })
+            }
+        })
+    }
+    */
 
     else if (currPw && newPw) {
         // handle change password
         // compare with encrypted current pw in database
-        // console.log(currPw, newPw)
+
+        User.findOne(query, (err, res_user) => {
+            if (err) {
+                res.status(401).json({err_message: 'user not found'})
+            } else {
+
+                // compare password
+                bcrypt.compare(currPw, res_user.password, (err, match) => {
+                    if (match) {
+                        console.log('password match')
+                        const saltRounds = 10
+                        bcrypt.hash(newPw, saltRounds, (err, hash) => {
+                            if (hash) {
+                                res_user.password = hash
+                                User.findOneAndUpdate(query, res_user, (err, doc) =>{
+                                    if (err) {
+                                        res.json({err_message: 'database save error'})
+                                    } else {
+                                        console.log('password update success')
+                                        res.status(200).json({success: true})
+                                    }
+                                })
+                            }
+                        })
+
+                    } else {
+                        console.log('password not match')
+                        res.json({err_message: 'wrong password'})
+                    }
+                })
+            }
+        })
     }
 
     else {
         // if there are missing fields
-        res.status(400).send()
+        res.status(401).json({err_message: 'missing fields'})
     }
-
-    res.status(200).send()
 })
 
 

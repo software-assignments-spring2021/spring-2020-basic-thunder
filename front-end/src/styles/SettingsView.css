@@ -14,14 +14,14 @@
     display: flex;
     border: 2px solid black;
     margin-top: 10px;
-    min-height: 180px;
+    min-height: 190px;
 }
 
 .SettingsView .section input[type=text] {
+    font-size: 20px;
     width: 200px;
-    height: 30px;
+    height: 35px;
 }
-
 
 .SettingsView .section input[type=email] {
     font-size: 20px;
@@ -90,5 +90,23 @@
 }
 
 .SettingsView #nameDiv {
-    height: 280px;
+    height: 235px;
+}
+
+.SettingsView #nameDiv .message {
+    margin-top: -2px;
+    margin-bottom: -5px;
+}
+
+.SettingsView #pwDiv .message {
+    margin-top: 3px;
+    margin-bottom: -5px;
+}
+
+.SettingsView #success {
+    color: green;
+}
+
+.SettingsView #failure {
+    color: red;
 }
