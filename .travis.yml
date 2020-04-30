@@ -2,8 +2,14 @@ sudo: false
 
 language: node_js
 
+services:
+  - mongodb
+
 node_js:
   - node
+
+before_script:
+  - sleep 15
 
 script:
   - cd back-end && npm install && npm test
