@@ -1,0 +1,9 @@
+sudo: false
+
+language: node_js
+
+node_js:
+  - node
+
+script:
+  - cd back-end && npm install && npm test
