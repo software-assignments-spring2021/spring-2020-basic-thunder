@@ -1,5 +1,7 @@
 # Biazza
 
+[![Build Status](https://travis-ci.com/nyu-software-engineering/spring-2020-basic-thunder.svg?branch=master)](https://travis-ci.com/nyu-software-engineering/spring-2020-basic-thunder)
+
 ## Project Description
 __Biazza__ is a forum style web application that provides an efficient mean for Professor-Student communication. Examples of similar forums can be Piazza, Campuswire, NYUClasses forum.
 
