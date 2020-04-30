@@ -932,7 +932,7 @@ app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(
                                 )
                             })
                             data.students = students
-                            res.json(data)
+                            res.status(200).json(data)
                         }
                     })
                 }
@@ -1018,7 +1018,7 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
                                             res.status(401).json({err_message: 'database error'})
 
                                         } else {
-                                            res.json({newUser: result})
+                                            res.status(200).json({newUser: result})
                                         }
                                     })
                                 }
@@ -1088,7 +1088,7 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
                                                     res.status(401).json({err_message: 'Failed to send email'})
                                                 } else {
                                                     console.log('Message sent: %s', info.messageId)
-                                                    res.json({success_message: 'Invitation sent'})
+                                                    res.status(200).json({success_message: 'Invitation sent'})
                                                 }
                                             })
                                         }
@@ -1104,7 +1104,6 @@ app.post('/:courseId/members-list', passport.authenticate('jwt',{session:false})
 
     else if (addRole || addEmail || addFirstName || addLastName) {
         // if there are missing fields
-        // console.log('missing fields')
         res.status(400).json({err_message: 'missing fields'})
     }
 
@@ -1247,7 +1246,6 @@ app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) =
                 // compare password
                 bcrypt.compare(currPw, res_user.password, (err, match) => {
                     if (match) {
-                        console.log('password match')
                         const saltRounds = 10
                         bcrypt.hash(newPw, saltRounds, (err, hash) => {
                             if (hash) {
@@ -1257,14 +1255,13 @@ app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) =
                                         res.json({err_message: 'database save error'})
                                     } else {
                                         console.log('password update success')
-                                        res.status(200).json({success: true})
+                                        res.json({success: true})
                                     }
                                 })
                             }
                         })
 
                     } else {
-                        console.log('password not match')
                         res.json({err_message: 'wrong password'})
                     }
                 })
@@ -1274,7 +1271,7 @@ app.post('/settings', passport.authenticate('jwt',{session:false}), (req, res) =
 
     else {
         // if there are missing fields
-        res.status(401).json({err_message: 'missing fields'})
+        res.status(400).json({err_message: 'missing fields'})
     }
 })
 
