@@ -10,6 +10,8 @@ node_js:
 
 before_script:
   - sleep 15
+  - cd back-end
+  - npm install
 
 script:
-  - cd back-end && npm install && npm test
+  - npm test
