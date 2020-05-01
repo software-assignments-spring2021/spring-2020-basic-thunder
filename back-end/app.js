@@ -159,6 +159,8 @@ app.post("/create-courses",passport.authenticate('jwt',{session:false}),(req,res
 
 // login
 app.post("/login", (req, res)=>{
+    console.log("t1");
+
     if(Biz.postLoginFieldCheck(req)){
         const email = req.body.email;
         const password = req.body.password;
@@ -187,6 +189,7 @@ app.post("/login", (req, res)=>{
         });
     }
     else{
+        console.log("t2");
         res.status(401).json({err_message:"request does not contain email or password."});
     }
 });
