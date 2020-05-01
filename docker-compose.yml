@@ -1,0 +1,22 @@
+version: "3.3"
+services:
+    frontend:
+        container_name: biazza_fe
+        build:
+            context: ./front-end
+            dockerfile: Dockerfile
+        image: walkerliusz/biazza_fe
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./front-end:/app
+    backend:
+        container_name: biazza_be
+        build:
+            context: ./back-end
+            dockerfile: Dockerfile
+        image: walkerliusz/biazza_be
+        ports:
+            - "5000:5000"
+        volumes:
+            - ./back-end:/app
