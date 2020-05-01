@@ -64,7 +64,14 @@ const bodyParser = require('body-parser');
 const Biz = require('./lib');
 
 // middleware begin
-const allowedOrigins = ['http://localhost:3000','http://127.0.0.1:3000'];
+const allowedOrigins = [
+	'http://localhost:3000',
+	'http://127.0.0.1:3000',
+	'http://localhost:80',
+	'http://127.0.0.1:80',
+	'http://localhost',
+	'http://127.0.0.1',
+	];
 
 app.use(
     cors({
