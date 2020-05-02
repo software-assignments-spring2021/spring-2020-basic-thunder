@@ -32,6 +32,14 @@ script:
 after_script:
   - cd ..
 
+# continuous integration
 deploy:
-  - chmod +x deploy.expect
-  - expect deploy.expect
+  - provider: script
+
+    script:
+      - chmod +x deploy.expect
+      - expect deploy.expect
+
+    # only deploy master branch content
+    on:
+      branch: master
