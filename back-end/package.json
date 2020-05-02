@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node --no-warnings index.js",
-    "test": "nyc --reporter=text mocha --timeout 120000 --recursive --exit --no-warnings"
+    "test": "nyc --reporter=text mocha --timeout 200000 --recursive --exit --no-warnings"
   },
   "author": "",
   "license": "ISC",

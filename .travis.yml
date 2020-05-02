@@ -1,0 +1,26 @@
+os: osx
+
+language: node_js
+
+services:
+  - mongodb
+
+node_js:
+  - node
+
+notifications:
+  email:
+    recipients:
+      - sylvia.ji@nyu.edu
+      - jl8456@nyu.edu
+      - cem663@nyu.edu
+    on_success: never
+    on_failure: always
+
+before_script:
+  - sleep 15
+  - cd back-end
+  - npm install
+
+script:
+  - npm test
