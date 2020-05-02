@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.com/nyu-software-engineering/spring-2020-basic-thunder.svg?branch=master)](https://travis-ci.com/nyu-software-engineering/spring-2020-basic-thunder)
 
+Click [here](http://204.48.25.3) to visit Biazza!
+
+
 ## Project Description
 __Biazza__ is a forum style web application that provides an efficient mean for Professor-Student communication. Examples of similar forums can be Piazza, Campuswire, NYUClasses forum.
 
@@ -14,7 +17,7 @@ The demo is composed of a series of wireframe diagrams.
 
 Please visit the [demo](https://invis.io/28W5IVVJ67M) page for more detail.
 
-## How to Run and Test Biazza'
+## How to Run and Test Biazza
 
 Please ensure you have `MongoDb` installed on your machine.
 ### Steps to Run the Biazza
