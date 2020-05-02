@@ -1,7 +1,7 @@
 #!/usr/bin/expect -f
 spawn ssh ::env(PRODUCTION_SERVER_USER)@$::env(PRODUCTION_SERVER)
 expect "*(yes/no)?"
-send -- "yes"
+send -- "yes\r"
 expect "*?ssword: "
 send -- "$::env(PRODUCTION_SERVER_PW)\r"
 expect "$ "
