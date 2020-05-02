@@ -24,14 +24,14 @@ notifications:
 
 before_script:
   - cd back-end
-#  - npm install
+ - npm install
 
 script:
-  # - npm test
-  echo DONE
+  - npm test
 
-#deploy:
-after_success:
+after_script:
   - cd ..
+
+deploy:
   - chmod +x deploy.expect
   - expect deploy.expect
