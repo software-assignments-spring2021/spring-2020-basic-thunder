@@ -23,19 +23,19 @@ notifications:
     on_failure: always
 
 before_script:
+  - chmod +x deploy.expect
   - cd back-end
   - npm install
 
 script:
   - npm test
   - cd ..
-  
+
 # continuous integration
 deploy:
   - provider: script
 
     script:
-      - chmod +x deploy.expect
       - expect deploy.expect
 
     # only deploy master branch content
