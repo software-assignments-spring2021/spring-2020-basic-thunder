@@ -24,7 +24,7 @@ notifications:
 
 before_script:
   - cd back-end
- - npm install
+  - npm install
 
 script:
   - npm test
