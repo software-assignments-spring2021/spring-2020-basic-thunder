@@ -1,0 +1,7 @@
+#!/usr/bin/expect -f
+spawn ssh ::env(PRODUCTION_SERVER_USER)@$::env(PRODUCTION_SERVER)
+expect "*?ssword: "
+send -- "$::env(PRODUCTION_SERVER_PW)\r"
+expect "$ "
+send -- "cd spring-2020-basic-thunder && git pull && docker-compose up -d --build && exit\r"
+expect eof
