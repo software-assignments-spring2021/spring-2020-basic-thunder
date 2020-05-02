@@ -21,6 +21,8 @@ Expected data:
     Course id
  */
 
+const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
+
 
 let rerenderTriggeer = null;
 /* main */
@@ -80,7 +82,7 @@ const AddCourse = ()=>{
     const handleAddNewCourse = (e)=> {
         e.preventDefault();
         const accessToken = localStorage.getItem("access-token");
-        const api = "http://127.0.0.1:5000/create-courses"; // backend api
+        const api = `${BACKEND_IP}/create-courses`; // backend api
         const course_name = e.target['courseNameInput'].value;
         const term = e.target['SemesterOptionsContainer'].value;
         const new_course_data = {
@@ -152,7 +154,7 @@ const CourseList = () =>{
     rerenderTriggeer = setRerender;
     useEffect(()=>{
         const fetchData = async () => {
-            const api = "http://127.0.0.1:5000/my-courses"; // backend api
+            const api = `${BACKEND_IP}/my-courses`; // backend api
             const accessToken = localStorage.getItem("access-token");
             await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res=>{

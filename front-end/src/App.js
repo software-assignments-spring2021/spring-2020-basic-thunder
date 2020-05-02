@@ -27,7 +27,7 @@ import Schedule from "./Schedule";
 import {SettingsView} from "./settings_view";
 
 function App() {
-
+    console.log("nodeenv",process.env.NODE_ENV);
     return (
         <Router>
             <div className="App">
@@ -47,7 +47,7 @@ function App() {
                             <Route path="/:courseId/Syllabus" component={Syllabus} />
                             <Route path="/:courseId/Schedule" component={Schedule} />
                             <Route path={"/:courseId/members-list"} component={MembersListView} />
-                            <Route path={"/settings"} component={SettingsView} /> 
+                            <Route path={"/settings"} component={SettingsView} />
                     </AuthRequiredFilter>
                 </Switch>
             </div>

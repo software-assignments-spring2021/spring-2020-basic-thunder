@@ -4,6 +4,8 @@ import {Link, Redirect} from "react-router-dom"
 import {Header} from './home_view'
 import axios from "axios";
 
+const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
+
 const RegisterView = () => {
     return (
         <div className={'RegisterView'}>
@@ -45,7 +47,7 @@ const SignUpForm = (props) => {
         const firstname = e.target['firstname'].value;
         const lastname = e.target['lastname'].value;
 
-        axios.post('http://127.0.0.1:5000/register',
+        axios.post(`${BACKEND_IP}/register`,
             {
                 email: email,
                 firstname:firstname,

@@ -15,13 +15,15 @@ import './styles/ListPostView.css'
 import Hamburger from './HamburgerMenu'
 import SubNav from "./SubNav.js"
 
+const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
+
 /* main */
 const ListPostsView = ()=>{
     const {courseId} = useParams();
     const [data,setData] = useState({'CourseName':null, 'ListOfPosts':[]});
     useEffect(()=>{
         const fetchData = async () => {
-            const api = `http://127.0.0.1:5000/${courseId}/Forum`; // testing api
+            const api = `${BACKEND_IP}/${courseId}/Forum`; // testing api
             const accessToken = localStorage.getItem("access-token");
             const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res=>{
@@ -75,7 +77,7 @@ const PostPreview = (props)=>{
     const [data,setData] = useState({'preview':null,'replies':null,'resolved':null,'topic':null});
     useEffect(()=>{
         const fetchData = async () => {
-            const api = `http://127.0.0.1:5000/${courseId}/Forum/${postid}/PostPreview`; // backend api
+            const api = `${BACKEND_IP}/${courseId}/Forum/${postid}/PostPreview`; // backend api
             const accessToken = localStorage.getItem("access-token");
             const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res=>{

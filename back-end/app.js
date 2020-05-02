@@ -71,8 +71,8 @@ const allowedOrigins = [
 	'http://127.0.0.1:80',
 	'http://localhost',
 	'http://127.0.0.1',
-  'http://204.48.25.3',
-  'http://204.48.25.3:80'
+    'http://204.48.25.3',
+    'http://204.48.25.3:80'
 	];
 
 app.use(
@@ -161,8 +161,6 @@ app.post("/create-courses",passport.authenticate('jwt',{session:false}),(req,res
 
 // login
 app.post("/login", (req, res)=>{
-    console.log("t1");
-
     if(Biz.postLoginFieldCheck(req)){
         const email = req.body.email;
         const password = req.body.password;

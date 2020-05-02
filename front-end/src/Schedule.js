@@ -9,6 +9,7 @@ import Hamburger from "./HamburgerMenu.js"
 import SubNav from "./SubNav.js"
 import {LoadingView} from "./loading_view"
 
+const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
 
 const NavBarComponentPlaceHolder = () => {
     return (
@@ -116,7 +117,7 @@ const AddBtn = (props) => {
 			else{
 				let dateValue = new Date(dateEle.value);
 				( async() => {
-					let postDateRoute = `http://127.0.0.1:5000/${props.courseId}/Schedule/${props.scheduleId}`
+					let postDateRoute = `${BACKEND_IP}/${props.courseId}/Schedule/${props.scheduleId}`
 					let accessToken = localStorage.getItem("access-token")
 
 					let res = await axios.post(postDateRoute,{date: dateValue,topic: topicEle.value,notes: notesEle.value,assignment: asgnEle.value}, {headers: {"Authorization" : `Bearer ${accessToken}`}}).then(result => {
@@ -146,7 +147,7 @@ const AddBtn = (props) => {
 							else
 								btnContainer.children[b].classList.add("hiding")
 						}
-						//Changing the onclick's for POST to PUT and Cancel functionality doesn't delete 
+						//Changing the onclick's for POST to PUT and Cancel functionality doesn't delete
 						saveBtn.onclick = (evt) => {
 							evt.preventDefault()
 
@@ -170,7 +171,7 @@ const AddBtn = (props) => {
 							else{
 								let dateValue = new Date(date);
 								( async() => {
-									let putDateRoute = `http://127.0.0.1:5000/${props.courseId}/Schedule/${props.scheduleId}`
+									let putDateRoute = `${BACKEND_IP}/${props.courseId}/Schedule/${props.scheduleId}`
 									let accessToken = localStorage.getItem("access-token")
 
 									let res = await axios.put(putDateRoute,{date: dateValue,topic: topic,notes: notes,assignment: assignment}, {headers: {"Authorization" : `Bearer ${accessToken}`}}).then(result => {
@@ -249,7 +250,7 @@ const AddBtn = (props) => {
 							let focusEle = evt.target
 							let date = focusEle.parentElement.parentElement.firstChild
 							let accessToken = localStorage.getItem("access-token");
-							let deleteRoute = `http://127.0.0.1:5000/${props.courseId}/Schedule/${props.scheduleId}/Delete/${new Date(date.value)}`
+							let deleteRoute = `${BACKEND_IP}/${props.courseId}/Schedule/${props.scheduleId}/Delete/${new Date(date.value)}`
 
 							axios.delete(deleteRoute, {headers: {"Authorization" : `Bearer ${accessToken}`}}).then(res =>{
 								console.log(res)
@@ -353,7 +354,7 @@ const SaveBtn = (props) => {
 			let focusEle = evt.target
 			let dateValue = new Date(date);
 			( async() => {
-				let putDateRoute = `http://127.0.0.1:5000/${props.courseId}/Schedule/${props.scheduleId}`
+				let putDateRoute = `${BACKEND_IP}/${props.courseId}/Schedule/${props.scheduleId}`
 				let accessToken = localStorage.getItem("access-token")
 
 				let res = await axios.put(putDateRoute,{date: dateValue,topic: topic,notes: notes,assignment: assignment}, {headers: {"Authorization" : `Bearer ${accessToken}`}}).then(result => {
@@ -460,7 +461,7 @@ const DelBtn = (props) => {
 			let focusEle = evt.target
 			let date = evt.target.parentElement.parentElement.firstChild
 			let accessToken = localStorage.getItem("access-token");
-			let deleteRoute = `http://127.0.0.1:5000/${props.courseId}/Schedule/${props.scheduleId}/Delete/${new Date(date.value)}`
+			let deleteRoute = `${BACKEND_IP}/${props.courseId}/Schedule/${props.scheduleId}/Delete/${new Date(date.value)}`
 
 			await axios.delete(deleteRoute, {headers: {"Authorization" : `Bearer ${accessToken}`}}).then(res =>{
 				console.log(res)
@@ -494,7 +495,7 @@ const Calendar = (props) => {
 	useEffect( ()=> {
 			let fetchDates = async() => {
 				let accessToken = localStorage.getItem("access-token");
-				let api = `http://127.0.0.1:5000/${parseInt(courseId.courseId)}/Schedule/${scheduleId}`
+				let api = `${BACKEND_IP}/${parseInt(courseId.courseId)}/Schedule/${scheduleId}`
 				await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}}).then(res => {
 						setDates(res.data.arr)
 						setAwaitingData(false)
@@ -553,7 +554,7 @@ const Schedule = () => {
 	useEffect( ()=>{
 			let fetch = async() => {
 				const accessToken = localStorage.getItem("access-token");
-				let api = `http://127.0.0.1:5000/${parseInt(courseId.courseId)}/Schedule`
+				let api = `${BACKEND_IP}/${parseInt(courseId.courseId)}/Schedule`
 				axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
 					.then(res => {
 						// console.log("Received data:", res.data)

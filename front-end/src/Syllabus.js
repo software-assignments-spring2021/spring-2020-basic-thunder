@@ -9,6 +9,9 @@ import Hamburger from "./HamburgerMenu.js"
 import SubNav from "./SubNav.js"
 import {LoadingView} from "./loading_view"
 
+const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
+
+
 const NavBarComponentPlaceHolder = () => {
     return (
         <div className="biazza-header-title">
@@ -60,7 +63,7 @@ const EditBtn = (instructorMode) => {
 const SaveBtn = (courseId) => {
 	let postSyllabus = async () => {
 		let text = document.querySelector('textarea')
-		let apiSyllabusRoute = `http://127.0.0.1:5000/${parseInt(courseId.courseId)}/Syllabus`
+		let apiSyllabusRoute = `${BACKEND_IP}/${parseInt(courseId.courseId)}/Syllabus`
 
         const accessToken = localStorage.getItem("access-token");
 
@@ -90,7 +93,7 @@ const CancelBtn = (courseId) =>{
 	let cancel = async () => {
         const accessToken = localStorage.getItem("access-token");
 
-		let apiSyllabusRoute = `http://127.0.0.1:5000/${parseInt(courseId.courseId)}/Syllabus`
+		let apiSyllabusRoute = `${BACKEND_IP}/${parseInt(courseId.courseId)}/Syllabus`
 		let result = await axios.get(apiSyllabusRoute,{headers: {"Authorization" : `Bearer ${accessToken}`}}).then(result => {
 			let attr = document.createAttribute("readonly")
 			let txtArea = document.querySelector('textarea')
@@ -120,7 +123,7 @@ const Syllabus = () => {
 	useEffect( ()=>{
 			let fetch = async() => {
                 const accessToken = localStorage.getItem("access-token");
-				let api = `http://127.0.0.1:5000/${parseInt(courseId.courseId)}/Syllabus`
+				let api = `${BACKEND_IP}/${parseInt(courseId.courseId)}/Syllabus`
 				axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
 					.then(result => {
 						setData(result.data);
