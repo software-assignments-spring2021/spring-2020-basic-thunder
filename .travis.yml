@@ -40,4 +40,6 @@ deploy:
 
     # only deploy master branch content
     on:
-      branch: master
+      branch:
+        - master
+        - spike/118/deployment
