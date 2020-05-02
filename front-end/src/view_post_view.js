@@ -18,6 +18,8 @@ import deleteicon from "./img/deleteicon.png"
 import Hamburger from "./HamburgerMenu";
 import {CourseBarComponent, NavBarComponentPlaceHolder} from "./list_posts_view"
 
+const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
+
 /* main */
 const PostView = () =>{
     const {courseId,postId} = useParams();
@@ -28,7 +30,7 @@ const PostView = () =>{
     useEffect(()=>{
         const fetchData = async () => {
             const accessToken = localStorage.getItem("access-token");
-            const api = `http://127.0.0.1:5000/${courseId}/Forum/${postId}/post`; // testing api
+            const api = `${BACKEND_IP}/${courseId}/Forum/${postId}/post`; // testing api
             const res = await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res=>{
                     res.data['reply_details'].sort((a,b)=>b.upvote-a.upvote);
@@ -142,7 +144,7 @@ const StudentAnswer = ({reply_id})=>{
     useEffect(()=>{
         const fetchData = async () => {
             const accessToken = localStorage.getItem("access-token");
-            const api = `http://127.0.0.1:5000/${courseId}/course/${reply_id}/reply-detail`;
+            const api = `${BACKEND_IP}/${courseId}/course/${reply_id}/reply-detail`;
             await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res=>{
                     setData(res.data);
@@ -160,7 +162,7 @@ const StudentAnswer = ({reply_id})=>{
     const upVoteHandler = (e)=>{
         e.preventDefault();
         const accessToken = localStorage.getItem("access-token");
-        const api = `http://127.0.0.1:5000/${reply_id}/add-upvote`;
+        const api = `${BACKEND_IP}/${reply_id}/add-upvote`;
         axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
             .then(res=>{
                 setUpvote(res.data.upvote);
@@ -174,7 +176,7 @@ const StudentAnswer = ({reply_id})=>{
     const cancelUpVoteHandler = (e)=>{
         e.preventDefault();
         const accessToken = localStorage.getItem("access-token");
-        const api = `http://127.0.0.1:5000/${reply_id}/cancel-upvote`;
+        const api = `${BACKEND_IP}/${reply_id}/cancel-upvote`;
         axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
             .then(res=>{
                 setUpvote(res.data.upvote);
@@ -236,7 +238,7 @@ const DeleteBtn = ({reply_id,instructorMode}) =>{
     const {courseId,postId} = useParams();
     const [deleted,setRerender] = useState(false);
     const sendDeleteReplyRequest = (_)=>{
-        const api = `http://127.0.0.1:5000/${courseId}/Forum/${postId}/post/${reply_id}/DeleteReply`; // testing api
+        const api = `${BACKEND_IP}/${courseId}/Forum/${postId}/post/${reply_id}/DeleteReply`; // testing api
         const accessToken = localStorage.getItem("access-token");
 
         //debug
@@ -289,7 +291,7 @@ const OfficialAnswer = ({reply_id})=>{
     useEffect(()=>{
         const fetchData = async () => {
             const accessToken = localStorage.getItem("access-token");
-            const api = `http://127.0.0.1:5000/${courseId}/course/${reply_id}/reply-detail`;
+            const api = `${BACKEND_IP}/${courseId}/course/${reply_id}/reply-detail`;
             await axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res=>{
                     setData(res.data);

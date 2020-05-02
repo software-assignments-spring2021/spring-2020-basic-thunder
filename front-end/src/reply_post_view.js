@@ -16,14 +16,15 @@ import {
 import Hamburger from "./HamburgerMenu";
 import {CourseBarComponent, NavBarComponentPlaceHolder} from "./list_posts_view";
 
+const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
+
 /* main */
 const ReplyPostView = () =>{
     const {courseId,postId} = useParams();
     const [awaitingData,setAwaitingData] = useState(true);
     const [data,setData] = useState({'CourseName':null, 'ListOfPosts':[]});
     const [goToPost,setGoToPost] = useState(false);
-    const api = `http://127.0.0.1:5000/${courseId}/Forum/${postId}/post/ReplyPost`; // testing api
-    const postUrl = `http://locohost:3000/${courseId}/Forum/${postId}/post`; // temp url
+    const api = `${BACKEND_IP}/${courseId}/Forum/${postId}/post/ReplyPost`;
     const postAsOptions = ["Anonymous to Classmates","Anonymous to Everyone"];
     const [authorName,setAuthorName] = useState(null);
 

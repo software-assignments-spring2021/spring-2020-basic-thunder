@@ -30,6 +30,8 @@ import axios from "axios";
 import {LoadingView} from "./loading_view";
 import {CourseBarComponent} from "./list_posts_view"
 
+const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
+
 
 const NavBarComponentPlaceHolder = () => {
     return (
@@ -42,7 +44,7 @@ const NavBarComponentPlaceHolder = () => {
 const CreatePost = () => {
 	const postAs = ["Anonymous to Classmates", "Anonymous to Everyone"];
     const {courseId} = useParams();
-    const api = `http://127.0.0.1:5000/${courseId}/Forum/CreatePost`; // backend api
+    const api = `${BACKEND_IP}/${courseId}/Forum/CreatePost`; // backend api
 	const [postId,setPostId] = useState(null);
 	const [data,setData] = useState({course_name:null,username:null});
 

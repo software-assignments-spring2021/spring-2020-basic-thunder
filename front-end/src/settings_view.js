@@ -11,6 +11,8 @@ import {
 } from "react-router-dom";
 import Hamburger from './HamburgerMenu.js'
 
+const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
+
 const data = {
     'username': 'user001',
     'email': 'user001@nyu.edu',
@@ -19,7 +21,7 @@ const data = {
 
 const SettingsView = () => {
     const [data, setData] = useState({'email': '', 'firstname': '', 'lastname': ''})
-    const api = 'http://127.0.0.1:5000/settings'
+    const api = `${BACKEND_IP}/settings`
 
     const accessToken = localStorage.getItem("access-token")
 
@@ -70,7 +72,7 @@ const Name = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const api = 'http://127.0.0.1:5000/settings'
+        const api = `${BACKEND_IP}/settings`
         const newFirst = e.target['firstname'].value
         const newLast = e.target['lastname'].value
         setFirst(newFirst)
@@ -133,7 +135,7 @@ const Email = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const api = 'http://127.0.0.1:5000/settings'
+        const api = `${BACKEND_IP}/settings`
         const newEmail = e.target['email'].value
         setEmail(newEmail)
         setModified(true)
@@ -181,7 +183,7 @@ const Password = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const api = 'http://127.0.0.1:5000/settings'
+        const api = `${BACKEND_IP}/settings`
         const currPw = e.target['currPw'].value
         const newPw = e.target['newPw'].value
 

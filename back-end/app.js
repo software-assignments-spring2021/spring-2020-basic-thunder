@@ -64,7 +64,16 @@ const bodyParser = require('body-parser');
 const Biz = require('./lib');
 
 // middleware begin
-const allowedOrigins = ['http://localhost:3000','http://127.0.0.1:3000'];
+const allowedOrigins = [
+	'http://localhost:3000',
+	'http://127.0.0.1:3000',
+	'http://localhost:80',
+	'http://127.0.0.1:80',
+	'http://localhost',
+	'http://127.0.0.1',
+    'http://204.48.25.3',
+    'http://204.48.25.3:80'
+	];
 
 app.use(
     cors({
@@ -180,6 +189,7 @@ app.post("/login", (req, res)=>{
         });
     }
     else{
+        console.log("t2");
         res.status(401).json({err_message:"request does not contain email or password."});
     }
 });

@@ -1,12 +1,17 @@
 os: osx
 
-language: node_js
+sudo: true
 
-services:
-  - mongodb
+language: node_js
 
 node_js:
   - node
+
+addons:
+  ssh_known_hosts: $PRODUCTION_SERVER
+  apt:
+    packages:
+      - expect
 
 notifications:
   email:
@@ -18,9 +23,21 @@ notifications:
     on_failure: always
 
 before_script:
-  - sleep 15
   - cd back-end
   - npm install
 
 script:
   - npm test
+  - cd ..
+  
+# continuous integration
+deploy:
+  - provider: script
+
+    script:
+      - chmod +x deploy.expect
+      - expect deploy.expect
+
+    # only deploy master branch content
+    on:
+      branch: master

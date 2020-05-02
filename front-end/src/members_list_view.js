@@ -13,6 +13,8 @@ import Hamburger from './HamburgerMenu.js'
 import SubNav from "./SubNav.js"
 import {LoadingView} from "./loading_view";
 
+const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
+
 const MembersListView = () => {
     const {courseId} = useParams()
 
@@ -20,7 +22,7 @@ const MembersListView = () => {
     const [courseName, setCourseName] = useState('')
     const [mode, setMode] = useState('instructor')
     const [data, setData] = useState({'courseId': -1, 'courseName': null, 'instructors': null, 'students': null})
-    const api = `http://127.0.0.1:5000/${courseId}/members-list`
+    const api = `${BACKEND_IP}/${courseId}/members-list`
 
     // fetch data from backend
     // set 'data' variable to the hard-coded JSON object
@@ -99,7 +101,7 @@ const MembersListView = () => {
 
 const Member = (props) => {
     const {courseId} = useParams()
-    const api = `http://127.0.0.1:5000/${courseId}/members-list`
+    const api = `${BACKEND_IP}/${courseId}/members-list`
 
     const name = props.name
     const email = props.email
@@ -188,7 +190,7 @@ const Member = (props) => {
 // modal dialog for adding a member
 const AddModal = (props) => {
     const {courseId} = useParams()
-    const api = `http://127.0.0.1:5000/${courseId}/members-list`
+    const api = `${BACKEND_IP}/${courseId}/members-list`
     // const [data,setData] = useState({course_name:null,username:null})
 
     // which radio button is selected
