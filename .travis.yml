@@ -42,4 +42,3 @@ deploy:
     on:
       branch:
         - master
-        - spike/118/deployment
