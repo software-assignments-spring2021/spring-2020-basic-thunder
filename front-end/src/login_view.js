@@ -32,7 +32,7 @@ const LoginForm = (props) => {
         e.preventDefault();
         const email = e.target['email'].value;
         const pw = e.target['pass'].value;
-        axios.post('http://127.0.0.1:5000/login',{
+        axios.post('http://localhost:5000/login',{
             email: email,
             password: pw,
         }).then(res=>{
