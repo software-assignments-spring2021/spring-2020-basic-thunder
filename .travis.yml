@@ -1,9 +1,7 @@
 os: osx
 
+sudo: true
 language: node_js
-
-services:
-  - mongodb
 
 node_js:
   - node
@@ -24,7 +22,6 @@ notifications:
     on_failure: always
 
 before_script:
-  - sleep 15
   - cd back-end
   - npm install
 
