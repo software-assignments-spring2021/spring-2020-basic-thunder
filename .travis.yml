@@ -28,10 +28,8 @@ before_script:
 
 script:
   - npm test
-
-after_script:
   - cd ..
-
+  
 # continuous integration
 deploy:
   - provider: script
