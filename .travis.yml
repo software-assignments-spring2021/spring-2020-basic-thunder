@@ -28,5 +28,7 @@ before_script:
 script:
   - npm test
 
-#deploy:
-#  - sshpass -p 'yourpassword'  ssh user@ip
+
+deploy:
+  - sshpass -p $PRODUCTION_SERVER_PW  ssh $PRODUCTION_SERVER_USER@$PRODUCTION_SERVER
+  - ls
