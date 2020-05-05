@@ -12,7 +12,7 @@ const NotLoggedInHomeView = () => {
             <div>
                 <header>
                     <Link to="/home" id="logo">Biazza</Link>
-                    <Link to="/log-in" id="signin">Sign in</Link>
+                    <Link to="/log-in" id="signin">Log in</Link>
                 </header>
             </div>
 

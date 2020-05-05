@@ -52,7 +52,7 @@
     font-family: GothamNarrow, sans-serif;
     color: #f3f3f3;
     font-weight: lighter;
-    font-size: 22px;
+    font-size: 20px;
     position: absolute;
     right: 15px;
     top: 25px;
@@ -169,4 +169,48 @@
     width: 600px;
     margin-bottom: 20px;
     max-width: 90%;
+}
+
+@media only screen and (max-width: 480px) {
+    .HomeView header {
+        height: 60px;
+    }
+
+    .HomeView header #logo{
+        font-size: 34px;
+    }
+
+    .HomeView header #signin{
+        font-size: 14px;
+    }
+
+    .HomeView .hero-text {
+        top: 50%;
+    }
+
+    .HomeView .hero-text h1 {
+        font-size: 2.5em;
+    }
+
+    .HomeView .hero-text p {
+        font-size: 0.8em;
+        font-weight: lighter;
+    }
+
+    .HomeView #main button {
+        font-size: 16px;
+        width: 120px;
+        height: 40px;
+    }
+
+    .HomeView footer {
+        height: 60px;
+    }
+}
+
+@media only screen and (max-height: 650px) {
+    .HomeView .hero-text {
+        top: 55%;
+    }
+
 }

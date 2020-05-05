@@ -33,7 +33,7 @@
 .LoginView footer {
     width:100%;
     height:70px;
-    position: relative;
+    position: fixed;
     bottom:0;
     left:0;
     background-color: black;
@@ -56,7 +56,7 @@
 }
 
 .LoginView #main {
-    height: 100vh;
+    height: 120vh;
 }
 
 .LoginView #login {
@@ -167,4 +167,23 @@
     outline: none;
     border-color: black;
     box-shadow: 0 0 1px black;
+}
+
+@media only screen and (max-width: 480px) {
+    .LoginView header {
+        height: 60px;
+    }
+
+    .LoginView header #logo{
+        font-size: 34px;
+    }
+
+    .LoginView footer {
+        height: 60px;
+    }
+
+    .LoginView #login {
+        width: 90%;
+        margin-top: 80px;
+    }
 }

@@ -37,13 +37,13 @@
 }
 
 .RegisterView #main {
-    height: 100vh;
+    height: 150vh;
 }
 
 .RegisterView #register {
     width: 350px;
     border: 10px solid black;
-    margin-top: 130px;
+    margin-top: 100px;
     display: inline-block;
     text-align: center;
     background-color: #f3f3f3;
@@ -59,10 +59,6 @@
 .RegisterView form {
     display: inline-block;
     width: 70%;
-}
-
-.RegisterView label {
-
 }
 
 .RegisterView label span{
@@ -177,14 +173,12 @@
     box-sizing: border-box;
     display: inline-block;
     font-size: 25px;
-    /*font-weight: lighter;*/
-    padding-top:5px;
 }
 
 .RegisterView footer {
     width:100%;
     height:70px;
-    position: relative;
+    position: fixed;
     bottom:0;
     left:0;
     background-color: black;
@@ -197,4 +191,50 @@
     position: absolute;
     left: 15px;
     top: 25px;
+}
+
+@media only screen and (max-width: 480px) {
+    .RegisterView header {
+        height: 60px;
+    }
+
+    .RegisterView header #logo{
+        font-size: 34px;
+    }
+
+    .RegisterView footer {
+        height: 60px;
+    }
+
+    .RegisterView #register {
+        width: 90%;
+        margin-top: 80px;
+    }
+
+    .RegisterView input[type=text] {
+        height: 28px;
+    }
+
+    .RegisterView input[type=email] {
+        height: 28px;
+    }
+
+    .RegisterView input[type=password] {
+        height: 28px;
+    }
+}
+
+@media only screen and (max-height: 650px) {
+    .RegisterView #buttons input {
+        border-radius: 4px;
+        width: 90px;
+        font-size: 16px;
+        padding: 5px 10px 5px 10px;
+        margin: 5px 5px 20px;
+        transition-duration: 0.4s;
+    }
+
+    .RegisterView footer {
+        display: none;
+    }
 }
