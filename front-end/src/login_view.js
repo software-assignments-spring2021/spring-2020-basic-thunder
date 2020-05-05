@@ -11,8 +11,10 @@ const LoginView = () => {
     return (
         <div className={'LoginView'}>
 
-            <div id="header">
-                <Header/>
+            <div>
+                <header>
+                    <Link to="/home" id="logo">Biazza</Link>
+                </header>
             </div>
 
             <div id="main">
@@ -21,6 +23,13 @@ const LoginView = () => {
                     <LoginForm/>
                 </div>
             </div>
+
+            <div>
+                <footer>
+                    <a href="https://github.com/nyu-software-engineering/spring-2020-basic-thunder">&copy; 2020 Biazza</a>
+                </footer>
+            </div>
+
         </div>
     )
 };
@@ -82,13 +91,6 @@ const LoginForm = (props) => {
     )
 };
 
-const HeaderCopy = () => {
-    return (
-        <Link to='/home'>
-            Biazza
-        </Link>
-    )
-}
 
 const ErrorMsg = ({activate}) =>{
     if(activate){

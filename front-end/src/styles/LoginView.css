@@ -1,34 +1,58 @@
+@font-face {
+    font-family: Gotham;
+    src: url('../fonts/Gotham-Book.otf');
+}
+
 .LoginView {
     display: flex;
     flex-wrap: wrap;
     flex-basis: 100%;
     background-color: #95859c;
-    font-family: Helvetica, sans-serif;
+    font-family: Gotham, sans-serif, sans-serif;
 }
 
-.LoginView #header {
-    width: 100vh;
-    text-align: center;
-    /*background-color: #95859c;*/
-    background-color: #373a47;
-    height: 50px;
+.LoginView header {
+    width:100%;
+    height:70px;
+    position:absolute;
+    top:0;
+    left:0;
+    background-color: black;
 }
 
-.LoginView #header a {
+.LoginView header #logo {
+    font-family: Gotham-Light, sans-serif;
     color: #f3f3f3;
-    font-size: 40px;
     font-weight: lighter;
+    font-size: 45px;
+    position: absolute;
+    left: 15px;
+    top: 12px;
+}
+
+.LoginView footer {
+    width:100%;
+    height:70px;
     position: relative;
-    margin: 5px;
-    text-decoration: none;
+    bottom:0;
+    left:0;
+    background-color: black;
+}
+
+.LoginView footer a {
+    font-family: Gotham, sans-serif;
+    font-size: 18px;
+    color: white;
+    position: absolute;
+    left: 15px;
+    top: 25px;
 }
 
 .LoginView  > div {
     flex-wrap: wrap;
     flex-basis: 100%;
     text-align: center;
-    /*background-color: #f3f3f3;*/
-    background-color: #aea8d3;
+    background-color: #f3f3f3;
 }
 
 .LoginView #main {
@@ -36,10 +60,9 @@
 }
 
 .LoginView #login {
-    width: 330px;
-    /*border: 10px solid #95859c;*/
-    border: 10px solid #373a47;
-    margin: 50px;
+    width: 350px;
+    border: 10px solid black;
+    margin-top: 130px;
     display: inline-block;
     text-align: center;
     background-color: #f3f3f3;
@@ -57,9 +80,6 @@
     width: 70%;
 }
 
-.LoginView label {
-
-}
 
 .LoginView label span{
     display: block;
@@ -85,17 +105,20 @@
 .LoginView input[type=submit] {
     width: 70%;
     font-size: 18px;
-    background-color: #745582;
+    background-color: #330662;
     color: white;
     padding: 10px 15px 10px 15px;
     margin: 30px 0 20px 0;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition-duration: 0.4s;
+    font-family: Gotham, sans-serif;
 }
 
 .LoginView input[type=submit]:hover {
-    background-color: #573069;
+    background-color: #220337;
+    box-shadow: 0 0 5px #a6a5c4;
 }
 
 .LoginView form p {
@@ -104,7 +127,7 @@
 }
 
 .SignUpLink:hover{
-    color:red;
+    box-shadow: inset 0 -1.2px 0 0 black;
 }
 
 .LoginErrMsgBlock{
@@ -124,27 +147,24 @@
     box-sizing: border-box;
     display: inline-block;
     font-size: 25px;
-    /*font-weight: lighter;*/
     padding-top:5px;
 }
 
+.LoginView input[type=email] {
+    text-align: left;
+    padding-left: 20px;
+    height: 40px;
+    margin-bottom: 25px;
+}
 
+.LoginView input[type=password] {
+    text-align: left;
+    padding-left: 20px;
+    height: 40px;
+}
 
-/*
-button {
-    margin: 10px;
+.LoginView input:focus{
+    outline: none;
+    border-color: black;
+    box-shadow: 0 0 1px black;
 }
-div.container {
-    display: flex;
-    justify-content: center;
-}
-form {
-    width: 30%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-label {
-    display: block;
-    padding: 5px;
-}
- */
