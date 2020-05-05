@@ -44,7 +44,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
 .bm-menu {
   background: #373a47;
   padding: 2.5em 1.5em 0;
-  font-size: 1.15em;
+  font-size: 1.3em;
   overflow-y: hidden !important;
 }
  
@@ -72,4 +72,8 @@ Note: Beware of modifying this element as it can break the animations - you shou
 .menu-item{
   text-decoration: none;
   color: white;
+  height: 80px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
 }

@@ -54,7 +54,7 @@ const AddBtn = (props) => {
 
 		let asgnEle = document.createElement("textarea")
 		asgnEle.classList.add("asgnField")
-		asgnEle.placeholder = "Assignments for the"
+		asgnEle.placeholder = "Assignments for the class"
 
 		let saveBtn = document.createElement("button")
 		// saveBtn.id = "post-save-btn"

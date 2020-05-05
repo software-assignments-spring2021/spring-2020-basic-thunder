@@ -2,7 +2,6 @@ import React from "react"
 import "./styles/SubNav.css"
 
 const SubNav = (props) => {
-	// console.log("Logging props in subnav:", props)
 	let syllabusLink = `/${props.courseId}/Syllabus`
 	let scheduleLink = `/${props.courseId}/Schedule`
 	let forumLink = `/${props.courseId}/Forum`
