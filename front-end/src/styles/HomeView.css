@@ -1,52 +1,131 @@
+@font-face {
+    font-family: Gotham;
+    src: url('../fonts/Gotham-Book.otf');
+}
+
+@font-face {
+    font-family: Gotham-Medium;
+    src: url('../fonts/Gotham-Medium.otf');
+}
+
+@font-face {
+    font-family: Gotham-Light;
+    src: url('../fonts/Gotham-Light.otf');
+}
+
+@font-face {
+    font-family: Gotham-Thin;
+    src: url('../fonts/Gotham-Thin.otf');
+}
+
+@font-face {
+    font-family: GothamNarrow;
+    src: url('../fonts/GothamNarrow-Book.otf');
+}
+
 .HomeView {
     display: flex;
     flex-wrap: wrap;
     flex-basis: 100%;
-    background-color: #95859c;
-    font-family: Helvetica, sans-serif;
 }
 
-.HomeView #header {
-    width: 100%;
-    text-align: center;
-    background-color: #373a47;
-    height: 50px;
+.HomeView header {
+    width:100%;
+    height:80px;
+    position:absolute;
+    top:0;
+    left:0;
+    background-color: black;
 }
 
-.HomeView #header a {
+.HomeView header #logo {
+    font-family: Gotham-Light, sans-serif;
     color: #f3f3f3;
-    font-size: 40px;
     font-weight: lighter;
-    position: relative;
-    margin: 5px;
-    text-decoration: none;
+    font-size: 45px;
+    position: absolute;
+    left: 15px;
+    top: 12px;
 }
+
+.HomeView header #signin {
+    font-family: GothamNarrow, sans-serif;
+    color: #f3f3f3;
+    font-weight: lighter;
+    font-size: 22px;
+    position: absolute;
+    right: 15px;
+    top: 30px;
+}
+
+.HomeView header #signin:hover {
+    box-shadow: inset 0 -1.2px 0 0 white;
+}
+
+.HomeView footer {
+    width:100%;
+    height:80px;
+    position: relative;
+    bottom:0;
+    left:0;
+    background-color: black;
+}
+
+.HomeView footer a {
+    font-family: GothamNarrow, sans-serif;
+    font-size: 20px;
+    color: white;
+    position: absolute;
+    left: 15px;
+    top: 30px;
+}
+
+.HomeView .hero-image {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), url("https://live.staticflickr.com/5681/30522452382_dd1363f2a3_b.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+}
+
+.HomeView .hero-text {
+    font-family: Gotham-Medium, sans-serif;
+    font-size: 22px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #f3f3f3;
+}
+
+.HomeView .hero-text h1 {
+    font-size: 3.5em;
+    font-weight: lighter;
+}
+
+.HomeView .hero-text p {
+    font-family: Gotham-Light, sans-serif;
+    margin-top: -20px;
+}
+
 
 .HomeView  > div {
     flex-wrap: wrap;
     flex-basis: 100%;
     text-align: center;
-    /*background-color: #d3ccd6;*/
-    background-color: #aea8d3;
 }
 
 .HomeView #main {
     height: 100vh;
 }
 
-.HomeView #main h1 {
-    /* color: #745582;*/
-    color: black;
-    padding-top: 10px;
-}
-
 .HomeView #main button {
+    font-family: Gotham-Light, sans-serif;
     font-size: 18px;
-    width: 110px;
-    height: 40px;
-    /*color: #745582;*/
+    width: 120px;
+    height: 50px;
     color: black;
-    border: 2px solid #95859c;
+    border: 2px solid black;
     border-radius: 4px;
     background-color: #f3f3f3;
     transition-duration: 0.6s;
@@ -55,14 +134,13 @@
 }
 
 .HomeView #main #button2 {
-    border: 2px solid #95949a;
-    background-color: #745582;
+    border: 2px solid #f3f3f3;
+    background-color: black;
     color: #f3f3f3;
 }
 
 .HomeView #main #button2:hover {
-    background-color: black;
-    border: 2px solid #95859c;
+    border: 2px solid black;
     cursor: pointer;
 }
 

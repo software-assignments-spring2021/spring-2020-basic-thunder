@@ -82,6 +82,14 @@ const LoginForm = (props) => {
     )
 };
 
+const HeaderCopy = () => {
+    return (
+        <Link to='/home'>
+            Biazza
+        </Link>
+    )
+}
+
 const ErrorMsg = ({activate}) =>{
     if(activate){
         return (
