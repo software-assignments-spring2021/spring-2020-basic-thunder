@@ -581,7 +581,7 @@ const Schedule = () => {
 					<Hamburger />
 					<NavBarComponentPlaceHolder />
 				</header>
-				<SubNav courseId={data.courseId} />
+				<SubNav courseId={data.courseId} current={"schedule"}/>
 				<CourseBarComponent courseName={data.courseName}/>
 				<Calendar scheduleId={data.scheduleId} isInstructor={instructorMode}/>
 			</div>

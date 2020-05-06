@@ -148,7 +148,7 @@ const Syllabus = () => {
 					<Hamburger />
 					<NavBarComponentPlaceHolder />
 				</header>
-				<SubNav courseId={parseInt(courseId.courseId)} />
+				<SubNav courseId={parseInt(courseId.courseId)} current={"syllabus"} />
 				<CourseBarComponent courseName={data.courseName}/>
 				<section id="syllabus-content">
 					<SyllabusContent defaultVal={data.syllabus} syllabusText={data.syllabus} />
