@@ -63,7 +63,7 @@
 }
 
 #addNewClassBtn{
-    background-color: darkslateblue;
+    background-color: #57068c;
     color: white;
     padding: 10px 22px;
     text-align: center;
@@ -74,8 +74,9 @@
 }
 
 #addNewClassBtn:hover {
-    background-color:mediumpurple;
+    background-color: #330662;
     cursor: pointer;
+    transition-duration: 0.4s;
 }
 
 .Banner{

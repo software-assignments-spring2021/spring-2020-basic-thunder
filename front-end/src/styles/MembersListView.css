@@ -1,3 +1,7 @@
+.MembersListView {
+    font-family: Gotham-Light, sans-serif;
+}
+
 .MembersListView .main{
     padding: 5px 30px 20px;
 }
@@ -11,8 +15,21 @@
 }
 
 .MembersListView #addBtn button {
-    font-size: 15px;
+    font-size: 18px;
     border-radius: 4px;
+    color: white;
+    background-color: #57068c ;
+    padding: 10px 15px 10px 15px;
+    margin: 30px 0 20px 0;
+    border: none;
+    cursor: pointer;
+    transition-duration: 0.4s;
+    font-family: Gotham, sans-serif;
+}
+
+.MembersListView #addBtn button:hover {
+    background-color: #330662;
+    transition-duration: 0.4s;
 }
 
 .MembersListView #addBtn button:focus {
@@ -21,7 +38,7 @@
 
 .MembersListView #add {
     position: absolute;
-    background-color: #c8c2c6;
+    background-color: #e6e6e9;
     top: 12rem;
     z-index: 1;
     width:400px;
@@ -34,11 +51,12 @@
 
 .MembersListView #add h2 {
     font-size: 25px;
-    font-weight: normal;
     padding-top: 30px;
 }
 
 .MembersListView #closeAdd {
+    font-family: Gotham, sans-serif;
+    border-radius: 4px;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -52,6 +70,8 @@
 
 .MembersListView #closeAdd:hover {
     cursor: pointer;
+    background-color: #f4f4f6;
+    transition-duration: 0.2s;
 }
 
 .MembersListView #add form {
@@ -84,6 +104,7 @@
 }
 
 .MembersListView #add input[type=submit] {
+    font-family: Gotham, sans-serif;
     width: 70%;
     font-size: 18px;
     background-color: #745582;
@@ -93,11 +114,11 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition-duration: 0.4s;
 }
 
 .MembersListView #add input[type=submit]:hover {
     background-color: #573069;
+    transition-duration: 0.4s;
 }
 
 .MembersListView #add input[type=radio] {
@@ -126,7 +147,7 @@
 
 .MembersListView #delete {
     position: absolute;
-    background-color: #c8c2c6;
+    background-color: #e6e6e9;
     top: 15rem;
     z-index: 1;
     width: 400px;
@@ -135,11 +156,12 @@
     left:50%;
     border-radius: 4px;
     box-shadow: 0px 0px 5px 5px #95949a;
+    font-family: Gotham, sans-serif;
 }
 
 .MembersListView #delete p {
     padding-top: 60px;
-    font-size: 19px;
+    font-size: 18px;
 }
 
 .MembersListView #delete .btn {
@@ -153,6 +175,7 @@
     border: none;
     border-radius: 4px;
     transition-duration: 0.4s;
+    font-family: Gotham, sans-serif;
 }
 
 .MembersListView #delete .btn:focus {
@@ -165,6 +188,8 @@
 }
 
 .MembersListView #closeDelete {
+    font-family: Gotham, sans-serif;
+    border-radius: 4px;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -178,6 +203,8 @@
 
 .MembersListView #closeDelete:hover {
     cursor: pointer;
+    background-color: #f4f4f6;
+    transition-duration: 0.2s;
 }
 
 .MembersListView #deleteBtn {
@@ -191,6 +218,7 @@
     text-align: left;
     font-size: 25px;
     font-weight: normal;
+    font-family: Gotham, sans-serif;
 }
 
 .MembersListView .members {
@@ -223,9 +251,13 @@
     font-size: 18px;
 }
 
-.MembersListView #instructors .member {
-
+.MembersListView input:focus {
+    outline: none;
+    border-color: white;
+    box-shadow: 0 0 10px #330662;
+    transition-duration: 0.2s;
 }
+
 
 @media (min-width: 480px) {
     .members { grid-template-columns: repeat(2, 1fr); }
@@ -235,3 +267,12 @@
     .members { grid-template-columns: repeat(3, 1fr); }
 }
 
+@media (max-width: 480px) {
+    .MembersListView #add {
+        width: 90%;
+    }
+
+    .MembersListView #delete {
+        width: 90%;
+    }
+}
