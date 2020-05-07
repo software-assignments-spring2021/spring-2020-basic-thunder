@@ -1,6 +1,39 @@
+@font-face {
+    font-family: Gotham;
+    src: url('../fonts/Gotham-Book.otf');
+}
+
+@font-face {
+    font-family: Gotham-Medium;
+    src: url('../fonts/Gotham-Medium.otf');
+}
+
+@font-face {
+    font-family: Gotham-Light;
+    src: url('../fonts/Gotham-Light.otf');
+}
+
+@font-face {
+    font-family: Gotham-Thin;
+    src: url('../fonts/Gotham-Thin.otf');
+}
+
+@font-face {
+    font-family: GothamNarrow;
+    src: url('../fonts/GothamNarrow-Book.otf');
+}
+
+#scheduleHeader{
+	font-family: Gotham-Medium, sans-serif;
+}
+
 #section-content{
 	margin-left: 5%;
 	margin-right: 5%;
+}
+
+#calendarText{
+	font-family: Gotham-Medium, sans-serif;
 }
 
 .row{
@@ -8,16 +41,18 @@
 	border: 1px solid black;
 	text-align: initial;
 	position: relative;
+	font-family: Gotham, sans-serif;
 }
 .dateField{
 	box-sizing: border-box;
 	margin: 0 !important;
 	padding: 20px 0px !important;
-	font-size: 18px !important;
+	font-size: 1.4em !important;
 	border-top: 0px;
 	border-left: 0px;
 	border-bottom: 0px;
 	text-align: center;
+	font-family: inherit;
 }
 .topicField{
 	box-sizing: border-box;
@@ -26,19 +61,25 @@
 	resize: none;
 	position: relative;
 	bottom: 0px;
-	border-bottom: 1px solid black
+	border-bottom: 1px solid black;
+	font-family: inherit;
+	font-size: 1.15em;
 }
 .notesField{
 	box-sizing: border-box;
 	width: 33%;
 	height: 150px;
 	resize: none;
+	font-family: inherit;
+	font-size: 1.15em;
 }
 .asgnField{
 	box-sizing: border-box;
 	width: 34%;
 	height: 150px;
 	resize: none;
+	font-family: inherit;
+	font-size: 1.15em;
 }
 
 .detail-buttons-container{
@@ -47,6 +88,7 @@
 	position: absolute;
 	top: 10px;
 	right: 0px;
+	font-family: Gotham, sans-serif;
 }
 
 .edit-date-details{
@@ -55,8 +97,9 @@
     padding: 6px 10px;
     text-align: center;
     font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: inherit;
     border-radius: 8px;
+    font-family: inherit;
 }
 .edit-date-details:hover{
 	background-color: mediumpurple;
@@ -69,48 +112,14 @@
     padding: 6px 8px;
     text-align: center;
     font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: inherit;
     border-radius: 8px;
+    font-family: inherit;
 }
 .delete-date-details:hover{
 	background-color: red;
 	cursor:pointer;
 }
-
-
-
-#post-save-btn{
-	background-color: darkgreen;
-    color: white;
-    padding: 6px 8px;
-    text-align: center;
-    font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
-    border-radius: 8px;
-}
-
-#post-save-btn:hover{
-	background-color: green;
-	cursor:pointer;
-}
-
-#post-cancel-btn{
-	background-color: darkred;
-    color: white;
-    padding: 6px 8px;
-    text-align: center;
-    font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
-    border-radius: 8px;
-}
-
-#post-cancel-btn:hover{
-	background-color: red;
-	cursor:pointer;
-}
-
-
-
 
 .save-date-details{
 	background-color: darkgreen;
@@ -118,7 +127,7 @@
     padding: 6px 8px;
     text-align: center;
     font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: inherit;
     border-radius: 8px;
 }
 
@@ -130,10 +139,10 @@
 .cancel-date-details{
 	background-color: darkred;
     color: white;
-    padding: 6px 8px;
+    padding: 6px 7px;
     text-align: center;
     font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: inherit;
     border-radius: 8px;
 }
 
@@ -148,7 +157,7 @@
     padding: 6px 8px;
     text-align: center;
     font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Gotham, sans-serif;
     border-radius: 8px;
 }
 #add-day-btn:hover{

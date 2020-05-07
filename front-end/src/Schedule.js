@@ -23,7 +23,7 @@ const CourseBarComponent = (props) => {
 	let text = "Schedule: "+props.courseName
 
 	return(
-		<h2>{text}</h2>
+		<h2 id="scheduleHeader">{text}</h2>
 	)
 }
 
@@ -524,7 +524,7 @@ const Calendar = (props) => {
 			console.log(t)
 			return(
 				<section id="section-content">
-					<h4>Calendar</h4>
+					<h4 id="calendarText">Calendar</h4>
 					<div id="calendar-table">
 						{t}
 						<AddBtn courseId={parseInt(courseId.courseId)} scheduleId={scheduleId} isInstructor={props.isInstructor}/>

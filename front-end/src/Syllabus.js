@@ -24,7 +24,7 @@ const CourseBarComponent = (props) => {
 	let text = "Syllabus: "+props.courseName;
 	// console.log(text)
 	return(
-		<h2>{text}</h2>
+		<h2 id="syllabusHeader">{text}</h2>
 	)
 }
 

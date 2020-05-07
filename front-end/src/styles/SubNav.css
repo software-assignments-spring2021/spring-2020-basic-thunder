@@ -1,3 +1,28 @@
+@font-face {
+    font-family: Gotham;
+    src: url('../fonts/Gotham-Book.otf');
+}
+
+@font-face {
+    font-family: Gotham-Medium;
+    src: url('../fonts/Gotham-Medium.otf');
+}
+
+@font-face {
+    font-family: Gotham-Light;
+    src: url('../fonts/Gotham-Light.otf');
+}
+
+@font-face {
+    font-family: Gotham-Thin;
+    src: url('../fonts/Gotham-Thin.otf');
+}
+
+@font-face {
+    font-family: GothamNarrow;
+    src: url('../fonts/GothamNarrow-Book.otf');
+}
+
 .sub-nav-container{
     height: 8vh;
     width: 100vw;
@@ -19,6 +44,7 @@
 	margin: 0;
 	width: 100%;
 	font-size: 1.1em;
+	font-family: Gotham-Medium, sans-serif;
 }
 
 .subnav-link-span{

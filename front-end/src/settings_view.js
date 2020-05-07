@@ -50,7 +50,7 @@ const SettingsView = () => {
 
             <div className={"main"}>
 
-                <h1>Settings</h1>
+                <h1 id="settingsHeader">Settings</h1>
                 <Name first={data['firstname']} last={data['lastname']}/>
                 <Password/>
 
