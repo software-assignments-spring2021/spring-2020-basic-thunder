@@ -9,8 +9,10 @@ const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:50
 const RegisterView = () => {
     return (
         <div className={'RegisterView'}>
-            <div id="header">
-                <Header/>
+            <div>
+                <header>
+                    <Link to="/home" id="logo">Biazza</Link>
+                </header>
             </div>
 
             <div id="main">
@@ -18,6 +20,12 @@ const RegisterView = () => {
                     <h2>SIGN UP</h2>
                     <SignUpForm/>
                 </div>
+            </div>
+
+            <div>
+                <footer>
+                    <a href="https://github.com/nyu-software-engineering/spring-2020-basic-thunder">&copy; 2020 Biazza</a>
+                </footer>
             </div>
 
         </div>
@@ -82,6 +90,11 @@ const SignUpForm = (props) => {
                 </div>
 
                 <label>
+                    <span>Email:</span>
+                    <input type="email" name="email" id={"email"} required={true} className={"LoginRegisInputs"} />
+                </label>
+
+                <label>
                     <span>First Name:</span>
                     <input type="text" name="first_name" id={"firstname"} required={true} className={"LoginRegisInputs"}/>
                 </label>
@@ -89,11 +102,6 @@ const SignUpForm = (props) => {
                 <label>
                     <span>Last Name:</span>
                     <input type="text" name="last_name" id={"lastname"} required={true} className={"LoginRegisInputs"}/>
-                </label>
-
-                <label>
-                    <span>Email:</span>
-                    <input type="email" name="email" id={"email"} required={true} className={"LoginRegisInputs"} />
                 </label>
 
                 <label>
