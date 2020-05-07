@@ -60,7 +60,7 @@
 }
 
 .LoginView #login {
-    width: 350px;
+    width: 340px;
     border: 10px solid black;
     margin-top: 130px;
     display: inline-block;
@@ -132,7 +132,6 @@
 
 .LoginErrMsgBlock{
     display: block;
-    /*text-align: center;*/
     color: #9a0000;
     margin-bottom: 10px;
 }
