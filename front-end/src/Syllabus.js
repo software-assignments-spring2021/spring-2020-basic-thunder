@@ -24,7 +24,7 @@ const CourseBarComponent = (props) => {
 	let text = "Syllabus: "+props.courseName;
 	// console.log(text)
 	return(
-		<h2>{text}</h2>
+		<h2 id="syllabusHeader">{text}</h2>
 	)
 }
 
@@ -148,15 +148,15 @@ const Syllabus = () => {
 					<Hamburger />
 					<NavBarComponentPlaceHolder />
 				</header>
-				<SubNav courseId={parseInt(courseId.courseId)} />
+				<SubNav courseId={parseInt(courseId.courseId)} current={"syllabus"} />
 				<CourseBarComponent courseName={data.courseName}/>
 				<section id="syllabus-content">
 					<SyllabusContent defaultVal={data.syllabus} syllabusText={data.syllabus} />
 				</section>
 				<div>
 					<EditBtn instructorMode={instructorMode}/>
-					<CancelBtn courseId={data.courseId}/>
 					<SaveBtn courseId={data.courseId}/>
+					<CancelBtn courseId={data.courseId}/>
 				</div>
 			</div>
 		);

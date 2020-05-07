@@ -23,7 +23,7 @@ const CourseBarComponent = (props) => {
 	let text = "Schedule: "+props.courseName
 
 	return(
-		<h2>{text}</h2>
+		<h2 id="scheduleHeader">{text}</h2>
 	)
 }
 
@@ -54,7 +54,7 @@ const AddBtn = (props) => {
 
 		let asgnEle = document.createElement("textarea")
 		asgnEle.classList.add("asgnField")
-		asgnEle.placeholder = "Assignments for the"
+		asgnEle.placeholder = "Assignments for the class"
 
 		let saveBtn = document.createElement("button")
 		// saveBtn.id = "post-save-btn"
@@ -524,7 +524,7 @@ const Calendar = (props) => {
 			console.log(t)
 			return(
 				<section id="section-content">
-					<h4>Calendar</h4>
+					<h4 id="calendarText">Calendar</h4>
 					<div id="calendar-table">
 						{t}
 						<AddBtn courseId={parseInt(courseId.courseId)} scheduleId={scheduleId} isInstructor={props.isInstructor}/>
@@ -581,7 +581,7 @@ const Schedule = () => {
 					<Hamburger />
 					<NavBarComponentPlaceHolder />
 				</header>
-				<SubNav courseId={data.courseId} />
+				<SubNav courseId={data.courseId} current={"schedule"}/>
 				<CourseBarComponent courseName={data.courseName}/>
 				<Calendar scheduleId={data.scheduleId} isInstructor={instructorMode}/>
 			</div>

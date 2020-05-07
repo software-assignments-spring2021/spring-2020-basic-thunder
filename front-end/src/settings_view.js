@@ -50,7 +50,7 @@ const SettingsView = () => {
 
             <div className={"main"}>
 
-                <h1>Settings</h1>
+                <h1 id="settingsHeader">Settings</h1>
                 <Name first={data['firstname']} last={data['lastname']}/>
                 <Password/>
 
@@ -106,8 +106,8 @@ const Name = (props) => {
 
             <div className={"right"}>
 
-                <form onSubmit={handleSubmit}>
-                    <p>Current name: {res === 'success' ? first + ' ' + last : props.first + ' ' + props.last}</p>
+                <form className="settingsForm" onSubmit={handleSubmit}>
+                    <h4 id="currentName">Current name: {res === 'success' ? first + ' ' + last : props.first + ' ' + props.last}</h4>
 
                     <label>New first name: </label>
                     <input type="text" name="firstname" required/>
@@ -218,7 +218,7 @@ const Password = (props) => {
             </div>
 
             <div className={"right"}>
-                <form onSubmit={handleSubmit}>
+                <form className="settingsForm" onSubmit={handleSubmit}>
                     <label>Current password: </label>
                     <input type="password" required minLength={3} name="currPw"/>
                     <br/>

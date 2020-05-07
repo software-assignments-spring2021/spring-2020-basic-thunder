@@ -1,4 +1,27 @@
+@font-face {
+    font-family: Gotham;
+    src: url('../fonts/Gotham-Book.otf');
+}
 
+@font-face {
+    font-family: Gotham-Medium;
+    src: url('../fonts/Gotham-Medium.otf');
+}
+
+@font-face {
+    font-family: Gotham-Light;
+    src: url('../fonts/Gotham-Light.otf');
+}
+
+@font-face {
+    font-family: Gotham-Thin;
+    src: url('../fonts/Gotham-Thin.otf');
+}
+
+@font-face {
+    font-family: GothamNarrow;
+    src: url('../fonts/GothamNarrow-Book.otf');
+}
 
 .NavBarComponentPlaceHolder{
     text-align: center;
@@ -8,24 +31,35 @@
 
 .CourseList{
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+    margin-left: 5%;
+    margin-right: 5%;
+    /*margin-left: auto;
+    margin-right: auto;*/
+    /*width: 50%;*/
     text-align: center;
 }
 
 .CourseDetail{
     display: block;
-    text-align: left;
+    text-align: center;
     margin-bottom: 10px;
-    font-size: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-    text-decoration:none;
+    font-size: 1.6em;
+    font-family: Gotham-Light, sans-serif;
+    text-decoration: underline;
 }
 
 .CourseDetail:hover{
-    background-color: thistle;
-    color: red;
+    /*background-color: thistle;
+    color: red;*/
+    text-decoration: none;
+    color: rgba(0,0,0,0.8);
+}
+
+.CourseDetail:active{
+    /*background-color: thistle;
+    color: red;*/
+    text-decoration: none;
+    color: rgba(0,0,0,0.8);
 }
 
 #addNewClassBtn{
@@ -35,32 +69,14 @@
     text-align: center;
     font-size: 16px;
     margin: 0 auto;
-    font-family: Arial, Helvetica, sans-serif;
-    border-radius: 8px;
-}
-
-#SettingsBtn{
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    background-color: darkslateblue;
-    color: white;
-    padding: 10px 22px;
-    text-align: center;
-    font-size: 16px;
-    margin: 4px 2px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Gotham, sans-serif;
     border-radius: 8px;
 }
 
 #addNewClassBtn:hover {
     background-color:mediumpurple;
+    cursor: pointer;
 }
-
-#SettingsBtn:hover {
-    background-color:mediumpurple;
-}
-
 
 .Banner{
     text-align: center;
@@ -70,11 +86,14 @@
 }
 
 #BannerImg{
-    height: 22vh;
+    height: 25vh;
+    width: 60vw;
     max-width: 1024px;
+    min-width: 250px;
     z-index: -1;
     position: relative;
     display: inline-block;
+    /*opacity: 1.0;*/
 }
 
 #BannerText{
@@ -86,22 +105,23 @@
     right: 0;
     z-index: 1;
     top: 17%;
-    font-family: Arial, Helvetica, sans-serif
+    font-family: Gotham-Medium, sans-serif;
 }
 
 #submitNewCourse{
-    background-color: mediumseagreen;
+    background-color: darkgreen;
     color: white;
     padding: 10px 22px;
     text-align: center;
     font-size: 16px;
     margin: 4px 2px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Gotham, sans-serif;
     border-radius: 8px;
 }
 
 #submitNewCourse:hover {
-    background-color:seagreen;
+    background-color:green;
+    cursor: pointer;
 }
 
 .AddNewCourseArea{
@@ -121,27 +141,28 @@ input[type=text] {
 }
 
 .GuideUserLine{
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: GothamNarrow, sans-serif;
     font-size: 18px;
     font-weight: bold;
 }
 
 #cancelNewClassBtn{
-    background-color: darkorange;
+    background-color: darkred;
     color: white;
     padding: 10px 22px;
     text-align: center;
     font-size: 16px;
     margin: 0 auto;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Gotham, sans-serif;
     border-radius: 8px;
 }
 
 #cancelNewClassBtn:hover {
-    background-color:darkgoldenrod;
+    background-color:red;
+    cursor: pointer;
 }
 
 .SemesterOptionsContainer {
     position: relative;
-    font-family: Arial, Helvetica, sans-serif
+    font-family: Gotham-Thin, sans-serif
 }

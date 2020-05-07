@@ -1,3 +1,28 @@
+@font-face {
+    font-family: Gotham;
+    src: url('../fonts/Gotham-Book.otf');
+}
+
+@font-face {
+    font-family: Gotham-Medium;
+    src: url('../fonts/Gotham-Medium.otf');
+}
+
+@font-face {
+    font-family: Gotham-Light;
+    src: url('../fonts/Gotham-Light.otf');
+}
+
+@font-face {
+    font-family: Gotham-Thin;
+    src: url('../fonts/Gotham-Thin.otf');
+}
+
+@font-face {
+    font-family: GothamNarrow;
+    src: url('../fonts/GothamNarrow-Book.otf');
+}
+
 .SettingsView {
 
 }
@@ -10,17 +35,23 @@
     padding-right: 20px;
 }
 
+#settingsHeader{
+    font-family: Gotham-Medium, sans-serif;
+}
+
 .SettingsView .section {
     display: flex;
     border: 2px solid black;
     margin-top: 10px;
-    min-height: 190px;
+    /*min-height: 190px;*/
+    min-height: 150px;
 }
 
 .SettingsView .section input[type=text] {
     font-size: 20px;
     width: 200px;
     height: 35px;
+    font-family: Gotham-Light, sans-serif;
 }
 
 .SettingsView .section input[type=email] {
@@ -30,10 +61,12 @@
 }
 
 .SettingsView .section input[type=password] {
-    margin-top: 15px;
+    margin-top: 8px;
+    margin-bottom: 8px;
     font-size: 20px;
     width: 200px;
     height: 30px;
+    font-family: Gotham-Light, sans-serif;
 }
 
 .SettingsView .section input[type=text]:focus {
@@ -53,11 +86,13 @@
 .SettingsView .left p {
     padding-top: 50px;
     font-size: 20px;
+    font-family: Gotham, sans-serif;
 }
 
 .SettingsView .right {
     flex: 75%;
     padding-top: 12px;
+    position: relative;
 }
 
 .SettingsView .right p {
@@ -70,7 +105,7 @@
 
 
 .SettingsView .right input[type=submit] {
-    font-size: 18px;
+    /*font-size: 18px;
     background-color: #745582;
     margin-top: 15px;
     padding: 6px;
@@ -78,7 +113,17 @@
     border: none;
     cursor: pointer;
     border-radius: 2px;
-    transition-duration: 0.4s;
+    transition-duration: 0.4s;*/
+    background-color: darkslateblue;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    font-size: 16px;
+    margin: 0 0 4px 0;
+    font-family: Gotham, sans-serif;
+    border-radius: 8px;
+    /*position: absolute;
+    bottom: 0px;*/
 }
 
 .SettingsView .right input[type=submit]:focus {
@@ -86,21 +131,23 @@
 }
 
 .SettingsView .right input[type=submit]:hover {
-    background-color: #573069;
+    /*background-color: #573069;*/
+    background-color: mediumpurple;
+    cursor: pointer;
 }
 
 .SettingsView #nameDiv {
-    height: 235px;
+    /*height: 235px;*/
 }
 
 .SettingsView #nameDiv .message {
-    margin-top: -2px;
-    margin-bottom: -5px;
+    margin-top: 2px;
+    margin-bottom: 5px;
 }
 
 .SettingsView #pwDiv .message {
-    margin-top: 3px;
-    margin-bottom: -5px;
+    margin-top: 2px;
+    margin-bottom: 5px;
 }
 
 .SettingsView #success {
@@ -109,4 +156,9 @@
 
 .SettingsView #failure {
     color: red;
+}
+
+#currentName{
+    margin-top: 0px;
+    font-family: GothamNarrow, sans-serif;
 }

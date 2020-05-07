@@ -47,7 +47,7 @@ const ListPostsView = ()=>{
                 <Hamburger />
                 <NavBarComponentPlaceHolder />
             </header>
-            <SubNav courseId={parseInt(courseId)} />
+            <SubNav courseId={parseInt(courseId)} current={"forums"}/>
             <CourseBarComponent CourseName={data['CourseName']} />
             <div  className={"PostPreviewContainer"}>
                 {

@@ -2,11 +2,6 @@ import React from "react"
 import { slide as Menu } from "react-burger-menu"
 import "./styles/HamburgerMenu.css"
 
-import {
-    useParams
-} from "react-router-dom";
-
-
 const Hamburger = () => {
 	
 	const coursesLink = '/LoggedInHome'
