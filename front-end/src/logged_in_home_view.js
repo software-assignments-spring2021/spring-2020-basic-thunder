@@ -91,8 +91,11 @@ const AddCourse = ()=>{
         };
         axios.post(api, new_course_data,{headers: {"Authorization" : `Bearer ${accessToken}`}})
             .then(res => {
-                rerenderTriggeer(null);
-                setAddCourse(false);
+                // rerenderTriggeer(null);
+                // setAddCourse(false);
+                // using a simple refresh to update the page,
+                // avoid using complex states so the page response better
+                window.location.href = '/LoggedInHome';
             })
             .catch(e=>{
                 console.log(e);
