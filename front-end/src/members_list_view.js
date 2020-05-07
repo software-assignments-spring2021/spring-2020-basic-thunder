@@ -71,7 +71,7 @@ const MembersListView = () => {
                 <Hamburger/>
                 <NavBarComponentPlaceHolder/>
             </header>
-            <SubNav courseId={data.courseId} />
+            <SubNav courseId={data.courseId} current={"members"}/>
             <CourseBarComponent CourseName={courseName}/>
             <div className={"main"}>
                 {mode === 'instructor' ? <div id="addBtn">

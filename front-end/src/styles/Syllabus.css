@@ -1,3 +1,32 @@
+@font-face {
+    font-family: Gotham;
+    src: url('../fonts/Gotham-Book.otf');
+}
+
+@font-face {
+    font-family: Gotham-Medium;
+    src: url('../fonts/Gotham-Medium.otf');
+}
+
+@font-face {
+    font-family: Gotham-Light;
+    src: url('../fonts/Gotham-Light.otf');
+}
+
+@font-face {
+    font-family: Gotham-Thin;
+    src: url('../fonts/Gotham-Thin.otf');
+}
+
+@font-face {
+    font-family: GothamNarrow;
+    src: url('../fonts/GothamNarrow-Book.otf');
+}
+
+#syllabusHeader{
+    font-family: Gotham-Medium, sans-serif;
+}
+
 .student{
 	display: none;
 }
@@ -19,8 +48,8 @@
 
 #syllabus-content{
     text-align: left;
-    margin-left: 100px;
-    margin-right: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
 #syllabus-text-area{
@@ -28,6 +57,7 @@
 	height: 60vh;
 	min-height: 300px;
     font-size: 22px;
+    font-family: Gotham-Light, sans-serif;
     /*background: rgba(174, 168, 211, 1);*/
 }
 
@@ -37,7 +67,7 @@
     padding: 10px 22px;
     text-align: center;
     font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Gotham, sans-serif;
     border-radius: 8px;
     border-left: 0px;
     border-top: 0px;
@@ -54,7 +84,7 @@
     padding: 10px 22px;
     text-align: center;
     font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Gotham, sans-serif;
     border-radius: 8px;
     border-left: 0px;
     border-top: 0px;
@@ -71,7 +101,7 @@
     padding: 10px 22px;
     text-align: center;
     font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Gotham, sans-serif;
     border-radius: 8px;
     border-left: 0px;
     border-top: 0px;
