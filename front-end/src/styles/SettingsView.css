@@ -35,6 +35,10 @@
     padding-right: 20px;
 }
 
+.SettingsView label {
+    font-family: Gotham, sans-serif;
+}
+
 .SettingsView .section {
     display: flex;
     border: 2px solid black;
@@ -113,7 +117,7 @@
     cursor: pointer;
     border-radius: 2px;
     transition-duration: 0.4s;*/
-    background-color: #330662 ;
+    background-color: #57068c;
     color: white;
     padding: 10px 22px;
     text-align: center;
@@ -130,7 +134,7 @@
 }
 
 .SettingsView .right input[type=submit]:hover {
-    background-color: #57068c;
+    background-color: #330662;
     cursor: pointer;
     transition-duration: 0.4s;
 }

@@ -59,6 +59,15 @@
     font-size: 22px;
     font-family: Gotham-Light, sans-serif;
     /*background: rgba(174, 168, 211, 1);*/
+    border-radius: 4px;
+    padding: 8px;
+}
+
+#syllabus-text-area:focus {
+    outline: none;
+    border-color: grey;
+    box-shadow: 0 0 10px #330662;
+    transition-duration: 0.4s;
 }
 
 #edit-btn{

@@ -11,9 +11,9 @@
 
 #create-post-container textarea:focus {
 	outline: none;
-	border-color: white;
-	box-shadow: 0 0 10px #57068c;
-	transition-duration: 0.8s;
+	border-color: grey;
+	box-shadow: 0 0 10px #330662;
+	transition-duration: 0.4s;
 }
 
 .question-container{
@@ -25,13 +25,14 @@
 	background-color: #f4f4f6;
 	border-radius: 4px;
 	font-family: Gotham, sans-serif;
+	border: 1px solid black;
 }
 
 .question-container input[type=text]:focus {
 	outline: none;
-	border-color: white;
-	box-shadow: 0 0 5px #57068c;
-	transition-duration: 0.8s;
+	border-color: grey;
+	box-shadow: 0 0 10px #330662;
+	transition-duration: 0.4s;
 }
 
 #inpt-question-content{
