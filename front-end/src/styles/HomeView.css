@@ -48,6 +48,12 @@
     top: 12px;
 }
 
+.HomeView header #logo:hover {
+    color: #e6e6e9;
+    text-shadow: 1px 1px 3px black, 0 0 3px #f3f3f3, 0 0 3px #f3f3f3;
+    transition-duration: 0.2s;
+}
+
 .HomeView header #signin {
     font-family: GothamNarrow, sans-serif;
     color: #f3f3f3;
@@ -120,7 +126,7 @@
 }
 
 .HomeView #main button {
-    font-family: Gotham-Light, sans-serif;
+    font-family: Gotham, sans-serif;
     font-size: 18px;
     width: 120px;
     height: 50px;
@@ -142,12 +148,14 @@
 .HomeView #main #button2:hover {
     border: 2px solid black;
     cursor: pointer;
+    text-shadow: 1px 1px 2px black, 0 0 2px #f3f3f3, 0 0 2px #f3f3f3;
 }
 
 .HomeView #main button:hover {
     background-color: black;
     color: #f3f3f3;
     cursor: pointer;
+    text-shadow: 1px 1px 2px black, 0 0 2px #f3f3f3, 0 0 2px #f3f3f3;
 }
 
 .HomeView ul {

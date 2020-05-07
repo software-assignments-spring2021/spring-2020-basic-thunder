@@ -3,6 +3,12 @@
     font-size: 34px;
 }
 
+.Header .header a:hover {
+    color: #e6e6e9;
+    text-shadow: 1px 1px 3px black, 0 0 3px white, 0 0 3px #f3f3f3;
+    transition-duration: 0.2s;
+}
+
 .Header .header {
     color: white;
     border-top: 3px solid black;
