@@ -51,7 +51,7 @@ const PostView = () =>{
         );
     else if (data['resolved']) {
         return (
-            <div>
+            <div className="ViewPost">
                 <header className="biazza-header">
                     <Hamburger />
                     <NavBarComponentPlaceHolder />
@@ -81,7 +81,7 @@ const PostView = () =>{
 
     else if (data['reply_details'].length>0){
         return (
-            <div>
+            <div className="ViewPost">
                 <header className="biazza-header">
                     <Hamburger />
                     <NavBarComponentPlaceHolder />
@@ -103,7 +103,7 @@ const PostView = () =>{
 
     else{
         return (
-            <div>
+            <div className="ViewPost">
                 <header className="biazza-header">
                     <Hamburger />
                     <NavBarComponentPlaceHolder />

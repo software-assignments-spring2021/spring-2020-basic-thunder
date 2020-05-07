@@ -106,7 +106,7 @@ const CreatePost = () => {
 					<textarea id="inpt-question-content" placeholder="Question Body" required={true}/>
 				</section>
 				<div className="post-as-container">
-					<label className="show-my-name-label">Show my name as:</label>
+					<label className="show-my-name-label">Show my name as: </label>
 					<select id="show-my-name-selector">
 						<option>{data['username']}</option>
 						<option>{postAs[0]}</option>

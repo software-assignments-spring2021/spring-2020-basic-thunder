@@ -74,7 +74,7 @@ const ReplyPostView = () =>{
     }
     else{
         return (
-            <div>
+            <div className="ReplyPost">
                 <header className="biazza-header">
                     <Hamburger />
                     <NavBarComponentPlaceHolder />

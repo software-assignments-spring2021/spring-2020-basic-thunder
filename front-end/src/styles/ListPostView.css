@@ -1,26 +1,30 @@
+.ForumView {
+    font-family: Gotham-Light, sans-serif;
+}
+
 #AddPostBtn{
+    font-family: GothamNarrow, sans-serif;
     position: fixed;
     bottom: 0;
     right: 0;
-    background-color: darkslateblue;
+    background-color: #57068c;
     color: white;
     padding: 10px 22px;
     text-align: center;
     font-size: 16px;
     margin: 4px 2px;
-    font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
 }
 
 #AddPostBtn:hover {
-    background-color:mediumpurple;
+    background-color: #330662;
     cursor: pointer;
+    transition-duration: 0.4s;
 }
 
 .PostPreviewContainer {
     text-align: left;
     margin-left: 100px;
-    /*border: 3px solid orange;*/
 }
 
 .PostPreviewDetail {
@@ -31,25 +35,21 @@
     border-bottom: 2px solid gray;
 }
 
-.false{
-    background-color: #ffe6e7;
-}
 
 .PostTopicHeader{
     text-align: left;
-    /*border: 3px solid orange;*/
 }
 
 .PostTopic{
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 21px;
     text-align: left;
+    padding-left: 10px;
     display: inline;
     font-weight: bolder;
 }
 
 .false .PostTopic{
-    color: #9a0000;
+    color: #bc0604;
 }
 
 .ture .PostTopic{
@@ -57,20 +57,19 @@
 }
 
 .ReplyInfo{
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: GothamNarrow, sans-serif;
     font-size: 15px;
     display: inline;
 }
 
-
 .PostPreview{
     text-align: left;
-    /*border: 3px solid slateblue;*/
+    padding-left: 10px;
     color: dimgrey;
 }
 
 .PostTopicContent{
-    /*border: 3px solid green;*/
+    font-family: Gotham, sans-serif;
 }
 
 .PostPreviewDetail .PostStatusIconContainer{
@@ -88,10 +87,18 @@ a, a:visited, a:hover, a:active {
     color: inherit;
 }
 
-.false:hover{
-    background: lightpink;
+.true {
+    background-color: white;
 }
 
 .true:hover{
-    background: lightyellow;
+    background: #f4f4f6;
+}
+
+.false{
+    background-color: #f2f2f2;
+}
+
+.false:hover{
+    background: #afafb5;
 }
