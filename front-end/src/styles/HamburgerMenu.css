@@ -1,3 +1,28 @@
+@font-face {
+    font-family: Gotham;
+    src: url('../fonts/Gotham-Book.otf');
+}
+
+@font-face {
+    font-family: Gotham-Medium;
+    src: url('../fonts/Gotham-Medium.otf');
+}
+
+@font-face {
+    font-family: Gotham-Light;
+    src: url('../fonts/Gotham-Light.otf');
+}
+
+@font-face {
+    font-family: Gotham-Thin;
+    src: url('../fonts/Gotham-Thin.otf');
+}
+
+@font-face {
+    font-family: GothamNarrow;
+    src: url('../fonts/GothamNarrow-Book.otf');
+}
+
 /* Position and sizing of burger button */
 .bm-burger-button {
   position: fixed;
@@ -76,4 +101,13 @@ Note: Beware of modifying this element as it can break the animations - you shou
   display: flex !important;
   align-items: center;
   justify-content: center;
+  font-family: Gotham-Light, sans-serif;
+}
+
+.menu-item:visited{
+  color: white;
+}
+
+.menu-item:hover{
+  color: rgba(255,255,255,0.3);
 }
