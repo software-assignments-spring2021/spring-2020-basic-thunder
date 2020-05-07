@@ -9,28 +9,32 @@ import {Link} from "react-router-dom"
 const NotLoggedInHomeView = () => {
     return (
         <div className="HomeView">
-            <div id="header">
-                <Header/>
+            <div>
+                <header>
+                    <Link to="/home" id="logo">Biazza</Link>
+                    <Link to="/log-in" id="signin">Log in</Link>
+                </header>
             </div>
 
             <div id="main">
-                <h1>Welcome to Biazza!</h1>
-                <p>Forums, schedules, and syllabuses for college courses</p>
-                <LoginBtn/>
-                <RegisterBtn/>
+                <div className="hero-image">
+                    <div className="hero-text">
+                        <h1>Learning made easier.</h1>
+                        <p>Forums, schedules, and syllabuses for college courses</p>
 
-                <ul>
-                    <li>Create and join classes</li>
-                    <li>Upload and access schedules and syllabuses</li>
-                    <li>Post questions for instructors and classmates</li>
-                    <li>Reply to classmates' posts</li>
-                    <li>Rank answers based on helpfulness</li>
-                </ul>
+                        <LoginBtn/>
+                        <RegisterBtn/>
 
-                <div>
-                    {/*<img src="../images/placeholder.jpg" alt="placeholder"/>*/}
+                    </div>
+
                 </div>
 
+            </div>
+
+            <div>
+                <footer>
+                    <a href="./img/wwh.jpg">&copy; 2020 Biazza</a>
+                </footer>
             </div>
 
         </div>

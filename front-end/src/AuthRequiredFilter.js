@@ -29,7 +29,7 @@ const AuthRequiredFilter = ({ children }) => {
     }
     // invalid access-token
     else if (validTokenState === false){
-        return <Redirect push to={`/log-in`} />;
+        return <Redirect push to={`/home`} />;
     }
 
     return (
