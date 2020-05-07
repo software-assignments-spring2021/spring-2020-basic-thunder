@@ -1,0 +1,12 @@
+.Header .header a {
+    font-family: Gotham-Light, sans-serif;
+    font-size: 34px;
+}
+
+.Header .header {
+    color: white;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+    background-color: black;
+    height: 70px;
+}

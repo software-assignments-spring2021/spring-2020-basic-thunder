@@ -8,6 +8,7 @@ import "./styles/Syllabus.css"
 import Hamburger from "./HamburgerMenu.js"
 import SubNav from "./SubNav.js"
 import {LoadingView} from "./loading_view"
+import {Header} from './header'
 
 const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
 
@@ -145,8 +146,7 @@ const Syllabus = () => {
 		return(
 			<div id="syllabus-container">
 				<header className="biazza-header">
-					<Hamburger />
-					<NavBarComponentPlaceHolder />
+					<Header/>
 				</header>
 				<SubNav courseId={parseInt(courseId.courseId)} current={"syllabus"} />
 				<CourseBarComponent courseName={data.courseName}/>

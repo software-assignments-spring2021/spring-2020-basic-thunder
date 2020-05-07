@@ -14,6 +14,7 @@ import {LoadingView} from "./loading_view"
 import './styles/ListPostView.css'
 import Hamburger from './HamburgerMenu'
 import SubNav from "./SubNav.js"
+import {Header} from './header'
 
 const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
 
@@ -43,10 +44,7 @@ const ListPostsView = ()=>{
     // console.log(typeof(parseInt(courseId)))
     return (
         <div className="ForumView">
-            <header className="biazza-header">
-                <Hamburger />
-                <NavBarComponentPlaceHolder />
-            </header>
+            <Header/>
             <SubNav courseId={parseInt(courseId)} current={"forums"}/>
             <CourseBarComponent CourseName={data['CourseName']} />
             <div  className={"PostPreviewContainer"}>

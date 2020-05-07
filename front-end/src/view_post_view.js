@@ -17,6 +17,7 @@ import editicon from "./img/editicon.png"
 import deleteicon from "./img/deleteicon.png"
 import Hamburger from "./HamburgerMenu";
 import {CourseBarComponent, NavBarComponentPlaceHolder} from "./list_posts_view"
+import {Header} from './header'
 
 const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
 
@@ -53,8 +54,7 @@ const PostView = () =>{
         return (
             <div className="ViewPost">
                 <header className="biazza-header">
-                    <Hamburger />
-                    <NavBarComponentPlaceHolder />
+                    <Header />
                 </header>
                 <CourseBarComponent CourseName={data['CourseName']} />
                 <div className={"PostDetailContainer"}>
