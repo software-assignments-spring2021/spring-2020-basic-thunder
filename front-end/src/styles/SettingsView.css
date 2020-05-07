@@ -24,7 +24,7 @@
 }
 
 .SettingsView {
-
+    font-family: Gotham-Light, sans-serif;
 }
 
 .SettingsView .main {
@@ -35,15 +35,14 @@
     padding-right: 20px;
 }
 
-#settingsHeader{
-    font-family: Gotham-Medium, sans-serif;
+.SettingsView label {
+    font-family: Gotham, sans-serif;
 }
 
 .SettingsView .section {
     display: flex;
     border: 2px solid black;
     margin-top: 10px;
-    /*min-height: 190px;*/
     min-height: 150px;
 }
 
@@ -103,6 +102,10 @@
     font-size: 17px;
 }
 
+.SettingsView #settingsHeader {
+    font-size: 30px;
+}
+
 
 .SettingsView .right input[type=submit] {
     /*font-size: 18px;
@@ -114,7 +117,7 @@
     cursor: pointer;
     border-radius: 2px;
     transition-duration: 0.4s;*/
-    background-color: darkslateblue;
+    background-color: #57068c;
     color: white;
     padding: 10px 22px;
     text-align: center;
@@ -131,9 +134,9 @@
 }
 
 .SettingsView .right input[type=submit]:hover {
-    /*background-color: #573069;*/
-    background-color: mediumpurple;
+    background-color: #330662;
     cursor: pointer;
+    transition-duration: 0.4s;
 }
 
 .SettingsView #nameDiv {
@@ -160,5 +163,8 @@
 
 #currentName{
     margin-top: 0px;
-    font-family: GothamNarrow, sans-serif;
+    margin-bottom: 5px;
+    font-family: Gotham, sans-serif;
+    font-size: 18px;
+    padding-bottom: -20px;
 }

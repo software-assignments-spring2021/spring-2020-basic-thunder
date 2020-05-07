@@ -12,6 +12,7 @@ import {
 import Hamburger from './HamburgerMenu.js'
 import SubNav from "./SubNav.js"
 import {LoadingView} from "./loading_view";
+import {Header} from './header'
 
 const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
 
@@ -68,8 +69,7 @@ const MembersListView = () => {
         <div className={'MembersListView'}>
 
             <header className="biazza-header">
-                <Hamburger/>
-                <NavBarComponentPlaceHolder/>
+                <Header/>
             </header>
             <SubNav courseId={data.courseId} current={"members"}/>
             <CourseBarComponent CourseName={courseName}/>

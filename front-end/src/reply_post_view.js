@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import Hamburger from "./HamburgerMenu";
 import {CourseBarComponent, NavBarComponentPlaceHolder} from "./list_posts_view";
+import {Header} from './header'
 
 const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
 
@@ -74,10 +75,9 @@ const ReplyPostView = () =>{
     }
     else{
         return (
-            <div>
+            <div className="ReplyPost">
                 <header className="biazza-header">
-                    <Hamburger />
-                    <NavBarComponentPlaceHolder />
+                    <Header/>
                 </header>
                 <CourseBarComponent CourseName={data['CourseName']} />
                 <div className={"PostDetailContainer"}>

@@ -19,6 +19,12 @@
     background-color: black;
 }
 
+.RegisterView header:hover {
+    color: #e6e6e9;
+    text-shadow: 1px 1px 3px black, 0 0 3px #f3f3f3, 0 0 3px #f3f3f3;
+    transition-duration: 0.2s;
+}
+
 .RegisterView header #logo {
     font-family: Gotham-Light, sans-serif;
     color: #f3f3f3;

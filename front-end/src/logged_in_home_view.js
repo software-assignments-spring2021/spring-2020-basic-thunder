@@ -12,6 +12,7 @@ import banner from "./img/ys.jpg"
 import Hamburger from "./HamburgerMenu.js"
 import {LoadingView} from "./loading_view"
 import './styles/loggedInHomeView.css'
+import {Header} from './header'
 
 /*
 Comment for future implement
@@ -31,8 +32,7 @@ const HomeView = ()=>{
         <div>
             <div id={"InsHomeView"} >
                 <header className="biazza-header">
-                    <Hamburger />
-                    <NavBarComponentPlaceHolder />
+                    <Header />
                 </header>
                 <Banner />
                 <CourseList />

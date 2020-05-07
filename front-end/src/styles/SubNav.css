@@ -43,8 +43,8 @@
 .subnav-link-text{
 	margin: 0;
 	width: 100%;
-	font-size: 1.1em;
-	font-family: Gotham-Medium, sans-serif;
+	font-size: 1.2em;
+	font-family: Gotham, sans-serif;
 }
 
 .subnav-link-span{
@@ -60,4 +60,5 @@
 .current{
 	background-color: rgba(72,61,139,.50);
 	opacity: .90;
+	border-radius: 4px;
 }

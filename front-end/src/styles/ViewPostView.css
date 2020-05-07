@@ -1,8 +1,15 @@
+.ViewPost {
+    font-family: Gotham-Light, sans-serif;
+}
+
+
 .PostDetailContainer{
     max-width: 1024px;
     margin: 0 auto;
-    /*border: 3px solid red;*/
+    font-family: Gotham, sans-serif;
 }
+
+
 
 .QuestionHeader{
     text-align: left;
@@ -16,17 +23,21 @@
     font-size: 30px;
     text-align: left;
     font-weight: bolder;
-    color:white;
+    color:black;
     padding: 12px;
     border-radius: 10px;
 }
 
+#QuestionTopic .problemNotSolved {
+    color: white;
+}
+
 .problemSolved{
-    background-color: darkgreen;
+    background-color: #f4f4f6;
 }
 
 .problemNotSolved{
-    background-color: darkred;
+    background-color: #afafb5;
 }
 
 .content{
@@ -39,7 +50,6 @@
 }
 
 .BottomInfo{
-    /*border: 3px solid black;*/
     color: dimgray;
     background-color: whitesmoke;
     display: flex;
@@ -68,14 +78,12 @@
 }
 
 #OfficialAnswerHeader{
-    background-color: darkorange;
+    background-color: #57068c;
 }
+
 #StudentAnswerHeader{
-    background-color: darkslateblue;
+    background-color: #28619e;
     margin-bottom: 10px;
-}
-.QuestionContainer{
-    margin-bottom: 20px;
 }
 
 .OfficialAnswerContainer{
@@ -84,7 +92,6 @@
 }
 
 .StudentAnswerContainer{
-    /*border: 2px solid darkslateblue;*/
     border-radius: 8px;
     margin-bottom: 15px;
 }
@@ -172,38 +179,39 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    background-color: darkslateblue;
+    background-color: #57068c;
     color: white;
     padding: 10px 22px;
     text-align: center;
     font-size: 16px;
     margin: 4px 2px;
-    font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
 }
 
 .AddReplyBtn:hover{
-    background-color:mediumpurple;
+    background-color: #330662;
     cursor: pointer;
     color:white;
+    transition-duration: 0.4s;
 }
+
 .AddReplyBtn:visited{
     color:white;
 }
 .BackToForumBtn{
-    background-color: saddlebrown;
+    background-color: #3dbbdb;
     color: white;
     padding: 10px 22px;
     text-align: center;
     font-size: 16px;
     margin: 0 auto;
-    font-family: Arial, Helvetica, sans-serif;
     border-radius: 8px;
 }
 
 .BackToForumBtn:hover{
-    background-color:darkgoldenrod;
+    background-color: #28619e;
     cursor: pointer;
+    transition-duration: 0.4s;
 }
 
 .BackBtnContainer{
@@ -224,6 +232,6 @@
 
 
 .DeleteContainer:hover{
-    color:red;
-    border: 2px solid red;
+    color: #bc0604;
+    border: 2px solid #bc0604;
 }

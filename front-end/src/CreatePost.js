@@ -29,6 +29,7 @@ import {
 import axios from "axios";
 import {LoadingView} from "./loading_view";
 import {CourseBarComponent} from "./list_posts_view"
+import {Header} from './header'
 
 const BACKEND_IP = process.env.NODE_ENV === "production"? "http://204.48.25.3:5000" :"http://127.0.0.1:5000";
 
@@ -96,8 +97,7 @@ const CreatePost = () => {
 	return(
 		<div id="create-post-container">
 			<header className="biazza-header">
-				<Hamburger />
-				<NavBarComponentPlaceHolder />
+				<Header/>
 			</header>
 			<CourseBarComponent CourseName={data['course_name']} />
 			<form onSubmit={handleCreatePost}>
@@ -106,7 +106,7 @@ const CreatePost = () => {
 					<textarea id="inpt-question-content" placeholder="Question Body" required={true}/>
 				</section>
 				<div className="post-as-container">
-					<label className="show-my-name-label">Show my name as:</label>
+					<label className="show-my-name-label">Show my name as: </label>
 					<select id="show-my-name-selector">
 						<option>{data['username']}</option>
 						<option>{postAs[0]}</option>
