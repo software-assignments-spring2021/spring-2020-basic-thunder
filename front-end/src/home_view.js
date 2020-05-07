@@ -33,7 +33,7 @@ const NotLoggedInHomeView = () => {
 
             <div>
                 <footer>
-                    <a href="https://github.com/nyu-software-engineering/spring-2020-basic-thunder">&copy; 2020 Biazza</a>
+                    <a href="./img/wwh.jpg">&copy; 2020 Biazza</a>
                 </footer>
             </div>
 
