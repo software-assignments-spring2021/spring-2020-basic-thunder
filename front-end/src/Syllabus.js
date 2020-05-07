@@ -155,8 +155,8 @@ const Syllabus = () => {
 				</section>
 				<div>
 					<EditBtn instructorMode={instructorMode}/>
-					<CancelBtn courseId={data.courseId}/>
 					<SaveBtn courseId={data.courseId}/>
+					<CancelBtn courseId={data.courseId}/>
 				</div>
 			</div>
 		);

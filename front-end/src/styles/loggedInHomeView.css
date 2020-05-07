@@ -8,24 +8,35 @@
 
 .CourseList{
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+    margin-left: 5%;
+    margin-right: 5%;
+    /*margin-left: auto;
+    margin-right: auto;*/
+    /*width: 50%;*/
     text-align: center;
 }
 
 .CourseDetail{
     display: block;
-    text-align: left;
+    text-align: center;
     margin-bottom: 10px;
-    font-size: 20px;
+    font-size: 1.6em;
     font-family: Arial, Helvetica, sans-serif;
-    text-decoration:none;
+    text-decoration: underline;
 }
 
 .CourseDetail:hover{
-    background-color: thistle;
-    color: red;
+    /*background-color: thistle;
+    color: red;*/
+    text-decoration: none;
+    color: rgba(0,0,0,0.8);
+}
+
+.CourseDetail:active{
+    /*background-color: thistle;
+    color: red;*/
+    text-decoration: none;
+    color: rgba(0,0,0,0.8);
 }
 
 #addNewClassBtn{
@@ -39,28 +50,10 @@
     border-radius: 8px;
 }
 
-#SettingsBtn{
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    background-color: darkslateblue;
-    color: white;
-    padding: 10px 22px;
-    text-align: center;
-    font-size: 16px;
-    margin: 4px 2px;
-    font-family: Arial, Helvetica, sans-serif;
-    border-radius: 8px;
-}
-
 #addNewClassBtn:hover {
     background-color:mediumpurple;
+    cursor: pointer;
 }
-
-#SettingsBtn:hover {
-    background-color:mediumpurple;
-}
-
 
 .Banner{
     text-align: center;
@@ -70,11 +63,14 @@
 }
 
 #BannerImg{
-    height: 22vh;
+    height: 25vh;
+    width: 60vw;
     max-width: 1024px;
+    min-width: 250px;
     z-index: -1;
     position: relative;
     display: inline-block;
+    /*opacity: 1.0;*/
 }
 
 #BannerText{
@@ -86,11 +82,11 @@
     right: 0;
     z-index: 1;
     top: 17%;
-    font-family: Arial, Helvetica, sans-serif
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #submitNewCourse{
-    background-color: mediumseagreen;
+    background-color: darkgreen;
     color: white;
     padding: 10px 22px;
     text-align: center;
@@ -101,7 +97,8 @@
 }
 
 #submitNewCourse:hover {
-    background-color:seagreen;
+    background-color:green;
+    cursor: pointer;
 }
 
 .AddNewCourseArea{
@@ -127,7 +124,7 @@ input[type=text] {
 }
 
 #cancelNewClassBtn{
-    background-color: darkorange;
+    background-color: darkred;
     color: white;
     padding: 10px 22px;
     text-align: center;
@@ -138,7 +135,8 @@ input[type=text] {
 }
 
 #cancelNewClassBtn:hover {
-    background-color:darkgoldenrod;
+    background-color:red;
+    cursor: pointer;
 }
 
 .SemesterOptionsContainer {
