@@ -22,6 +22,8 @@ const MembersListView = () => {
     const [courseName, setCourseName] = useState('')
     const [mode, setMode] = useState('instructor')
     const [data, setData] = useState({'courseId': -1, 'courseName': null, 'instructors': null, 'students': null})
+    const [term,setTerm] = useState(null);
+
     const api = `${BACKEND_IP}/${courseId}/members-list`
 
     // fetch data from backend
@@ -32,6 +34,7 @@ const MembersListView = () => {
             axios.get(api, {headers: {"Authorization" : `Bearer ${accessToken}`}})
                 .then(res => {
                     setCourseName(res.data.courseName)
+                    setTerm(res.data.term)
                     setMode(res.data.isInstructor ?  'instructor' : 'student')
                     setCurrEmail(res.data.currEmail)
                     setData(res.data)
@@ -72,7 +75,7 @@ const MembersListView = () => {
                 <NavBarComponentPlaceHolder/>
             </header>
             <SubNav courseId={data.courseId} current={"members"}/>
-            <CourseBarComponent CourseName={courseName}/>
+            <CourseBarComponent CourseName={courseName} term={term}/>
             <div className={"main"}>
                 {mode === 'instructor' ? <div id="addBtn">
                     <button onClick={handleAdd}>Add New Member</button>
@@ -297,9 +300,9 @@ const NavBarComponentPlaceHolder = () =>{
     )
 }
 
-const CourseBarComponent = ({CourseName})=>{
+const CourseBarComponent = ({CourseName,term})=>{
     return (
-        <h2 className={"barHeader"}>Members List: {CourseName}</h2>
+        <h2 className={"barHeader"}>Members List: {CourseName}[{term}]</h2>
     )
 }
 
