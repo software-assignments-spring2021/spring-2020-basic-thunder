@@ -5,5 +5,5 @@ send -- "yes\r"
 expect "*?ssword: "
 send -- "$::env(PRODUCTION_SERVER_PW)\r"
 expect "$ "
-send -- "cd spring-2020-basic-thunder && git checkout master && git pull && docker-compose up -d --build && exit\r"
+send -- "cd spring-2020-basic-thunder && git checkout master && git pull && docker-compose up --build && exit\r"
 expect eof
