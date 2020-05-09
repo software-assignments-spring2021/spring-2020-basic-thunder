@@ -228,6 +228,13 @@
 
 }
 
+.barHeader{
+
+    font-family: Gotham-Medium, sans-serif;
+
+
+}
+
 @media (min-width: 480px) {
     .members { grid-template-columns: repeat(2, 1fr); }
 }
