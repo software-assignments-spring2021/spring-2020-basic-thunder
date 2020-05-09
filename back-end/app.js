@@ -913,6 +913,7 @@ app.get('/:courseId/members-list',passport.authenticate('jwt',{session:false}),(
             data.courseId = course.course_id
             data.courseName = course.course_name
             data.isInstructor = course.instructor_uids.includes(user.uid)
+            data.term = course.term
 
             User.find().where('uid').in(course.instructor_uids).exec((err2, users1) => {
                 if (err2) {
