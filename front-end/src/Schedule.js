@@ -20,7 +20,7 @@ const NavBarComponentPlaceHolder = () => {
 }
 
 const CourseBarComponent = (props) => {
-	let text = "Schedule: "+props.courseName
+	let text = "Schedule: "+props.courseName + ` [${props.term}]`;
 
 	return(
 		<h2 id="scheduleHeader">{text}</h2>
@@ -548,7 +548,7 @@ const Calendar = (props) => {
 const Schedule = () => {
 	let courseId = useParams()
 	const [awaitingData, setAwaitingData] = useState(true)
-	const [data, setData] = useState({"scheduleId":-1,"courseId":-1,"courseName":null})
+	const [data, setData] = useState({"scheduleId":-1,"courseId":-1,"courseName":null,'term':null})
 	const [instructorMode, setInstructorMode] = useState(false)
 
 	useEffect( ()=>{
@@ -558,7 +558,7 @@ const Schedule = () => {
 				axios.get(api,{headers: {"Authorization" : `Bearer ${accessToken}`}})
 					.then(res => {
 						// console.log("Received data:", res.data)
-						let tempObj = {scheduleId:res.data.scheduleId, courseId:res.data.courseId, courseName:res.data.courseName}
+						let tempObj = {scheduleId:res.data.scheduleId, courseId:res.data.courseId, courseName:res.data.courseName,term:res.data.term}
 						setInstructorMode(res.data.isInstructor)
 						setData(tempObj);
 					})
@@ -582,7 +582,7 @@ const Schedule = () => {
 					<NavBarComponentPlaceHolder />
 				</header>
 				<SubNav courseId={data.courseId} current={"schedule"}/>
-				<CourseBarComponent courseName={data.courseName}/>
+				<CourseBarComponent courseName={data.courseName} term={data.term}/>
 				<Calendar scheduleId={data.scheduleId} isInstructor={instructorMode}/>
 			</div>
 		)

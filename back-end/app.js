@@ -713,7 +713,8 @@ app.get("/:courseId/Schedule",passport.authenticate('jwt',{session:false}),(req,
                             "scheduleId":schedule.schedule_id,
                             "courseId": schedule.schedule_id,
                             "courseName":schedule.course_name,
-                            "isInstructor": course.creator_uid === user.uid
+                            "isInstructor": course.creator_uid === user.uid,
+                            'term':course.term
                         })
                 })
             }
