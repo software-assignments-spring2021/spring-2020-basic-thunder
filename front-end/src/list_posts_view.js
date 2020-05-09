@@ -65,7 +65,7 @@ const ListPostsView = ()=>{
 
 const CourseBarComponent = ({CourseName})=>{
     return (
-        <h2 className={"Forum"}>Forum: {CourseName}</h2>
+        <h2 className={"ForumHeader"}>Forum: {CourseName}</h2>
     );
 };
 
