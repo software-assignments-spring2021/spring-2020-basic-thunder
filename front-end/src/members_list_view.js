@@ -299,7 +299,7 @@ const NavBarComponentPlaceHolder = () =>{
 
 const CourseBarComponent = ({CourseName})=>{
     return (
-        <h2 className={"bar"}>Members List: {CourseName}</h2>
+        <h2 className={"barHeader"}>Members List: {CourseName}</h2>
     )
 }
 
