@@ -5,5 +5,5 @@ send -- "yes\r"
 expect "*?ssword: "
 send -- "$::env(PRODUCTION_SERVER_PW)\r"
 expect "$ "
-send -- "./deploy.sh"
+send -- "./deploy.sh \r"
 expect eof
